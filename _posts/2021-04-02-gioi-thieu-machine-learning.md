@@ -1,7 +1,7 @@
 ---
 title: Enable Google Page Views
 author: Quy Nguyen
-date: 2021-01-03 18:32:00 -0500
+date: 2021-04-02 18:32:00 -0500
 categories: [Blogging, Tutorial]
 tags: [Machine learning]
 ---
