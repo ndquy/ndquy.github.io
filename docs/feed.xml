@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T19:31:04+08:00</updated>
+  <updated>2021-04-02T19:33:57+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -63,7 +63,7 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
     <link href="/posts/softmax-regression/" rel="alternate" type="text/html" title="Softmax Regression" />
     <published>2021-04-02T05:45:00+08:00</published>
   
-    <updated>2021-04-02T19:29:10+08:00</updated>
+    <updated>2021-04-02T19:31:59+08:00</updated>
   
     <id>/posts/softmax-regression/</id>
     <content src="/posts/softmax-regression/" />

@@ -19,8 +19,8 @@ Và tham số mô hình θ đã được huấn luyện để tối ưu hàm chi
 $$\begin{align} J(\theta) = -\left[ \sum_{i=1}^m y^{(i)} \log h_\theta(x^{(i)}) + (1-y^{(i)}) \log (1-h_\theta(x^{(i)})) \right] \end{align}$$
 
 Trong  softmax regression, chúng ta quan tâm tới việc phân loại nhiều lớp và nhãn y có thể là 1 trong K giá trị khác nhau thay vì chỉ 2 như logistic. Vì vậy trong tập huấn luyện $\{ (x^{(1)}, y^{(1)}), \ldots, (x^{(m)}, y^{(m)}) \}$, chúng ta có $y^{(i)} \in \{1, 2, \ldots, K\}$ (chú ý chúng ta quy ước sẽ đánh chỉ số cho các lớp bắt đầu từ 1, thay vì từ 0). Ví dụ trong nhận diện số viết tay dùng tập MNIST, chúng ta sẽ có K=10 lớp khác nhau.
-
-Cho 1 dữ liệu đầu vào x, chúng ta cần phải ước lượng được xác xuất thuộc vào 1 lớp nào đó $ P(y=k | x) $ với $ k = 1, \ldots, K $. Sẽ có K giá trị xác suất khác nhau, vì vậy giả thiết của chúng ta sẽ đưa ra vector K chiều gồm các giá trị xác suất. Cụ thể, giả thiết $ h_{\theta}(x) $ sẽ có dạng:
+<br>
+Cho 1 dữ liệu đầu vào x, chúng ta cần phải ước lượng được xác xuất thuộc vào 1 lớp nào đó $ P(y=k \| x) $ với $ k = 1, \ldots, K $. Sẽ có K giá trị xác suất khác nhau, vì vậy giả thiết của chúng ta sẽ đưa ra vector K chiều gồm các giá trị xác suất. Cụ thể, giả thiết $ h_{\theta}(x) $ sẽ có dạng:
 
 $$\begin{align} h_\theta(x) = \begin{bmatrix} P(y = 1 | x; \theta) \\ P(y = 2 | x; \theta) \\ \vdots \\ P(y = K | x; \theta) \end{bmatrix} = \frac{1}{ \sum_{j=1}^{K}{\exp(\theta^{(j)\top} x) }} \begin{bmatrix} \exp(\theta^{(1)\top} x ) \\ \exp(\theta^{(2)\top} x ) \\ \vdots \\ \exp(\theta^{(K)\top} x ) \\ \end{bmatrix} \end{align}$$
 
