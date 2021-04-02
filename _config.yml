@@ -17,7 +17,7 @@ timezone: Asia/Shanghai
 # --------------------------
 title: Quy's blog                         # the main title
 
-tagline: Machine learning và Khoa học dữ liệu   # it will display as the sub-title
+tagline: Lập trình, Machine learning và Khoa học dữ liệu   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Chia sẻ kiến thức công nghệ
