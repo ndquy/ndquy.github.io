@@ -1,5 +1,5 @@
 ---
-title: About
+title: Giới thiệu
 icon: fas fa-info
 order: 4
 ---
