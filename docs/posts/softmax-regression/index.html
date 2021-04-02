@@ -593,7 +593,7 @@
 
 
 <!-- return element -->
-<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="490 words">2 min</span>
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="928 words">5 min</span>
 
 
           <!-- page views -->
@@ -636,6 +636,35 @@ Và tham số mô hình θ đã được huấn luyện để tối ưu hàm chi
 <p>Để thuận tiện, chúng ta sẽ viết $\theta$ đại diện cho các tham số của mô hình. Khi thực hiện implement bằng code sẽ dễ hơn biểu diễn $\theta$ bằng ma trận nxK, $\theta$  thu được bằng cách gộp $\theta^{(1)}, \theta^{(2)}, \ldots, \theta^{(K)}$ vào các cột như sau:</p>
 
 \[\theta = \left[\begin{array}{cccc}| &amp; | &amp; | &amp; | \\ \theta^{(1)} &amp; \theta^{(2)} &amp; \cdots &amp; \theta^{(K)} \\ | &amp; | &amp; | &amp; | \end{array}\right]\]
+
+<h2 id="hàm-chi-phí-của-mô-hình">Hàm chi phí của mô hình</h2>
+
+<p>Bây giờ chúng ta sẽ xem hàm chi phí của mô hình Softmax Regression
+\(\begin{align} J(\theta) = - \left[ \sum_{i=1}^{m} \sum_{k=1}^{K}  1\left\{y^{(i)} = k\right\} \log \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)})}\right] \end{align}\)</p>
+
+<p>Trong biểu thức trên, hàm chi phí sử dụng cách viết như “hàm chỉ dẫn (indicator function)”, ký hiệu 1{nếu biểu thức đúng} = 1 và 1{nếu biểu thức sai}=0. Ở đây, $1\left{y^{(i)} = k\right}$ sẽ = 1 nếu $y^{(i)} = k$ và = 0 nếu ngược lại.</p>
+
+<p>Nhắc lại 1 chút, như vậy hàm chi phí của hồi quy logistic có thể viết dưới dạng:</p>
+
+\[\begin{align} J(\theta) &amp;= - \left[ \sum_{i=1}^m   (1-y^{(i)}) \log (1-h_\theta(x^{(i)})) + y^{(i)} \log h_\theta(x^{(i)}) \right] \\ &amp;= - \left[ \sum_{i=1}^{m} \sum_{k=0}^{1} 1\left\{y^{(i)} = k\right\} \log P(y^{(i)} = k | x^{(i)} ; \theta) \right] \end{align}\]
+
+<p>Lúc này hàm chi phí của Logistic regression nhìn khá giống với hàm chi phí của Softmax regression, chỉ khác là chúng ta tính tổng các xác suất của K lớp khác nhau. Như vậy:</p>
+
+<p>\(P(y^{(i)} = k | x^{(i)} ; \theta) = \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)}) }\)
+Bằng cách đạo hàm J(θ), chúng ta sẽ tìm được gradient như sau:</p>
+
+\[\begin{align} \nabla_{\theta^{(k)}} J(\theta) = - \sum_{i=1}^{m}{ \left[ x^{(i)} \left( 1\{ y^{(i)} = k\}  - P(y^{(i)} = k | x^{(i)}; \theta) \right) \right]  } \end{align}\]
+
+<p>$”\nabla_{\theta^{(k)}}”$ là 1 vector có phần tử thử j là $\frac{\partial J(\theta)}{\partial \theta_{lk}}$ là đạo hàm riêng của $J(\theta) $ đối với phần tử thứ j của $\theta(k)$</p>
+
+<h1 id="mối-liên-hệ-với-logistic-regression">Mối liên hệ với Logistic Regression</h1>
+
+<p>Trong trường hợp đặc biệt với K=2, chúng ta có thể thấy dạng của softmax regression được chuyển thành logistic regression. Điều này cho ta thấy softmax regression là khái quát của logistic regression.</p>
+
+\[\begin{align} h_\theta(x) &amp;=  \frac{1}{ \exp(\theta^{(1)\top}x)  + \exp( \theta^{(2)\top} x^{(i)} ) } \begin{bmatrix} \exp( \theta^{(1)\top} x ) \\ \exp( \theta^{(2)\top} x ) \end{bmatrix} \end{align}\]
+
+<p>\(\begin{align} h(x) &amp;=  \frac{1}{ \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) + \exp(\vec{0}^\top x) } \begin{bmatrix} \exp( (\theta^{(1)}-\theta^{(2)})^\top x ) \exp( \vec{0}^\top x ) \\ \end{bmatrix} \\  &amp;= \begin{bmatrix} \frac{1}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \frac{\exp( (\theta^{(1)}-\theta^{(2)})^\top x )}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \end{bmatrix} \\  &amp;= \begin{bmatrix} \frac{1}{ 1  + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ 1 - \frac{1}{ 1  + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \end{bmatrix} \end{align}\)
+Sau đó ta thay $\theta^{(2)}-\theta^{(1)} $ với 1 tham số duy nhất là $\theta’$. Chúng ta sẽ có softmax regression dự đoán xác suất 1 lớp là $\frac{1}{ 1 + \exp(- (\theta’)^\top x^{(i)} ) }$, lớp còn lại là $1 - \frac{1}{ 1 + \exp(- (\theta’)^\top x^{(i)} ) }$. Giống hệt với hồi quy logistic</p>
 
 
       </div>
@@ -1017,6 +1046,13 @@ Và tham số mô hình θ đã được huấn luyện để tối ưu hàm chi
   
   </div> <!-- .access -->
 
+  
+    <!-- BS-toc.js will be loaded at medium priority -->
+    <script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+    <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+      <span class="pl-3 pt-2 mb-2">Contents</span>
+      <nav id="toc" data-toggle="toc"></nav>
+    </div>
   
 
 </div> <!-- #panel-wrapper -->

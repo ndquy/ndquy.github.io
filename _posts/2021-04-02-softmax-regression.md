@@ -29,3 +29,32 @@ Với $ \theta^{(1)}, \theta^{(2)}, \ldots, \theta^{(K)} \in \Re^{n}$ là các t
 Để thuận tiện, chúng ta sẽ viết $\theta$ đại diện cho các tham số của mô hình. Khi thực hiện implement bằng code sẽ dễ hơn biểu diễn $\theta$ bằng ma trận nxK, $\theta$  thu được bằng cách gộp $\theta^{(1)}, \theta^{(2)}, \ldots, \theta^{(K)}$ vào các cột như sau:
 
 $$\theta = \left[\begin{array}{cccc}| & | & | & | \\ \theta^{(1)} & \theta^{(2)} & \cdots & \theta^{(K)} \\ | & | & | & | \end{array}\right]$$
+
+## Hàm chi phí của mô hình
+
+Bây giờ chúng ta sẽ xem hàm chi phí của mô hình Softmax Regression
+$$\begin{align} J(\theta) = - \left[ \sum_{i=1}^{m} \sum_{k=1}^{K}  1\left\{y^{(i)} = k\right\} \log \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)})}\right] \end{align}$$
+
+Trong biểu thức trên, hàm chi phí sử dụng cách viết như "hàm chỉ dẫn (indicator function)", ký hiệu 1{nếu biểu thức đúng} = 1 và 1{nếu biểu thức sai}=0. Ở đây, $1\left\{y^{(i)} = k\right\}$ sẽ = 1 nếu $y^{(i)} = k$ và = 0 nếu ngược lại.
+
+Nhắc lại 1 chút, như vậy hàm chi phí của hồi quy logistic có thể viết dưới dạng:
+
+$$\begin{align} J(\theta) &= - \left[ \sum_{i=1}^m   (1-y^{(i)}) \log (1-h_\theta(x^{(i)})) + y^{(i)} \log h_\theta(x^{(i)}) \right] \\ &= - \left[ \sum_{i=1}^{m} \sum_{k=0}^{1} 1\left\{y^{(i)} = k\right\} \log P(y^{(i)} = k | x^{(i)} ; \theta) \right] \end{align}$$
+
+Lúc này hàm chi phí của Logistic regression nhìn khá giống với hàm chi phí của Softmax regression, chỉ khác là chúng ta tính tổng các xác suất của K lớp khác nhau. Như vậy:
+
+$$P(y^{(i)} = k | x^{(i)} ; \theta) = \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)}) }$$
+Bằng cách đạo hàm J(θ), chúng ta sẽ tìm được gradient như sau:
+
+$$\begin{align} \nabla_{\theta^{(k)}} J(\theta) = - \sum_{i=1}^{m}{ \left[ x^{(i)} \left( 1\{ y^{(i)} = k\}  - P(y^{(i)} = k | x^{(i)}; \theta) \right) \right]  } \end{align}$$
+
+$”\nabla_{\theta^{(k)}}”$ là 1 vector có phần tử thử j là $\frac{\partial J(\theta)}{\partial \theta_{lk}}$ là đạo hàm riêng của $J(\theta) $ đối với phần tử thứ j của $\theta(k)$
+
+# Mối liên hệ với Logistic Regression
+
+Trong trường hợp đặc biệt với K=2, chúng ta có thể thấy dạng của softmax regression được chuyển thành logistic regression. Điều này cho ta thấy softmax regression là khái quát của logistic regression.
+
+$$\begin{align} h_\theta(x) &=  \frac{1}{ \exp(\theta^{(1)\top}x)  + \exp( \theta^{(2)\top} x^{(i)} ) } \begin{bmatrix} \exp( \theta^{(1)\top} x ) \\ \exp( \theta^{(2)\top} x ) \end{bmatrix} \end{align}$$
+
+$$\begin{align} h(x) &=  \frac{1}{ \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) + \exp(\vec{0}^\top x) } \begin{bmatrix} \exp( (\theta^{(1)}-\theta^{(2)})^\top x ) \exp( \vec{0}^\top x ) \\ \end{bmatrix} \\  &= \begin{bmatrix} \frac{1}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \frac{\exp( (\theta^{(1)}-\theta^{(2)})^\top x )}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \end{bmatrix} \\  &= \begin{bmatrix} \frac{1}{ 1  + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ 1 - \frac{1}{ 1  + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \end{bmatrix} \end{align}$$
+Sau đó ta thay $\theta^{(2)}-\theta^{(1)} $ với 1 tham số duy nhất là $\theta'$. Chúng ta sẽ có softmax regression dự đoán xác suất 1 lớp là $\frac{1}{ 1 + \exp(- (\theta')^\top x^{(i)} ) }$, lớp còn lại là $1 - \frac{1}{ 1 + \exp(- (\theta')^\top x^{(i)} ) }$. Giống hệt với hồi quy logistic
