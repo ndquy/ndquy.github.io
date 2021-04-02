@@ -33,6 +33,7 @@ Sau đây là 1 số thuật toán học giám sát mà mình sẽ đề cập d
 * Support Vector Machines (SVMs)
 * Decision Trees and Random Forests
 * Neural networks
+\n\n
 <br>
 ## Unsupervised learning
 Trong thuật toán học không giám sát, dữ liệu huấn luyện không được gán nhãn. Hệ thống sẽ học mà không cần ai dạy.
