@@ -1,6 +1,6 @@
 ---
 layout: archives
-title: Lưu trữ
+title: Archives
 icon: fas fa-archive
 order: 3
 ---
