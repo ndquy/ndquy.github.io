@@ -15,7 +15,7 @@ Thuật toán này thường được dùng trong các bài toán phân cụm/g�
 ##Supervised Learning
 Dữ liệu đầu vào để đưa vào huấn luyện thuật toán gồm dữ liệu và nhãn (label) của dữ liệu
 <br>
-![Ví dụ về Supervised learning]('assets/img/blog/Supervised-Learning-in-ML.jpg')
+![Ví dụ về Supervised learning](assets/img/blog/Supervised-Learning-in-ML.jpg)
 _Ví dụ về Supervised learning_
 
 Một loại thuật toán của supervised learning là việc gán nhãn dữ liệu. Bộ lọc email là 1 ví dụ cho thuật toán này. Model được huấn luyện với rất nhiều mẫu email và mỗi email được gán nhãn (spam hoặc không spam). Và thuật toán cần phải học được cách phân loại khi cần xác định 1 email mới có phải là spam hay không.
