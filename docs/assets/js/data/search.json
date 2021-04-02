@@ -1,6 +1,36 @@
 [
   
   {
+    "title": "Phân loại các thuật toán Machine Learning",
+    "url": "/posts/gioi-thieu-machine-learning/",
+    "categories": "Blogging",
+    "tags": "Machine learning",
+    "date": "2021-04-02 14:32:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Phân loại các thuật toánCó rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), v..."
+  },
+  
+  {
+    "title": "Huấn luyện mô hình Linear Regression",
+    "url": "/posts/linear-regression-part1/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-02 05:45:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.Tuy nhiên nếu biết đượ..."
+  },
+  
+  {
     "title": "Thực hiện một dự án Machine learning hoàn chỉnh",
     "url": "/posts/end-to-end-machine-learning-project/",
     "categories": "Machine Learning",
@@ -28,36 +58,6 @@
 
 
     "snippet": "This post is to enable Page Views on the Chirpy theme based blog that you just built. This requires technical knowledge and it’s recommended to keep the google_analytics.pv disabled unless you have a good reason. If your website has low traffic, the page views count would discourage you to write ..."
-  },
-  
-  {
-    "title": "Huấn luyện mô hình Linear Regression",
-    "url": "/posts/linear-regression-part1/",
-    "categories": "Machine Learning",
-    "tags": "Machine learning",
-    "date": "2021-01-04 05:45:00 +0800",
-    
-
-
-
-
-
-    "snippet": "Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.Tuy nhiên nếu biết đượ..."
-  },
-  
-  {
-    "title": "Phân loại các thuật toán Machine Learning",
-    "url": "/posts/gioi-thieu-machine-learning/",
-    "categories": "Blogging",
-    "tags": "Machine learning",
-    "date": "2021-01-02 14:32:00 +0800",
-    
-
-
-
-
-
-    "snippet": "Phân loại các thuật toánCó rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), v..."
   },
   
   {

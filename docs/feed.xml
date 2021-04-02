@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T17:59:27+08:00</updated>
+  <updated>2021-04-02T18:01:20+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -17,6 +17,81 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Phân loại các thuật toán Machine Learning</title>
+    <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="Phân loại các thuật toán Machine Learning" />
+    <published>2021-04-02T14:32:00+08:00</published>
+  
+    <updated>2021-04-02T14:44:55+08:00</updated>
+  
+    <id>/posts/gioi-thieu-machine-learning/</id>
+    <content src="/posts/gioi-thieu-machine-learning/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Blogging" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Phân loại các thuật toán
+
+Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:
+
+  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường)
+  So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Huấn luyện mô hình Linear Regression</title>
+    <link href="/posts/linear-regression-part1/" rel="alternate" type="text/html" title="Huấn luyện mô hình Linear Regression" />
+    <published>2021-04-02T05:45:00+08:00</published>
+  
+    <updated>2021-04-02T05:45:00+08:00</updated>
+  
+    <id>/posts/linear-regression-part1/</id>
+    <content src="/posts/linear-regression-part1/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.
+
+Tuy nhiên nếu biết được chính xác những gì thuật toán làm việc sẽ giúp chúng ta tìm được ra mô hình phù hợp với các bộ s...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -95,81 +170,6 @@
 Set up Google Analytics
 
 Create GA account ...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>Huấn luyện mô hình Linear Regression</title>
-    <link href="/posts/linear-regression-part1/" rel="alternate" type="text/html" title="Huấn luyện mô hình Linear Regression" />
-    <published>2021-01-04T05:45:00+08:00</published>
-  
-    <updated>2021-01-04T05:45:00+08:00</updated>
-  
-    <id>/posts/linear-regression-part1/</id>
-    <content src="/posts/linear-regression-part1/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Machine Learning" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.
-
-Tuy nhiên nếu biết được chính xác những gì thuật toán làm việc sẽ giúp chúng ta tìm được ra mô hình phù hợp với các bộ s...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>Phân loại các thuật toán Machine Learning</title>
-    <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="Phân loại các thuật toán Machine Learning" />
-    <published>2021-01-02T14:32:00+08:00</published>
-  
-    <updated>2021-04-02T14:44:55+08:00</updated>
-  
-    <id>/posts/gioi-thieu-machine-learning/</id>
-    <content src="/posts/gioi-thieu-machine-learning/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Blogging" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Phân loại các thuật toán
-
-Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:
-
-  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường)
-  So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ...
     </summary>
   
 
