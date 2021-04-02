@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T13:07:20+08:00</updated>
+  <updated>2021-04-02T14:11:21+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -60,8 +60,8 @@ Create GA account ...
 
   
   <entry>
-    <title>Giới thiệu về machine learning</title>
-    <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="Giới thiệu về machine learning" />
+    <title>Phân loại các thuật toán Machine Learning</title>
+    <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="Phân loại các thuật toán Machine Learning" />
     <published>2021-01-02T14:32:00+08:00</published>
   
     <updated>2021-04-02T12:31:54+08:00</updated>
@@ -76,8 +76,6 @@ Create GA account ...
     
     <category term="Blogging" />
     
-    <category term="Tutorial" />
-    
   
 
   
@@ -88,10 +86,11 @@ Create GA account ...
 
 
 
-      Paragraph
+      Phân loại các thuật toán
 Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:
-Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường)
-So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ để đưa ra kết luận h...
+
+  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường)
+  So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ ...
     </summary>
   
 

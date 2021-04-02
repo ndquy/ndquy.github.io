@@ -16,9 +16,9 @@
   },
   
   {
-    "title": "Giới thiệu về machine learning",
+    "title": "Phân loại các thuật toán Machine Learning",
     "url": "/posts/gioi-thieu-machine-learning/",
-    "categories": "Blogging, Tutorial",
+    "categories": "Blogging",
     "tags": "Machine learning",
     "date": "2021-01-02 14:32:00 +0800",
     
@@ -27,7 +27,7 @@
 
 
 
-    "snippet": "ParagraphCó rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement L..."
+    "snippet": "Phân loại các thuật toánCó rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), v..."
   },
   
   {
