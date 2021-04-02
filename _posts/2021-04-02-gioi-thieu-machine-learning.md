@@ -1,7 +1,7 @@
 ---
-title: Enable Google Page Views
+title: Giới thiệu về machine learning
 author: Quy Nguyen
-date: 2021-04-02 18:32:00 -0500
+date: 2021-01-02 01:32:00 -0500
 categories: [Blogging, Tutorial]
 tags: [Machine learning]
 ---

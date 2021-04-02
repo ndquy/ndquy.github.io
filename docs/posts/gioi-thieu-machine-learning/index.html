@@ -15,26 +15,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   
+    <meta name="pv-cache-enabled" content="false">
+
+    
+  
 
   <!-- Begin Jekyll SEO tag v2.7.1 -->
 <meta name="generator" content="Jekyll v4.2.0" />
-<meta property="og:title" content="Demo" />
+<meta property="og:title" content="Giới thiệu về machine learning" />
+<meta name="author" content="Quy Nguyen" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao." />
-<meta property="og:description" content="Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao." />
-<link rel="canonical" href="/categories/demo/" />
-<meta property="og:url" content="/categories/demo/" />
+<meta name="description" content="Paragraph Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau: Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường) So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ để đưa ra kết luận hoặc xây dựng các mẫu quy tắc cho dữ liệu huấn luyện rồi xây dựng các model để dự đoán giống như các scientist vẫn hay làm (instance-based và model-based learning)" />
+<meta property="og:description" content="Paragraph Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau: Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường) So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ để đưa ra kết luận hoặc xây dựng các mẫu quy tắc cho dữ liệu huấn luyện rồi xây dựng các model để dự đoán giống như các scientist vẫn hay làm (instance-based và model-based learning)" />
+<link rel="canonical" href="/posts/gioi-thieu-machine-learning/" />
+<meta property="og:url" content="/posts/gioi-thieu-machine-learning/" />
 <meta property="og:site_name" content="Quy’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-02T14:32:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Demo" />
+<meta property="twitter:title" content="Giới thiệu về machine learning" />
 <meta name="twitter:site" content="@dinhquy94" />
+<meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"/categories/demo/","headline":"Demo","@type":"WebPage","description":"Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.","@context":"https://schema.org"}</script>
+{"url":"/posts/gioi-thieu-machine-learning/","headline":"Giới thiệu về machine learning","dateModified":"2021-01-02T14:32:00+08:00","datePublished":"2021-01-02T14:32:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/gioi-thieu-machine-learning/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Paragraph Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau: Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường) So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ để đưa ra kết luận hoặc xây dựng các mẫu quy tắc cho dữ liệu huấn luyện rồi xây dựng các model để dự đoán giống như các scientist vẫn hay làm (instance-based và model-based learning)","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>Demo | Quy's blog
+  <title>Giới thiệu về machine learning | Quy's blog
   </title>
 
   <!--
@@ -100,6 +108,9 @@
 <link rel="stylesheet" href="/assets/css/style.css">
 
 
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+
 
 
   <!-- JavaScripts -->
@@ -114,11 +125,13 @@
 -->
 
 
+  
 
 
 
 
-<script defer src="/assets/js/dist/page.min.js"></script>
+
+<script defer src="/assets/js/dist/post.min.js"></script>
 
 
 
@@ -418,10 +431,6 @@
 
         
           
-          <span>
-            <a href="/">Home</a>
-          </span>
-          
 
         
 
@@ -431,8 +440,8 @@
         <span>
           
           
-          <a href="/categories">
-            Categories
+          <a href="/">
+            Posts
           </a>
         </span>
 
@@ -441,7 +450,7 @@
       
 
         
-          <span>Demo</span>
+          <span>Giới thiệu về machine learning</span>
 
         
 
@@ -454,7 +463,7 @@
     <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i>
 
     <div id="topbar-title">
-      Category
+      Post
     </div>
 
     <i id="search-trigger" class="fas fa-search fa-fw"></i>
@@ -499,32 +508,174 @@
 
 <!-- return -->
 <div class="row">
-  <div class="col-12 col-lg-11 col-xl-8">
-    <div id="page" class="post pb-5 pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4 mb-md-4">
-    
-      <div id="page-category">
-  <h1 class="pl-lg-2">
-    <i class="far fa-folder-open fa-fw text-muted"></i>
-    Demo
-    <span class="lead text-muted pl-2">1</span>
-  </h1>
 
-  <ul class="post-content pl-0">
+  <div id="post-wrapper" class="col-12 col-lg-11 col-xl-8">
+
+    <div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+      <h1 data-toc-skip>Giới thiệu về machine learning</h1>
+
+      <div class="post-meta text-muted d-flex flex-column">
+        <!-- Published date and author -->
+        <div>
+          <span class="semi-bold">
+            Quy Nguyen
+          </span>
+          <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago "
+  
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="Sat, Jan  2, 2021,  2:32 PM +0800"
+  
+
+  
+  prep="on" >
+
+  
+  
+
+  
+    Jan  2
+  
+
+  <i class="unloaded">2021-01-02T14:32:00+08:00</i>
+
+</span>
+
+        </div>
+
+        <div>
+          <!-- lastmod -->
+          
+
+          <!-- read time -->
+          <!--
+  Calculate the post's reading time, and display the word count in tooltip
+ -->
+
+
+<!-- words per minute  -->
+
+
+
+
+
+
+
+<!-- return element -->
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="105 words">1 min</span>
+
+
+          <!-- page views -->
+          
+
+        </div>
+
+      </div> <!-- .post-meta -->
+
+      <div class="post-content">
+
+        
+
+        <h2 id="paragraph">Paragraph</h2>
+<p>Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:
+Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement Learning (học tăng cường)
+So sánh các điểm dữ liệu mới với các điểm dữ liệu cũ để đưa ra kết luận hoặc xây dựng các mẫu quy tắc cho dữ liệu huấn luyện rồi xây dựng các model để dự đoán giống như các scientist vẫn hay làm (instance-based và model-based learning)</p>
+
+
+      </div>
+
+      <div class="post-tail-wrapper text-muted">
+
+        <!-- categories -->
+        
+        <div class="post-meta mb-3">
+          <i class="far fa-folder-open fa-fw mr-1"></i>
+          
+            <a href='/categories/blogging/'>Blogging</a>,
+            <a href='/categories/tutorial/'>Tutorial</a>
+        </div>
+        
+
+        <!-- tags -->
+        
+        <div class="post-tags">
+          <i class="fa fa-tags fa-fw mr-1"></i>
+          
+          <a href="/tags/machine-learning/"
+            class="post-tag no-text-decoration" >Machine learning</a>
+          
+          </div>
+        
+
+        <div class="post-tail-bottom
+          d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+          
+          <div class="license-wrapper">
+            This post is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+            by the author.
+          </div>
+          
+
+          <!--
+ Post sharing snippet
+-->
+
+<div class="share-wrapper">
+  <span class="share-label text-muted mr-1">Share</span>
+  <span class="share-icons">
+    
     
 
     
-    <li class="d-flex justify-content-between pl-md-3 pr-md-3">
-      <a href="/posts/text-and-typography/">Text and Typography</a>
-      <span class="dash flex-grow-1"></span>
-      <span class="text-muted small">Aug  8, 2019</span>
-    </li>
+      
+        <a href="https://twitter.com/intent/tweet?text=Giới thiệu về machine learning - Quy's blog&url=/posts/gioi-thieu-machine-learning/" data-toggle="tooltip" data-placement="top"
+          title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+          <i class="fa-fw fab fa-twitter"></i>
+        </a>
     
-  </ul>
+      
+        <a href="https://www.facebook.com/sharer/sharer.php?title=Giới thiệu về machine learning - Quy's blog&u=/posts/gioi-thieu-machine-learning/" data-toggle="tooltip" data-placement="top"
+          title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
+          <i class="fa-fw fab fa-facebook-square"></i>
+        </a>
+    
+      
+        <a href="https://telegram.me/share?text=Giới thiệu về machine learning - Quy's blog&url=/posts/gioi-thieu-machine-learning/" data-toggle="tooltip" data-placement="top"
+          title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
+          <i class="fa-fw fab fa-telegram"></i>
+        </a>
+    
+
+    <i class="fa-fw fas fa-link small" onclick="copyLink()"
+        data-toggle="tooltip" data-placement="top" title="Copy link"></i>
+
+  </span>
 </div>
 
-    
-    </div> <!-- #page -->
-  </div><!-- .col-12 -->
+
+        </div><!-- .post-tail-bottom -->
+
+      </div><!-- div.post-tail -->
+
+    </div> <!-- .post -->
+
+
+  </div> <!-- #post-wrapper -->
+
+  
+
+  
 
   <!--
   The Pannel on right side (Desktop views)
@@ -813,13 +964,322 @@
   </div> <!-- .access -->
 
   
+    <!-- BS-toc.js will be loaded at medium priority -->
+    <script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+    <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+      <span class="pl-3 pt-2 mb-2">Contents</span>
+      <nav id="toc" data-toggle="toc"></nav>
+    </div>
+  
 
 </div> <!-- #panel-wrapper -->
 
 
+</div> <!-- .row -->
+
+<div class="row">
+  <div class="col-12 col-lg-11 col-xl-8">
+    <div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+    <!--
+ Recommend the other 3 posts according to the tags and categories of the current post,
+ if the number is not enough, use the other latest posts to supplement.
+-->
+
+<!-- The total size of related posts  -->
+
+
+<!-- An random integer that bigger than 0  -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy}  -->
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<!-- Fill with the other newlest posts  -->
+
+
+
+
+
+
+  <div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+    <h3 class="pt-2 mt-1 mb-4 ml-1"
+      data-toc-skip>Further Reading</h3>
+    <div class="card-deck mb-4">
+    
+      
+      
+      <div class="card">
+        <a href="/posts/write-a-new-post/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Aug  8, 2019
+  
+
+  <i class="unloaded">2019-08-08T14:10:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>Writing a New Post</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Naming and Path
+
+Create a new file named YYYY-MM-DD-TITLE.EXTENSION and put it in the _posts/ of the root directory. Please note that the EXTENSION must be one of md and markdown.
+
+Front Matter
+
+Ba...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/getting-started/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Aug  9, 2019
+  
+
+  <i class="unloaded">2019-08-09T20:55:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>Getting Started</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Prerequisites
+
+Follow the Jekyll Docs to complete the installation of Ruby, RubyGems, Jekyll and Bundler.
+
+Installation
+
+There are two ways to get the theme:
+
+
+  Install from RubyGems - Easy to upd...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/customize-the-favicon/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Aug 11, 2019
+  
+
+  <i class="unloaded">2019-08-11T00:34:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>Customize the Favicon</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                In Chirpy, the image files of Favicons are placed in assets/img/favicons/. You may need to replace them with your own. So let’s see how to customize these Favicons.
+
+With a square image (PNG, JPG o...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+    </div> <!-- .card-deck -->
+  </div> <!-- #related-posts -->
+
+
+
+    <!--
+  Navigation buttons at the bottom of the post.
+-->
+
+<div class="post-navigation d-flex justify-content-between">
+  
+  <a href="/posts/customize-the-favicon/" class="btn btn-outline-primary"
+    prompt="Older">
+    <p>Customize the Favicon</p>
+  </a>
+  
+
+  
+  <a href="/posts/enable-google-pv/" class="btn btn-outline-primary"
+    prompt="Newer">
+    <p>Enable Google Page Views</p>
+  </a>
+  
+
 </div>
 
 
+    
+
+    </div> <!-- #post-extend-wrapper -->
+
+  </div> <!-- .col-* -->
+
+</div> <!-- .row -->
 
 
 

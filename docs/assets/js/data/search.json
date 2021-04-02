@@ -16,6 +16,21 @@
   },
   
   {
+    "title": "Giới thiệu về machine learning",
+    "url": "/posts/gioi-thieu-machine-learning/",
+    "categories": "Blogging, Tutorial",
+    "tags": "Machine learning",
+    "date": "2021-01-02 14:32:00 +0800",
+    
+
+
+
+
+
+    "snippet": "ParagraphCó rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), và Reinforcement L..."
+  },
+  
+  {
     "title": "Customize the Favicon",
     "url": "/posts/customize-the-favicon/",
     "categories": "Blogging, Tutorial",
