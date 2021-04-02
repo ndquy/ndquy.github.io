@@ -1,6 +1,21 @@
 [
   
   {
+    "title": "Thực hiện một dự án Machine learning hoàn chỉnh",
+    "url": "/posts/end-to-end-machine-learning-project/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-02 04:44:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Trong bài viết này chúng ta sẽ có cái nhìn tổng quát hơn về machine learning thông qua một bài toán cụ thể trong thực tế với dữ liệu thực tế của một công ty. Sau đây là các bước cần thực hiện:  Tìm hiểu yêu cầu bài toán  Lấy dữ liệu  Khám phá và mô phỏng dữ liệu để hiểu về dữ liệu  Chuẩn bị dữ li..."
+  },
+  
+  {
     "title": "Enable Google Page Views",
     "url": "/posts/enable-google-pv/",
     "categories": "Blogging, Tutorial",
@@ -13,6 +28,21 @@
 
 
     "snippet": "This post is to enable Page Views on the Chirpy theme based blog that you just built. This requires technical knowledge and it’s recommended to keep the google_analytics.pv disabled unless you have a good reason. If your website has low traffic, the page views count would discourage you to write ..."
+  },
+  
+  {
+    "title": "Huấn luyện mô hình Linear Regression",
+    "url": "/posts/linear-regression-part1/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-01-04 05:45:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.Tuy nhiên nếu biết đượ..."
   },
   
   {

@@ -15,28 +15,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   
+    <meta name="pv-cache-enabled" content="false">
+
+    
+  
 
   <!-- Begin Jekyll SEO tag v2.7.1 -->
 <meta name="generator" content="Jekyll v4.2.0" />
-<meta property="og:title" content="About" />
+<meta property="og:title" content="Huấn luyện mô hình Linear Regression" />
+<meta name="author" content="Quy Nguyen" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Chào mừng mọi người đã đến với blog của tôi. Hiện nay công nghệ nói chung và AI nói riêng đang ngày càng phổ biến trong tất cả các lĩnh vực của đời sống. Vì vậy việc học tập và nghiên cứu AI đang là xu hướng và được rất nhiều người quan tâm. Tuy nhiên hiện tại ở Việt Nam, việc tiếp cận AI còn khá khó khăn. Các tài liệu để nghiên cứu chưa nhiều, đặc biệt là tài liệu tiếng Việt còn ít, dữ liệu và tài nguyên cũng ít được chia sẻ." />
-<meta property="og:description" content="Chào mừng mọi người đã đến với blog của tôi. Hiện nay công nghệ nói chung và AI nói riêng đang ngày càng phổ biến trong tất cả các lĩnh vực của đời sống. Vì vậy việc học tập và nghiên cứu AI đang là xu hướng và được rất nhiều người quan tâm. Tuy nhiên hiện tại ở Việt Nam, việc tiếp cận AI còn khá khó khăn. Các tài liệu để nghiên cứu chưa nhiều, đặc biệt là tài liệu tiếng Việt còn ít, dữ liệu và tài nguyên cũng ít được chia sẻ." />
-<link rel="canonical" href="/about/" />
-<meta property="og:url" content="/about/" />
+<meta name="description" content="Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể áp dụng, thậm chí tối ưu và cải thiện." />
+<meta property="og:description" content="Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể áp dụng, thậm chí tối ưu và cải thiện." />
+<link rel="canonical" href="/posts/linear-regression-part1/" />
+<meta property="og:url" content="/posts/linear-regression-part1/" />
 <meta property="og:site_name" content="Quy’s blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2021-04-02T17:59:27+08:00" />
+<meta property="article:published_time" content="2021-01-04T05:45:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="About" />
+<meta property="twitter:title" content="Huấn luyện mô hình Linear Regression" />
 <meta name="twitter:site" content="@dinhquy94" />
+<meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"/about/","headline":"About","dateModified":"2021-04-02T17:59:27+08:00","datePublished":"2021-04-02T17:59:27+08:00","sameAs":["https://twitter.com/username","https://github.com/username"],"@type":"WebSite","description":"Chào mừng mọi người đã đến với blog của tôi. Hiện nay công nghệ nói chung và AI nói riêng đang ngày càng phổ biến trong tất cả các lĩnh vực của đời sống. Vì vậy việc học tập và nghiên cứu AI đang là xu hướng và được rất nhiều người quan tâm. Tuy nhiên hiện tại ở Việt Nam, việc tiếp cận AI còn khá khó khăn. Các tài liệu để nghiên cứu chưa nhiều, đặc biệt là tài liệu tiếng Việt còn ít, dữ liệu và tài nguyên cũng ít được chia sẻ.","name":"Nguyễn Đình Quý","@context":"https://schema.org"}</script>
+{"url":"/posts/linear-regression-part1/","headline":"Huấn luyện mô hình Linear Regression","dateModified":"2021-01-04T05:45:00+08:00","datePublished":"2021-01-04T05:45:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/linear-regression-part1/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể áp dụng, thậm chí tối ưu và cải thiện.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>About | Quy's blog
+  <title>Huấn luyện mô hình Linear Regression | Quy's blog
   </title>
 
   <!--
@@ -102,6 +108,9 @@
 <link rel="stylesheet" href="/assets/css/style.css">
 
 
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+
 
 
   <!-- JavaScripts -->
@@ -116,12 +125,35 @@
 -->
 
 
+  
 
 
 
 
-<script defer src="/assets/js/dist/page.min.js"></script>
 
+<script defer src="/assets/js/dist/post.min.js"></script>
+
+
+  <!-- MathJax -->
+  <script>
+  // see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options>
+  MathJax = {
+    tex: {
+      inlineMath: [              // start/end delimiter pairs for in-line math
+        ['$','$'],
+        ['\\(','\\)']
+      ],
+      displayMath: [             // start/end delimiter pairs for display math
+        ['$$', '$$'],
+        ['\\[', '\\]']
+      ]
+    }
+  };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+  </script>
 
 
 
@@ -185,7 +217,7 @@
       </a>
     </li> <!-- .nav-item -->
     
-    <li class="nav-item active">
+    <li class="nav-item">
       <a href="/about/" class="nav-link">
         <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i>
         <span>ABOUT</span>
@@ -420,17 +452,26 @@
 
         
           
-          <span>
-            <a href="/">Home</a>
-          </span>
-          
 
         
 
       
 
         
-          <span>About</span>
+        <span>
+          
+          
+          <a href="/">
+            Posts
+          </a>
+        </span>
+
+        
+
+      
+
+        
+          <span>Huấn luyện mô hình Linear Regression</span>
 
         
 
@@ -443,7 +484,7 @@
     <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i>
 
     <div id="topbar-title">
-      About
+      Post
     </div>
 
     <i id="search-trigger" class="fas fa-search fa-fw"></i>
@@ -488,24 +529,186 @@
 
 <!-- return -->
 <div class="row">
-  <div class="col-12 col-lg-11 col-xl-8">
-    <div id="page" class="post pb-5 pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4 mb-md-4">
-    
-      <h1 class="dynamic-title">About</h1>
+
+  <div id="post-wrapper" class="col-12 col-lg-11 col-xl-8">
+
+    <div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+      <h1 data-toc-skip>Huấn luyện mô hình Linear Regression</h1>
+
+      <div class="post-meta text-muted d-flex flex-column">
+        <!-- Published date and author -->
+        <div>
+          <span class="semi-bold">
+            Quy Nguyen
+          </span>
+          <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago "
+  
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="Mon, Jan  4, 2021,  5:45 AM +0800"
+  
+
+  
+  prep="on" >
+
+  
+  
+
+  
+    Jan  4
+  
+
+  <i class="unloaded">2021-01-04T05:45:00+08:00</i>
+
+</span>
+
+        </div>
+
+        <div>
+          <!-- lastmod -->
+          
+
+          <!-- read time -->
+          <!--
+  Calculate the post's reading time, and display the word count in tooltip
+ -->
+
+
+<!-- words per minute  -->
+
+
+
+
+
+
+
+<!-- return element -->
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="331 words">1 min</span>
+
+
+          <!-- page views -->
+          
+
+        </div>
+
+      </div> <!-- .post-meta -->
+
       <div class="post-content">
-        <p>Chào mừng mọi người đã đến với blog của tôi. Hiện nay công nghệ nói chung và AI nói riêng đang ngày càng phổ biến trong tất cả các lĩnh vực của đời sống. Vì vậy việc học tập và nghiên cứu AI đang là xu hướng và được rất nhiều người quan tâm. Tuy nhiên hiện tại ở Việt Nam, việc tiếp cận AI còn khá khó khăn. Các tài liệu để nghiên cứu chưa nhiều, đặc biệt là tài liệu tiếng Việt còn ít, dữ liệu và tài nguyên cũng ít được chia sẻ.</p>
 
-<p>Chính vì vậy blog này nhằm mục đích chính là hướng dẫn cách tiếp cận, chia sẻ tài liệu và các tài nguyên phục vụ cho việc nghiên cứu và ứng dụng trí tuệ nhân tạo. Ngoài ra blog cũng sẽ giới thiệu cách xây dựng các sản phẩm tích hợp trí tuệ nhân tạo.</p>
+        
 
-<h1 id="về-tác-giả">Về tác giả</h1>
+        <p>Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.</p>
 
-<p>Mình là Quý, tên đầy đủ là Nguyễn Đình Quý, hiện đang công tác tại bộ môn Khoa học Máy tính trường Đại học Xây dựng.</p>
+<p>Tuy nhiên nếu biết được chính xác những gì thuật toán làm việc sẽ giúp chúng ta tìm được ra mô hình phù hợp với các bộ siêu tham số đủ tốt. Biết được bản chất sẽ giúp chúng ta xác định được vấn đề gặp phải và phân tích lỗi hiệu quả hơn. Trong phần này mình sẽ đi sâu vào thuật toán hồi quy tuyến tính (Linear Regression), một trong những thuật toán đơn giản nhất. Chúng ta sẽ nghiên cứu 2 phương pháp để huấn luyện:</p>
+
+<ul>
+  <li>Sử dụng công thức để tìm ra các tham số cho mô hình mà nó khớp với dữ liệu huấn luyện nhất (nghĩa là các tham số mô hình sẽ tối thiểu hóa hàm chi phí (cost function) thông qua tập huấn luyện)</li>
+  <li>Sử dụng phương pháp tối ưu lặp đi lặp lại, phương pháp này được gọi là Gradient Descent (xin phép không dịch), nó sẽ tối thiểu hóa dần dần hàm chi phí  thông qua quá trình huấn luyện, sau 1 số bước lặp hữu hạn, mô hình sẽ hội tụ và ta được bộ tham số giống với phương pháp đầu tiên. Chúng ta sẽ nghiên cứu 1 số thuật toán Gradient Descent: Batch GD, Mini-batch GD và Stochastic GD.</li>
+</ul>
+
+<p>#Mô hình hồi quy tuyến tính (Linear Regression)</p>
+
+<p>Mục tiêu của giải thuật hồi quy tuyến tính là dự đoán giá trị của một hoặc nhiều biến mục tiêu liên tục (continuous target variable) y dựa trên một véc-tơ đầu vào X</p>
+
+<h2 id="định-nghĩa-mô-hình">Định nghĩa mô hình</h2>
+
+\[\hat y = \theta_0 + \theta_1x_1 + \theta_2x_2 + ... + \theta_nx_n\]
+
 
 
       </div>
+
+      <div class="post-tail-wrapper text-muted">
+
+        <!-- categories -->
+        
+        <div class="post-meta mb-3">
+          <i class="far fa-folder-open fa-fw mr-1"></i>
+          
+            <a href='/categories/machine-learning/'>Machine Learning</a>
+        </div>
+        
+
+        <!-- tags -->
+        
+        <div class="post-tags">
+          <i class="fa fa-tags fa-fw mr-1"></i>
+          
+          <a href="/tags/machine-learning/"
+            class="post-tag no-text-decoration" >Machine learning</a>
+          
+          </div>
+        
+
+        <div class="post-tail-bottom
+          d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+          
+          <div class="license-wrapper">
+            This post is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+            by the author.
+          </div>
+          
+
+          <!--
+ Post sharing snippet
+-->
+
+<div class="share-wrapper">
+  <span class="share-label text-muted mr-1">Share</span>
+  <span class="share-icons">
     
-    </div> <!-- #page -->
-  </div><!-- .col-12 -->
+    
+
+    
+      
+        <a href="https://twitter.com/intent/tweet?text=Huấn luyện mô hình Linear Regression - Quy's blog&url=/posts/linear-regression-part1/" data-toggle="tooltip" data-placement="top"
+          title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+          <i class="fa-fw fab fa-twitter"></i>
+        </a>
+    
+      
+        <a href="https://www.facebook.com/sharer/sharer.php?title=Huấn luyện mô hình Linear Regression - Quy's blog&u=/posts/linear-regression-part1/" data-toggle="tooltip" data-placement="top"
+          title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
+          <i class="fa-fw fab fa-facebook-square"></i>
+        </a>
+    
+      
+        <a href="https://telegram.me/share?text=Huấn luyện mô hình Linear Regression - Quy's blog&url=/posts/linear-regression-part1/" data-toggle="tooltip" data-placement="top"
+          title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
+          <i class="fa-fw fab fa-telegram"></i>
+        </a>
+    
+
+    <i class="fa-fw fas fa-link small" onclick="copyLink()"
+        data-toggle="tooltip" data-placement="top" title="Copy link"></i>
+
+  </span>
+</div>
+
+
+        </div><!-- .post-tail-bottom -->
+
+      </div><!-- div.post-tail -->
+
+    </div> <!-- .post -->
+
+
+  </div> <!-- #post-wrapper -->
+
+  
+
+  
 
   <!--
   The Pannel on right side (Desktop views)
@@ -798,13 +1001,356 @@
   </div> <!-- .access -->
 
   
+    <!-- BS-toc.js will be loaded at medium priority -->
+    <script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+    <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+      <span class="pl-3 pt-2 mb-2">Contents</span>
+      <nav id="toc" data-toggle="toc"></nav>
+    </div>
+  
 
 </div> <!-- #panel-wrapper -->
 
 
+</div> <!-- .row -->
+
+<div class="row">
+  <div class="col-12 col-lg-11 col-xl-8">
+    <div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+    <!--
+ Recommend the other 3 posts according to the tags and categories of the current post,
+ if the number is not enough, use the other latest posts to supplement.
+-->
+
+<!-- The total size of related posts  -->
+
+
+<!-- An random integer that bigger than 0  -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy}  -->
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<!-- Fill with the other newlest posts  -->
+
+
+
+
+  
+    
+    
+      
+      
+    
+  
+    
+    
+      
+      
+        
+        
+        
+          
+
+
+
+
+
+  <div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+    <h3 class="pt-2 mt-1 mb-4 ml-1"
+      data-toc-skip>Further Reading</h3>
+    <div class="card-deck mb-4">
+    
+      
+      
+      <div class="card">
+        <a href="/posts/gioi-thieu-machine-learning/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Jan  2
+  
+
+  <i class="unloaded">2021-01-02T14:32:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>Phân loại các thuật toán Machine Learning</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Phân loại các thuật toán
+
+Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:
+
+  Quá trình huấn luyện có cần sự giám sát của con ngư...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/end-to-end-machine-learning-project/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Apr  2
+  
+
+  <i class="unloaded">2021-04-02T04:44:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>Thực hiện một dự án Machine learning hoàn chỉnh</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Trong bài viết này chúng ta sẽ có cái nhìn tổng quát hơn về machine learning thông qua một bài toán cụ thể trong thực tế với dữ liệu thực tế của một công ty. Sau đây là các bước cần thực hiện:
+
+
+  ...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/enable-google-pv/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Jan  4
+  
+
+  <i class="unloaded">2021-01-04T07:32:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>Enable Google Page Views</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                This post is to enable Page Views on the Chirpy theme based blog that you just built. This requires technical knowledge and it’s recommended to keep the google_analytics.pv disabled unless you have...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+    </div> <!-- .card-deck -->
+  </div> <!-- #related-posts -->
+
+
+
+    <!--
+  Navigation buttons at the bottom of the post.
+-->
+
+<div class="post-navigation d-flex justify-content-between">
+  
+  <a href="/posts/gioi-thieu-machine-learning/" class="btn btn-outline-primary"
+    prompt="Older">
+    <p>Phân loại các thuật toán Machine Learning</p>
+  </a>
+  
+
+  
+  <a href="/posts/enable-google-pv/" class="btn btn-outline-primary"
+    prompt="Newer">
+    <p>Enable Google Page Views</p>
+  </a>
+  
+
 </div>
 
 
+    
+
+    </div> <!-- #post-extend-wrapper -->
+
+  </div> <!-- .col-* -->
+
+</div> <!-- .row -->
 
 
 

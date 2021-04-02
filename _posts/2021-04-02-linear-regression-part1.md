@@ -1,7 +1,7 @@
 ---
 title: Huấn luyện mô hình Linear Regression
 author: Quy Nguyen
-date: 2021-04-02 04:45:00 +0700
+date: 2021-01-04 04:45:00 +0700
 categories: [Machine Learning]
 tags: [Machine learning]
 math: true

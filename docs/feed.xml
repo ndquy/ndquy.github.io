@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T17:53:42+08:00</updated>
+  <updated>2021-04-02T17:59:27+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -17,6 +17,48 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Thực hiện một dự án Machine learning hoàn chỉnh</title>
+    <link href="/posts/end-to-end-machine-learning-project/" rel="alternate" type="text/html" title="Thực hiện một dự án Machine learning hoàn chỉnh" />
+    <published>2021-04-02T04:44:00+08:00</published>
+  
+    <updated>2021-04-02T04:44:00+08:00</updated>
+  
+    <id>/posts/end-to-end-machine-learning-project/</id>
+    <content src="/posts/end-to-end-machine-learning-project/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong bài viết này chúng ta sẽ có cái nhìn tổng quát hơn về machine learning thông qua một bài toán cụ thể trong thực tế với dữ liệu thực tế của một công ty. Sau đây là các bước cần thực hiện:
+
+
+  Tìm hiểu yêu cầu bài toán
+  Lấy dữ liệu
+  Khám phá và mô phỏng dữ liệu để hiểu về dữ liệu
+  Chuẩn bị dữ liệu và tiền xử lý
+  Lựa chọn mô hình và thực hiện huấn luyện
+  Fine-tune (hiệu chỉnh) lại mô hì...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -53,6 +95,42 @@
 Set up Google Analytics
 
 Create GA account ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Huấn luyện mô hình Linear Regression</title>
+    <link href="/posts/linear-regression-part1/" rel="alternate" type="text/html" title="Huấn luyện mô hình Linear Regression" />
+    <published>2021-01-04T05:45:00+08:00</published>
+  
+    <updated>2021-01-04T05:45:00+08:00</updated>
+  
+    <id>/posts/linear-regression-part1/</id>
+    <content src="/posts/linear-regression-part1/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.
+
+Tuy nhiên nếu biết được chính xác những gì thuật toán làm việc sẽ giúp chúng ta tìm được ra mô hình phù hợp với các bộ s...
     </summary>
   
 
@@ -134,103 +212,6 @@ With a square image (PNG, JPG or GIF) in hand, open the site Favicon &amp;amp; A
 
 
 Click button Create Favicon and wait a moment for the website to generate the icons of various sizes a...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>Getting Started</title>
-    <link href="/posts/getting-started/" rel="alternate" type="text/html" title="Getting Started" />
-    <published>2019-08-09T20:55:00+08:00</published>
-  
-    <updated>2019-08-09T20:55:00+08:00</updated>
-  
-    <id>/posts/getting-started/</id>
-    <content src="/posts/getting-started/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Blogging" />
-    
-    <category term="Tutorial" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Prerequisites
-
-Follow the Jekyll Docs to complete the installation of Ruby, RubyGems, Jekyll and Bundler.
-
-Installation
-
-There are two ways to get the theme:
-
-
-  Install from RubyGems - Easy to update, isolate irrelevant project files so you can focus on writing.
-  Fork on GitHub - Convenient for custom development, but difficult to update, only suitable for web developers.
-
-
-Installing the The...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>Writing a New Post</title>
-    <link href="/posts/write-a-new-post/" rel="alternate" type="text/html" title="Writing a New Post" />
-    <published>2019-08-08T14:10:00+08:00</published>
-  
-    <updated>2019-08-08T14:10:00+08:00</updated>
-  
-    <id>/posts/write-a-new-post/</id>
-    <content src="/posts/write-a-new-post/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Blogging" />
-    
-    <category term="Tutorial" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Naming and Path
-
-Create a new file named YYYY-MM-DD-TITLE.EXTENSION and put it in the _posts/ of the root directory. Please note that the EXTENSION must be one of md and markdown.
-
-Front Matter
-
-Basically, you need to fill the Front Matter as below at the top of the post:
-
----
-title: TITLE
-date: YYYY-MM-DD HH:MM:SS +/-TTTT
-categories: [TOP_CATEGORIE, SUB_CATEGORIE]
-tags: [TAG]     # TAG names s...
     </summary>
   
 
