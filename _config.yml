@@ -15,9 +15,9 @@ timezone: Asia/Shanghai
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # --------------------------
-title: ndquy blog                          # the main title
+title: Quy's blog                         # the main title
 
-tagline: Chia sẻ kiến thức lập trình và machine learning   # it will display as the sub-title
+tagline: Machine learning và Khoa học dữ liệu   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Chia sẻ kiến thức công nghệ
@@ -31,7 +31,7 @@ github:
   username: dinhquy94             # change to your github username
 
 twitter:
-  username: twitter_username            # change to your twitter username
+  username: dinhquy94            # change to your twitter username
 
 social:
   # Change to your full name.
