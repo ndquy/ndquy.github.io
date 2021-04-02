@@ -16,6 +16,21 @@
   },
   
   {
+    "title": "Softmax Regression",
+    "url": "/posts/softmax-regression/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-02 05:45:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \\in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^..."
+  },
+  
+  {
     "title": "Huấn luyện mô hình Linear Regression",
     "url": "/posts/linear-regression-part1/",
     "categories": "Machine Learning",
