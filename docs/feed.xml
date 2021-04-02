@@ -4,16 +4,16 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T12:13:30+08:00</updated>
+  <updated>2021-04-02T12:15:20+08:00</updated>
   <author>
-    <name>your_full_name</name>
+    <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
   </author>
   <link rel="self" type="application/atom+xml" href="/feed.xml"/>
   <link rel="alternate" type="text/html" hreflang="en-US"
     href="/"/>
   <generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator>
-  <rights> © 2021 your_full_name </rights>
+  <rights> © 2021 Nguyễn Đình Quý </rights>
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
@@ -29,7 +29,7 @@
     <id>/posts/enable-google-pv/</id>
     <content src="/posts/enable-google-pv/" />
     <author>
-      <name>your_full_name</name>
+      <name>Nguyễn Đình Quý</name>
     </author>
 
   
@@ -69,7 +69,7 @@ Create GA account ...
     <id>/posts/customize-the-favicon/</id>
     <content src="/posts/customize-the-favicon/" />
     <author>
-      <name>your_full_name</name>
+      <name>Nguyễn Đình Quý</name>
     </author>
 
   
@@ -111,7 +111,7 @@ Click button Create Favicon and wait a moment for the website to generate the ic
     <id>/posts/getting-started/</id>
     <content src="/posts/getting-started/" />
     <author>
-      <name>your_full_name</name>
+      <name>Nguyễn Đình Quý</name>
     </author>
 
   
@@ -160,7 +160,7 @@ Installing the The...
     <id>/posts/write-a-new-post/</id>
     <content src="/posts/write-a-new-post/" />
     <author>
-      <name>your_full_name</name>
+      <name>Nguyễn Đình Quý</name>
     </author>
 
   
@@ -208,7 +208,7 @@ tags: [TAG]     # TAG names s...
     <id>/posts/text-and-typography/</id>
     <content src="/posts/text-and-typography/" />
     <author>
-      <name>your_full_name</name>
+      <name>Nguyễn Đình Quý</name>
     </author>
 
   
