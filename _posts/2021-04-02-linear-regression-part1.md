@@ -20,5 +20,30 @@ Mục tiêu của giải thuật hồi quy tuyến tính là dự đoán giá tr
 
 ## Định nghĩa mô hình
 
+Với đầu vào x, đầu ra là y. Ta có mô hình như sau:
+
 $$\hat y = \theta_0 + \theta_1x_1 + \theta_2x_2 + ... + \theta_nx_n $$
+
+Trong đó
+\( \hat y \) là giá trị đầu ra cần dự đoán
+
+n là số lượng features (số chiều của vector đầu vào X)
+
+\( x_i \) là feature thứ i.
+
+\( \theta \) là tham số của mô hình (bao gồm \( \theta_0 \) là bias và các  tham số \( \theta_1, \theta_2 \),...)
+
+Phương trình này có thể viết ngắn gọn lại thành:
+
+$$\hat y = h_\theta(x) = \theta . x$$
+
+Trong đó:
+
+\( \theta  \) là vector tham số mô hình bao gồm bias \( \theta_0  \) và các feature weights \( \theta_1 ... \theta_n\)
+
+X là vector đầu vào của mô hình, trong đó \( x_0\) có giá trị bằng 1 (được thêm vào)
+
+θ · x là tích có hướng của vector đầu vào và trọng số
+
+Trong Machine learning, các vector thường được biểu diễn dưới dạng các vector cột, dạng mảng 2 chiều với 1 cột. Nếu θ và x là các vector cột thì \( \hat y = \theta^Tx \)  trong đó \( \theta^T \) là chuyển vị của θ
 

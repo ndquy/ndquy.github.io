@@ -38,7 +38,7 @@
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"/posts/linear-regression-part1/","headline":"Huấn luyện mô hình Linear Regression","dateModified":"2021-04-02T05:45:00+08:00","datePublished":"2021-04-02T05:45:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/linear-regression-part1/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể áp dụng, thậm chí tối ưu và cải thiện.","@context":"https://schema.org"}</script>
+{"url":"/posts/linear-regression-part1/","headline":"Huấn luyện mô hình Linear Regression","dateModified":"2021-04-02T18:01:37+08:00","datePublished":"2021-04-02T05:45:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/linear-regression-part1/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể áp dụng, thậm chí tối ưu và cải thiện.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -577,6 +577,39 @@
         <div>
           <!-- lastmod -->
           
+          <span>
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago lastmod"
+  
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="Fri, Apr  2, 2021,  5:01 PM +0700"
+  
+
+  prefix="Updated "
+   >
+
+  
+  
+
+  
+    Apr  2
+  
+
+  <i class="unloaded">2021-04-02T18:01:37+08:00</i>
+
+</span>
+
+          </span>
+          
 
           <!-- read time -->
           <!--
@@ -593,7 +626,7 @@
 
 
 <!-- return element -->
-<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="331 words">1 min</span>
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="525 words">2 min</span>
 
 
           <!-- page views -->
@@ -622,7 +655,32 @@
 
 <h2 id="định-nghĩa-mô-hình">Định nghĩa mô hình</h2>
 
+<p>Với đầu vào x, đầu ra là y. Ta có mô hình như sau:</p>
+
 \[\hat y = \theta_0 + \theta_1x_1 + \theta_2x_2 + ... + \theta_nx_n\]
+
+<p>Trong đó
+( \hat y ) là giá trị đầu ra cần dự đoán</p>
+
+<p>n là số lượng features (số chiều của vector đầu vào X)</p>
+
+<p>( x_i ) là feature thứ i.</p>
+
+<p>( \theta ) là tham số của mô hình (bao gồm ( \theta_0 ) là bias và các  tham số ( \theta_1, \theta_2 ),…)</p>
+
+<p>Phương trình này có thể viết ngắn gọn lại thành:</p>
+
+\[\hat y = h_\theta(x) = \theta . x\]
+
+<p>Trong đó:</p>
+
+<p>( \theta  ) là vector tham số mô hình bao gồm bias ( \theta_0  ) và các feature weights ( \theta_1 … \theta_n)</p>
+
+<p>X là vector đầu vào của mô hình, trong đó ( x_0) có giá trị bằng 1 (được thêm vào)</p>
+
+<p>θ · x là tích có hướng của vector đầu vào và trọng số</p>
+
+<p>Trong Machine learning, các vector thường được biểu diễn dưới dạng các vector cột, dạng mảng 2 chiều với 1 cột. Nếu θ và x là các vector cột thì ( \hat y = \theta^Tx )  trong đó ( \theta^T ) là chuyển vị của θ</p>
 
 
 
@@ -739,6 +797,11 @@
       <span>Recent Update</span>
       <ul class="post-content pl-0 pb-1 ml-1 mt-2">
 
+      
+        
+        
+        
+        <li><a href="/posts/linear-regression-part1/">Huấn luyện mô hình Linear Regression</a></li>
       
         
         

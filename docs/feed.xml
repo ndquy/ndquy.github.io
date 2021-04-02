@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T18:01:20+08:00</updated>
+  <updated>2021-04-02T18:05:16+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -24,7 +24,7 @@
     <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="Phân loại các thuật toán Machine Learning" />
     <published>2021-04-02T14:32:00+08:00</published>
   
-    <updated>2021-04-02T14:44:55+08:00</updated>
+    <updated>2021-04-02T18:01:37+08:00</updated>
   
     <id>/posts/gioi-thieu-machine-learning/</id>
     <content src="/posts/gioi-thieu-machine-learning/" />
@@ -63,7 +63,7 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
     <link href="/posts/linear-regression-part1/" rel="alternate" type="text/html" title="Huấn luyện mô hình Linear Regression" />
     <published>2021-04-02T05:45:00+08:00</published>
   
-    <updated>2021-04-02T05:45:00+08:00</updated>
+    <updated>2021-04-02T18:01:37+08:00</updated>
   
     <id>/posts/linear-regression-part1/</id>
     <content src="/posts/linear-regression-part1/" />
