@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T12:31:36+08:00</updated>
+  <updated>2021-04-02T13:03:08+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -64,7 +64,7 @@ Create GA account ...
     <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="Giới thiệu về machine learning" />
     <published>2021-01-02T14:32:00+08:00</published>
   
-    <updated>2021-01-02T14:32:00+08:00</updated>
+    <updated>2021-04-02T12:31:54+08:00</updated>
   
     <id>/posts/gioi-thieu-machine-learning/</id>
     <content src="/posts/gioi-thieu-machine-learning/" />
