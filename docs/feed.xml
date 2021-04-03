@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-02T19:33:57+08:00</updated>
+  <updated>2021-04-03T16:24:16+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -20,11 +20,47 @@
 
   
   <entry>
-    <title>Phân loại các thuật toán Machine Learning</title>
-    <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="Phân loại các thuật toán Machine Learning" />
+    <title>4. Gradient Descent</title>
+    <link href="/posts/gradient-descent-2/" rel="alternate" type="text/html" title="4. Gradient Descent" />
+    <published>2021-04-03T05:45:00+08:00</published>
+  
+    <updated>2021-04-03T05:45:00+08:00</updated>
+  
+    <id>/posts/gradient-descent-2/</id>
+    <content src="/posts/gradient-descent-2/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Bài trước mình đã giới thiệu mọi người cách để huấn luyện mô hình học máy, trong đó mục đích của việc huấn luyện là để tìm ra các tham số mà tại đó hàm chi phí (hàm mất mát) đạt giá trị nhỏ nhất.
+
+Trong toán tối ưu, việc tìm ra cực trị của hàm số rất phổ biến. Có nhiều phương pháp để tìm cực trị hàm số, trong đó cách phổ biến nhất là tìm đạo hàm rồi giải phương trình đạo hàm bằng 0, các nghiệm ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>1. Phân loại các thuật toán Machine Learning</title>
+    <link href="/posts/gioi-thieu-machine-learning/" rel="alternate" type="text/html" title="1. Phân loại các thuật toán Machine Learning" />
     <published>2021-04-02T14:32:00+08:00</published>
   
-    <updated>2021-04-02T18:01:37+08:00</updated>
+    <updated>2021-04-03T16:19:04+08:00</updated>
   
     <id>/posts/gioi-thieu-machine-learning/</id>
     <content src="/posts/gioi-thieu-machine-learning/" />
@@ -59,11 +95,11 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
 
   
   <entry>
-    <title>Softmax Regression</title>
-    <link href="/posts/softmax-regression/" rel="alternate" type="text/html" title="Softmax Regression" />
+    <title>3. Softmax Regression</title>
+    <link href="/posts/softmax-regression/" rel="alternate" type="text/html" title="3. Softmax Regression" />
     <published>2021-04-02T05:45:00+08:00</published>
   
-    <updated>2021-04-02T19:31:59+08:00</updated>
+    <updated>2021-04-03T16:19:04+08:00</updated>
   
     <id>/posts/softmax-regression/</id>
     <content src="/posts/softmax-regression/" />
@@ -97,11 +133,11 @@ Chúng ta có tập dữ liệu h...
 
   
   <entry>
-    <title>Huấn luyện mô hình Linear Regression</title>
-    <link href="/posts/linear-regression-part1/" rel="alternate" type="text/html" title="Huấn luyện mô hình Linear Regression" />
+    <title>2. Huấn luyện mô hình Linear Regression</title>
+    <link href="/posts/linear-regression-part1/" rel="alternate" type="text/html" title="2. Huấn luyện mô hình Linear Regression" />
     <published>2021-04-02T05:45:00+08:00</published>
   
-    <updated>2021-04-02T18:20:09+08:00</updated>
+    <updated>2021-04-03T16:19:04+08:00</updated>
   
     <id>/posts/linear-regression-part1/</id>
     <content src="/posts/linear-regression-part1/" />
@@ -168,46 +204,6 @@ Tuy nhiên nếu biết được chính xác những gì thuật toán làm vi�
   Chuẩn bị dữ liệu và tiền xử lý
   Lựa chọn mô hình và thực hiện huấn luyện
   Fine-tune (hiệu chỉnh) lại mô hì...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>Enable Google Page Views</title>
-    <link href="/posts/enable-google-pv/" rel="alternate" type="text/html" title="Enable Google Page Views" />
-    <published>2021-01-04T07:32:00+08:00</published>
-  
-    <updated>2021-01-04T07:32:00+08:00</updated>
-  
-    <id>/posts/enable-google-pv/</id>
-    <content src="/posts/enable-google-pv/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Blogging" />
-    
-    <category term="Tutorial" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      This post is to enable Page Views on the Chirpy theme based blog that you just built. This requires technical knowledge and it’s recommended to keep the google_analytics.pv disabled unless you have a good reason. If your website has low traffic, the page views count would discourage you to write more blogs. With that said, let’s start with the setup.
-
-Set up Google Analytics
-
-Create GA account ...
     </summary>
   
 
