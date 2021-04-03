@@ -38,7 +38,7 @@
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"/posts/gradient-descent-2/","headline":"Gradient Descent","dateModified":"2021-04-03T05:45:00+08:00","datePublished":"2021-04-03T05:45:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/gradient-descent-2/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Bài trước mình đã giới thiệu mọi người cách để huấn luyện mô hình học máy, trong đó mục đích của việc huấn luyện là để tìm ra các tham số mà tại đó hàm chi phí (hàm mất mát) đạt giá trị nhỏ nhất.","@context":"https://schema.org"}</script>
+{"url":"/posts/gradient-descent-2/","@type":"BlogPosting","headline":"Gradient Descent","dateModified":"2021-04-03T05:45:00+08:00","datePublished":"2021-04-03T05:45:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/gradient-descent-2/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Bài trước mình đã giới thiệu mọi người cách để huấn luyện mô hình học máy, trong đó mục đích của việc huấn luyện là để tìm ra các tham số mà tại đó hàm chi phí (hàm mất mát) đạt giá trị nhỏ nhất.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -694,15 +694,15 @@
 
 <h1 id="batch-gradient-descent">Batch Gradient Descent</h1>
 
-<p>Để thực hiện thuật toán Gradient Descent, chúng ta phải tìm được đạo hàm của hàm chi phí ảnh hưởng đến từng tham số của mô hình $ \theta_j $. Nói khác đi, cần phải xác định được giá trị hàm chi phí thay đổi thế nào nếu thay đổi ( \theta_j ). Cái này được gọi là đạo hàm riêng (partial derivative).</p>
+<p>Để thực hiện thuật toán Gradient Descent, chúng ta phải tìm được đạo hàm của hàm chi phí ảnh hưởng đến từng tham số của mô hình $ \theta_j $. Nói khác đi, cần phải xác định được giá trị hàm chi phí thay đổi thế nào nếu thay đổi $ \theta_j $. Cái này được gọi là đạo hàm riêng (partial derivative).</p>
 
 <p>Biểu thức sau sẽ dùng để tính đạo hàm riêng của hàm chi phí cho tham số $ \theta_j $, được ký hiệu là $ \frac{\delta}{\delta\theta_j}MSE(\theta) $:</p>
 
 \[\frac{\delta}{\delta\theta_j}MSE(\theta)  = \frac{2}{m}\sum_{i=1}^m(\theta^Tx^{(i)} - y^{(i)})x^{(i)}_j\]
 
-<p>Thay vì tính từng đạo hàm thành phần, bạn có thể sử dụng công thức sau để tính tất cả trong 1 bước. Vector độ dốc, ký hiệu ( ∇_\theta MSE(\theta) ) là đạo hàm riêng (vector độ dốc) cho các tham số ( \theta) ) của mô hình.</p>
+<p>Thay vì tính từng đạo hàm thành phần, bạn có thể sử dụng công thức sau để tính tất cả trong 1 bước. Vector độ dốc, ký hiệu $ ∇_\theta MSE(\theta) $ là đạo hàm riêng (vector độ dốc) cho các tham số $ \theta) $ của mô hình.</p>
 
-<p>Khi chúng ta có vector độc dốc và vị trí hiện tại, chúng ta chỉ cần đi ngược lại với vector độ dốc. Nghĩa là ta phải trừ θ đi 1 giá trị là ( ∇_\theta MSE(\theta) ). Lúc này ta sẽ sử dụng tham số learning rate ( \eta ) để xác định giá trị của bước xuống dốc bằng cách nhân vào.</p>
+<p>Khi chúng ta có vector độc dốc và vị trí hiện tại, chúng ta chỉ cần đi ngược lại với vector độ dốc. Nghĩa là ta phải trừ θ đi 1 giá trị là $ ∇_\theta MSE(\theta) $. Lúc này ta sẽ sử dụng tham số learning rate $ \eta $ để xác định giá trị của bước xuống dốc bằng cách nhân vào.</p>
 
 \[\theta^{(next step)} =\theta - \eta  ∇_\theta MSE(\theta)\]
 
@@ -939,17 +939,17 @@ array([[4.21076011],
         
         
         
+        <li><a href="/posts/gioi-thieu-machine-learning/">1. Phân loại các thuật toán Machine Learning</a></li>
+      
+        
+        
+        
         <li><a href="/posts/linear-regression-part1/">2. Huấn luyện mô hình Linear Regression</a></li>
       
         
         
         
         <li><a href="/posts/softmax-regression/">3. Softmax Regression</a></li>
-      
-        
-        
-        
-        <li><a href="/posts/gioi-thieu-machine-learning/">1. Phân loại các thuật toán Machine Learning</a></li>
       
 
       </ul>
@@ -1112,6 +1112,19 @@ array([[4.21076011],
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
     
   
 
@@ -1233,10 +1246,10 @@ array([[4.21076011],
   
 
   
-    Apr  2
+    Apr  1
   
 
-  <i class="unloaded">2021-04-02T14:32:00+08:00</i>
+  <i class="unloaded">2021-04-01T14:32:00+08:00</i>
 
 </span>
 
@@ -1368,17 +1381,17 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
 
 <div class="post-navigation d-flex justify-content-between">
   
-  <a href="/posts/gioi-thieu-machine-learning/" class="btn btn-outline-primary"
+  <a href="/posts/softmax-regression/" class="btn btn-outline-primary"
     prompt="Older">
-    <p>1. Phân loại các thuật toán Machine Learning</p>
+    <p>3. Softmax Regression</p>
   </a>
   
 
   
-  <span class="btn btn-outline-primary disabled"
+  <a href="/posts/hoi-quy-logistic/" class="btn btn-outline-primary"
     prompt="Newer">
-    <p>-</p>
-  </span>
+    <p>5. Hồi quy Logistic</p>
+  </a>
   
 
 </div>

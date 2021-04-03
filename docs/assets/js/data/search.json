@@ -1,6 +1,21 @@
 [
   
   {
+    "title": "5. Hồi quy Logistic",
+    "url": "/posts/hoi-quy-logistic/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-03 05:46:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính ..."
+  },
+  
+  {
     "title": "4. Gradient Descent",
     "url": "/posts/gradient-descent-2/",
     "categories": "Machine Learning",
@@ -13,21 +28,6 @@
 
 
     "snippet": "Bài trước mình đã giới thiệu mọi người cách để huấn luyện mô hình học máy, trong đó mục đích của việc huấn luyện là để tìm ra các tham số mà tại đó hàm chi phí (hàm mất mát) đạt giá trị nhỏ nhất.Trong toán tối ưu, việc tìm ra cực trị của hàm số rất phổ biến. Có nhiều phương pháp để tìm cực trị hà..."
-  },
-  
-  {
-    "title": "1. Phân loại các thuật toán Machine Learning",
-    "url": "/posts/gioi-thieu-machine-learning/",
-    "categories": "Blogging",
-    "tags": "Machine learning",
-    "date": "2021-04-02 14:32:00 +0800",
-    
-
-
-
-
-
-    "snippet": "Phân loại các thuật toánCó rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), v..."
   },
   
   {
@@ -73,6 +73,21 @@
 
 
     "snippet": "Trong bài viết này chúng ta sẽ có cái nhìn tổng quát hơn về machine learning thông qua một bài toán cụ thể trong thực tế với dữ liệu thực tế của một công ty. Sau đây là các bước cần thực hiện:  Tìm hiểu yêu cầu bài toán  Lấy dữ liệu  Khám phá và mô phỏng dữ liệu để hiểu về dữ liệu  Chuẩn bị dữ li..."
+  },
+  
+  {
+    "title": "1. Phân loại các thuật toán Machine Learning",
+    "url": "/posts/gioi-thieu-machine-learning/",
+    "categories": "Blogging",
+    "tags": "Machine learning",
+    "date": "2021-04-01 14:32:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Phân loại các thuật toánCó rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:  Quá trình huấn luyện có cần sự giám sát của con người hay không?: Supervised (có giám sát), unsupervised (không giám sát), semisupervised (nửa giám sát), v..."
   },
   
   {

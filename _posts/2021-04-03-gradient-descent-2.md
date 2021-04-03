@@ -74,15 +74,15 @@ Như bạn có thể thấy, ở bên phải thuật toán Gradient Descent đi 
 
 # Batch Gradient Descent
 
-Để thực hiện thuật toán Gradient Descent, chúng ta phải tìm được đạo hàm của hàm chi phí ảnh hưởng đến từng tham số của mô hình $ \theta_j $. Nói khác đi, cần phải xác định được giá trị hàm chi phí thay đổi thế nào nếu thay đổi \( \theta_j \). Cái này được gọi là đạo hàm riêng (partial derivative).
+Để thực hiện thuật toán Gradient Descent, chúng ta phải tìm được đạo hàm của hàm chi phí ảnh hưởng đến từng tham số của mô hình $ \theta_j $. Nói khác đi, cần phải xác định được giá trị hàm chi phí thay đổi thế nào nếu thay đổi $ \theta_j $. Cái này được gọi là đạo hàm riêng (partial derivative).
 
 Biểu thức sau sẽ dùng để tính đạo hàm riêng của hàm chi phí cho tham số $ \theta_j $, được ký hiệu là $ \frac{\delta}{\delta\theta_j}MSE(\theta) $:
 
 $$ \frac{\delta}{\delta\theta_j}MSE(\theta)  = \frac{2}{m}\sum_{i=1}^m(\theta^Tx^{(i)} - y^{(i)})x^{(i)}_j $$
 
-Thay vì tính từng đạo hàm thành phần, bạn có thể sử dụng công thức sau để tính tất cả trong 1 bước. Vector độ dốc, ký hiệu \( ∇_\theta MSE(\theta) \) là đạo hàm riêng (vector độ dốc) cho các tham số \( \theta) \) của mô hình.
+Thay vì tính từng đạo hàm thành phần, bạn có thể sử dụng công thức sau để tính tất cả trong 1 bước. Vector độ dốc, ký hiệu $ ∇_\theta MSE(\theta) $ là đạo hàm riêng (vector độ dốc) cho các tham số $ \theta) $ của mô hình.
 
-Khi chúng ta có vector độc dốc và vị trí hiện tại, chúng ta chỉ cần đi ngược lại với vector độ dốc. Nghĩa là ta phải trừ θ đi 1 giá trị là \( ∇_\theta MSE(\theta) \). Lúc này ta sẽ sử dụng tham số learning rate \( \eta \) để xác định giá trị của bước xuống dốc bằng cách nhân vào.
+Khi chúng ta có vector độc dốc và vị trí hiện tại, chúng ta chỉ cần đi ngược lại với vector độ dốc. Nghĩa là ta phải trừ θ đi 1 giá trị là $ ∇_\theta MSE(\theta) $. Lúc này ta sẽ sử dụng tham số learning rate $ \eta $ để xác định giá trị của bước xuống dốc bằng cách nhân vào.
 
 $$ \theta^{(next step)} =\theta - \eta  ∇_\theta MSE(\theta) $$
 
