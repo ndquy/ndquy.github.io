@@ -1,21 +1,6 @@
 [
   
   {
-    "title": "5. Hồi quy Logistic",
-    "url": "/posts/hoi-quy-logistic/",
-    "categories": "Machine Learning",
-    "tags": "Machine learning",
-    "date": "2021-04-03 05:46:00 +0800",
-    
-
-
-
-
-
-    "snippet": "Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính ..."
-  },
-  
-  {
     "title": "4. Gradient Descent",
     "url": "/posts/gradient-descent-2/",
     "categories": "Machine Learning",
@@ -43,6 +28,21 @@
 
 
     "snippet": "Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thu..."
+  },
+  
+  {
+    "title": "5. Hồi quy Logistic",
+    "url": "/posts/hoi-quy-logistic/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-03 03:46:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính ..."
   },
   
   {

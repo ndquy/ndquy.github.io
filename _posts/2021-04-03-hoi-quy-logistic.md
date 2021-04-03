@@ -1,7 +1,7 @@
 ---
 title: 5. Hồi quy Logistic
 author: Quy Nguyen
-date: 2021-04-03 04:46:00 +0700
+date: 2021-04-03 02:46:00 +0700
 categories: [Machine Learning]
 tags: [Machine learning]
 math: true
