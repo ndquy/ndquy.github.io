@@ -31,6 +31,21 @@
   },
   
   {
+    "title": "6. Bài toán phân lớp và các phương pháp đánh giá P1",
+    "url": "/posts/bai-toan-phan-lop-va-danh-gia/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-03 05:45:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thu..."
+  },
+  
+  {
     "title": "3. Softmax Regression",
     "url": "/posts/softmax-regression/",
     "categories": "Machine Learning",

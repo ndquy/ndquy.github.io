@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-03T16:55:17+08:00</updated>
+  <updated>2021-04-03T17:39:44+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -58,7 +58,7 @@
     <link href="/posts/gradient-descent-2/" rel="alternate" type="text/html" title="4. Gradient Descent" />
     <published>2021-04-03T05:45:00+08:00</published>
   
-    <updated>2021-04-03T05:45:00+08:00</updated>
+    <updated>2021-04-03T16:56:27+08:00</updated>
   
     <id>/posts/gradient-descent-2/</id>
     <content src="/posts/gradient-descent-2/" />
@@ -83,6 +83,42 @@
       Bài trước mình đã giới thiệu mọi người cách để huấn luyện mô hình học máy, trong đó mục đích của việc huấn luyện là để tìm ra các tham số mà tại đó hàm chi phí (hàm mất mát) đạt giá trị nhỏ nhất.
 
 Trong toán tối ưu, việc tìm ra cực trị của hàm số rất phổ biến. Có nhiều phương pháp để tìm cực trị hàm số, trong đó cách phổ biến nhất là tìm đạo hàm rồi giải phương trình đạo hàm bằng 0, các nghiệm ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>6. Bài toán phân lớp và các phương pháp đánh giá P1</title>
+    <link href="/posts/bai-toan-phan-lop-va-danh-gia/" rel="alternate" type="text/html" title="6. Bài toán phân lớp và các phương pháp đánh giá P1" />
+    <published>2021-04-03T05:45:00+08:00</published>
+  
+    <updated>2021-04-03T05:45:00+08:00</updated>
+  
+    <id>/posts/bai-toan-phan-lop-va-danh-gia/</id>
+    <content src="/posts/bai-toan-phan-lop-va-danh-gia/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.
+
+Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thuật toán và thường được gọi là bộ dữ liệu “Hello World” trong Machine learning. Nói chung là ai học...
     </summary>
   
 
@@ -157,48 +193,6 @@ Chúng ta có tập dữ liệu h...
       Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.
 
 Tuy nhiên nếu biết được chính xác những gì thuật toán làm việc sẽ giúp chúng ta tìm được ra mô hình phù hợp với các bộ s...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>Thực hiện một dự án Machine learning hoàn chỉnh</title>
-    <link href="/posts/end-to-end-machine-learning-project/" rel="alternate" type="text/html" title="Thực hiện một dự án Machine learning hoàn chỉnh" />
-    <published>2021-04-02T04:44:00+08:00</published>
-  
-    <updated>2021-04-02T04:44:00+08:00</updated>
-  
-    <id>/posts/end-to-end-machine-learning-project/</id>
-    <content src="/posts/end-to-end-machine-learning-project/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Machine Learning" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Trong bài viết này chúng ta sẽ có cái nhìn tổng quát hơn về machine learning thông qua một bài toán cụ thể trong thực tế với dữ liệu thực tế của một công ty. Sau đây là các bước cần thực hiện:
-
-
-  Tìm hiểu yêu cầu bài toán
-  Lấy dữ liệu
-  Khám phá và mô phỏng dữ liệu để hiểu về dữ liệu
-  Chuẩn bị dữ liệu và tiền xử lý
-  Lựa chọn mô hình và thực hiện huấn luyện
-  Fine-tune (hiệu chỉnh) lại mô hì...
     </summary>
   
 
