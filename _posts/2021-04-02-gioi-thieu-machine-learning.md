@@ -1,5 +1,5 @@
 ---
-title: Phân loại các thuật toán Machine Learning
+title: 1. Phân loại các thuật toán Machine Learning
 author: Quy Nguyen
 date: 2021-04-02 01:32:00 -0500
 categories: [Blogging]

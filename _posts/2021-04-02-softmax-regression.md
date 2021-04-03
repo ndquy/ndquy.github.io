@@ -1,5 +1,5 @@
 ---
-title: Softmax Regression
+title: 3. Softmax Regression
 author: Quy Nguyen
 date: 2021-04-02 04:45:00 +0700
 categories: [Machine Learning]

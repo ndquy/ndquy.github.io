@@ -1,5 +1,5 @@
 ---
-title: Huấn luyện mô hình Linear Regression
+title: 2. Huấn luyện mô hình Linear Regression
 author: Quy Nguyen
 date: 2021-04-02 04:45:00 +0700
 categories: [Machine Learning]
