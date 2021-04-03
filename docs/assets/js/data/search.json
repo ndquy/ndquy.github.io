@@ -1,6 +1,21 @@
 [
   
   {
+    "title": "6. Bài toán phân lớp và các phương pháp đánh giá",
+    "url": "/posts/bai-toan-phan-lop-va-danh-gia/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-03 05:46:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thu..."
+  },
+  
+  {
     "title": "4. Gradient Descent",
     "url": "/posts/gradient-descent-2/",
     "categories": "Machine Learning",
@@ -13,21 +28,6 @@
 
 
     "snippet": "Bài trước mình đã giới thiệu mọi người cách để huấn luyện mô hình học máy, trong đó mục đích của việc huấn luyện là để tìm ra các tham số mà tại đó hàm chi phí (hàm mất mát) đạt giá trị nhỏ nhất.Trong toán tối ưu, việc tìm ra cực trị của hàm số rất phổ biến. Có nhiều phương pháp để tìm cực trị hà..."
-  },
-  
-  {
-    "title": "6. Bài toán phân lớp và các phương pháp đánh giá P1",
-    "url": "/posts/bai-toan-phan-lop-va-danh-gia/",
-    "categories": "Machine Learning",
-    "tags": "Machine learning",
-    "date": "2021-04-03 05:45:00 +0800",
-    
-
-
-
-
-
-    "snippet": "Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thu..."
   },
   
   {
