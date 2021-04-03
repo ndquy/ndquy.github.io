@@ -1,7 +1,7 @@
 ---
 title: 4. Gradient Descent
 author: Quy Nguyen
-date: 2021-04-03 04:45:00 +0700
+date: 2021-04-03 04:44:00 +0700
 categories: [Machine Learning]
 tags: [Machine learning]
 math: true

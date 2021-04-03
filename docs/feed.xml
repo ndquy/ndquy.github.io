@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-03T17:44:19+08:00</updated>
+  <updated>2021-04-03T17:49:17+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -22,9 +22,9 @@
   <entry>
     <title>6. Bài toán phân lớp và các phương pháp đánh giá</title>
     <link href="/posts/bai-toan-phan-lop-va-danh-gia/" rel="alternate" type="text/html" title="6. Bài toán phân lớp và các phương pháp đánh giá" />
-    <published>2021-04-03T05:46:00+08:00</published>
+    <published>2021-04-03T05:47:00+08:00</published>
   
-    <updated>2021-04-03T05:46:00+08:00</updated>
+    <updated>2021-04-03T17:45:49+08:00</updated>
   
     <id>/posts/bai-toan-phan-lop-va-danh-gia/</id>
     <content src="/posts/bai-toan-phan-lop-va-danh-gia/" />
@@ -56,9 +56,43 @@ Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của c�
 
   
   <entry>
+    <title>5. Hồi quy Logistic</title>
+    <link href="/posts/hoi-quy-logistic/" rel="alternate" type="text/html" title="5. Hồi quy Logistic" />
+    <published>2021-04-03T05:46:00+08:00</published>
+  
+    <updated>2021-04-03T17:42:32+08:00</updated>
+  
+    <id>/posts/hoi-quy-logistic/</id>
+    <content src="/posts/hoi-quy-logistic/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &amp;gt; 50% thì mô hình dự đoán có thể khẳng định được điểm ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
     <title>4. Gradient Descent</title>
     <link href="/posts/gradient-descent-2/" rel="alternate" type="text/html" title="4. Gradient Descent" />
-    <published>2021-04-03T05:45:00+08:00</published>
+    <published>2021-04-03T05:44:00+08:00</published>
   
     <updated>2021-04-03T16:56:27+08:00</updated>
   
@@ -85,40 +119,6 @@ Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của c�
       Bài trước mình đã giới thiệu mọi người cách để huấn luyện mô hình học máy, trong đó mục đích của việc huấn luyện là để tìm ra các tham số mà tại đó hàm chi phí (hàm mất mát) đạt giá trị nhỏ nhất.
 
 Trong toán tối ưu, việc tìm ra cực trị của hàm số rất phổ biến. Có nhiều phương pháp để tìm cực trị hàm số, trong đó cách phổ biến nhất là tìm đạo hàm rồi giải phương trình đạo hàm bằng 0, các nghiệm ...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>5. Hồi quy Logistic</title>
-    <link href="/posts/hoi-quy-logistic/" rel="alternate" type="text/html" title="5. Hồi quy Logistic" />
-    <published>2021-04-03T03:46:00+08:00</published>
-  
-    <updated>2021-04-03T17:42:32+08:00</updated>
-  
-    <id>/posts/hoi-quy-logistic/</id>
-    <content src="/posts/hoi-quy-logistic/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Machine Learning" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &amp;gt; 50% thì mô hình dự đoán có thể khẳng định được điểm ...
     </summary>
   
 

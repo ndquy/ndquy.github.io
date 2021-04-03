@@ -1,7 +1,7 @@
 ---
 title: 6. Bài toán phân lớp và các phương pháp đánh giá
 author: Quy Nguyen
-date: 2021-04-03 04:46:00 +0700
+date: 2021-04-03 04:47:00 +0700
 categories: [Machine Learning]
 tags: [Machine learning]
 math: true
