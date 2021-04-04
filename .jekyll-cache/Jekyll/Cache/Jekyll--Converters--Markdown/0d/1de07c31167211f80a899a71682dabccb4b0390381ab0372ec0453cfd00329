@@ -1,0 +1,162 @@
+I"�1<p>Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện của các thuật toán đó nhưng vẫn có thể  áp dụng, thậm chí tối ưu và cải thiện.</p>
+
+<p>Tuy nhiên nếu biết được chính xác những gì thuật toán làm việc sẽ giúp chúng ta tìm được ra mô hình phù hợp với các bộ siêu tham số đủ tốt. Biết được bản chất sẽ giúp chúng ta xác định được vấn đề gặp phải và phân tích lỗi hiệu quả hơn. Trong phần này mình sẽ đi sâu vào thuật toán hồi quy tuyến tính (Linear Regression), một trong những thuật toán đơn giản nhất. Chúng ta sẽ nghiên cứu 2 phương pháp để huấn luyện:</p>
+
+<ul>
+  <li>Sử dụng công thức để tìm ra các tham số cho mô hình mà nó khớp với dữ liệu huấn luyện nhất (nghĩa là các tham số mô hình sẽ tối thiểu hóa hàm chi phí (cost function) thông qua tập huấn luyện)</li>
+  <li>Sử dụng phương pháp tối ưu lặp đi lặp lại, phương pháp này được gọi là Gradient Descent (xin phép không dịch), nó sẽ tối thiểu hóa dần dần hàm chi phí  thông qua quá trình huấn luyện, sau 1 số bước lặp hữu hạn, mô hình sẽ hội tụ và ta được bộ tham số giống với phương pháp đầu tiên. Chúng ta sẽ nghiên cứu 1 số thuật toán Gradient Descent: Batch GD, Mini-batch GD và Stochastic GD.</li>
+</ul>
+
+<p>#Mô hình hồi quy tuyến tính (Linear Regression)</p>
+
+<p>Mục tiêu của giải thuật hồi quy tuyến tính là dự đoán giá trị của một hoặc nhiều biến mục tiêu liên tục (continuous target variable) y dựa trên một véc-tơ đầu vào X</p>
+
+<h2 id="định-nghĩa-mô-hình">Định nghĩa mô hình</h2>
+
+<p>Với đầu vào x, đầu ra là y. Ta có mô hình như sau:</p>
+
+<p>[\hat y = \theta_0 + \theta_1x_1 + \theta_2x_2 + … + \theta_nx_n]</p>
+
+<p>Trong đó</p>
+<ul>
+  <li>
+    <p>$( \hat y )$ là giá trị đầu ra cần dự đoán</p>
+  </li>
+  <li>
+    <p>$n$ là số lượng features (số chiều của vector đầu vào X)</p>
+  </li>
+  <li>
+    <p>$( x_i )$ là feature thứ i.</p>
+  </li>
+  <li>
+    <p>$( \theta )$ là tham số của mô hình (bao gồm $( \theta_0 )$ là bias và các  tham số $( \theta_1, \theta_2 ),…)$</p>
+  </li>
+</ul>
+
+<p>Phương trình này có thể viết ngắn gọn lại thành:</p>
+
+<p>[\hat y = h_\theta(x) = \theta . x]</p>
+
+<p>Trong đó:</p>
+
+<ul>
+  <li>
+    <p>$( \theta  )$ là vector tham số mô hình bao gồm bias $( \theta_0  )$ và các feature weights $( \theta_1 … \theta_n)$</p>
+  </li>
+  <li>
+    <p>X là vector đầu vào của mô hình, trong đó $( x_0)$ có giá trị bằng 1 (được thêm vào)</p>
+  </li>
+  <li>
+    <p>$θ · x$ là tích có hướng của vector đầu vào và trọng số</p>
+  </li>
+</ul>
+
+<p>Trong Machine learning, các vector thường được biểu diễn dưới dạng các vector cột, dạng mảng 2 chiều với 1 cột. Nếu $θ$ và $x$ là các vector cột thì $( \hat y = \theta^Tx )$  trong đó $( \theta^T )$ là chuyển vị của $θ$</p>
+
+<h2 id="huấn-luyện-mô-hình">Huấn luyện mô hình</h2>
+
+<p>Sau khi đã có mô hình hồi quy tuyến tính, giờ làm cách nào để huấn luyện chúng? Mình nhắc lại 1 chút, đó là việc huấn luyện cho mô hình là việc tìm ra các tham số tối ưu nhất thông qua bộ dữ liệu huấn luyện. Để làm được điều này chúng ta phái xác định được thước đo để biết được mô hình tốt hay không tốt (tham số có tối ưu hay không). Sau đây mình sẽ giới thiệu 1 cách để xác định đó là dùng biểu thức Root Mean Square Error (RMSE). Hiểu nôm na nó là Bình phương lỗi trung bình. Và mục tiêu của việc huấn luyện đó là giảm thiểu giá trị của Mean Square Error (MSE).</p>
+
+<p>MSE của mô hình hồi quy tuyến tính $( h_\theta )$ trên tập huấn luyện X được tính như sau:</p>
+
+<p>[MSE(X, h_\theta) = \frac{1}{m}\sum_{i=1}^m(\theta^Tx^{(i)} -y^{(i)})^2]</p>
+
+<p>Chúng ta viết $( h_\theta )$ thay vì h để làm rõ việc mô hình được tham số hóa bởi vector $θ$ (phụ thuộc vào  $θ$). Để đơn giản công thức, chúng ta sẽ chỉ viết $MSE(θ)$ thay vì  $MSE(X, hθ)$</p>
+
+<h2 id="phương-trình-chuẩn">Phương trình chuẩn</h2>
+
+<p>Để tìm giá trị θ để phương trình $MSE(θ)$  đạt cực tiểu có thể tìm được nhờ công thức sau:
+\(\hat\theta = (X^TX)^{-1}  X^T  y\)</p>
+
+<p>Phương trình (5.2)</p>
+
+<p>Trong đó:</p>
+
+<p>$(\hat\theta)$ là giá trị của θ mà tại đó $MSE(θ)$ đạt cực tiểu
+$y$ là vector giá trị cần tìm bao gồm $( y^1…y^m )$</p>
+
+<h1 id="implement-bằng-python">Implement bằng python</h1>
+
+<p>Khởi tạo dữ liệu</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> --><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">X</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Tiếp theo chúng ta sẽ tính θ dựa vào công thức 5.2. Chúng ta sẽ sử dụng hàm inv() trong thư viện Linear Algebra  của numpy để tính nghịch đảo của ma trận và hàm dot() để nhân ma trận:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td> --><td class="rouge-code"><pre><span class="n">X_b</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">X</span><span class="p">]</span> <span class="c1"># thêm x0 = 1 cho mỗi giá trị của vector X
+</span><span class="n">theta_best</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linalg</span><span class="p">.</span><span class="n">inv</span><span class="p">(</span><span class="n">X_b</span><span class="p">.</span><span class="n">T</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X_b</span><span class="p">)).</span><span class="n">dot</span><span class="p">(</span><span class="n">X_b</span><span class="p">.</span><span class="n">T</span><span class="p">).</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Cùng xem kết quả:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> --><td class="rouge-code"><pre>&gt;&gt;&gt; theta_best
+array([[4.21509616],
+[2.77011339]])
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chúng ta sẽ kỳ vọng là $( \theta_0 = 4 và \theta_1 = 3 )$ thay vì $( \theta_0 = 4.215 và \theta_1 = 2.770 )$. Tuy nhiên khi khởi tạo dữ liệu chúng ta đã thêm vào 1 ít noise nên không thể đưa nó về dạng phương trình gốc được.</p>
+
+<p>Sau khi đã có $( \hat\theta )$, chúng ta có thể dự đoán kết quả với đầu vào mới:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td> --><td class="rouge-code"><pre><span class="o">&gt;&gt;&gt;</span> X_new <span class="o">=</span> np.array<span class="o">([[</span>0], <span class="o">[</span>2]]<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> X_new_b <span class="o">=</span> np.c_[np.ones<span class="o">((</span>2, 1<span class="o">))</span>, X_new] <span class="c"># add x0 = 1 to each instance &gt;&gt;&gt; y_predict = X_new_b.dot(theta_best)</span>
+<span class="o">&gt;&gt;&gt;</span> y_predict
+array<span class="o">([[</span>4.21509616],
+<span class="o">[</span>9.75532293]]<span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Giờ chúng ta sẽ vẽ đường thẳng cho các dự đoán</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> --><td class="rouge-code"><pre><span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_new</span><span class="p">,</span> <span class="n">y_predict</span><span class="p">,</span> <span class="s">"r-"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">"b."</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Kiểm tra lại bằng thư viện trong Scikit-Learn</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td> --><td class="rouge-code"><pre><span class="o">&gt;&gt;&gt;</span> from sklearn.linear_model
+import LinearRegression
+<span class="o">&gt;&gt;&gt;</span> lin_reg <span class="o">=</span> LinearRegression<span class="o">()</span>
+<span class="o">&gt;&gt;&gt;</span> lin_reg.fit<span class="o">(</span>X, y<span class="o">)</span>
+<span class="o">&gt;&gt;&gt;</span> lin_reg.intercept_, lin_reg.coef_ <span class="o">(</span>array<span class="o">([</span>4.21509616]<span class="o">)</span>, array<span class="o">([[</span>2.77011339]]<span class="o">))</span>
+<span class="o">&gt;&gt;&gt;</span> lin_reg.predict<span class="o">(</span>X_new<span class="o">)</span> array<span class="o">([[</span>4.21509616],
+<span class="o">[</span>9.75532293]]<span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="tổng-kết">Tổng kết</h1>
+<p>Vậy là bài này mình đã hướng dẫn các bạn cách huấn luyện thuật toán hồi quy tuyến tính. Chốt lại về cơ bản, để huấn luyện 1 thuật toán cần:</p>
+<ul>
+  <li>Định nghĩa được mô hình</li>
+  <li>Định nghĩa hàm chi phí (hoặc hàm mất mát)</li>
+  <li>Tối ưu hàm chi phí bằng dữ liệu huấn luyện</li>
+  <li>Tìm ra các trọng số của mô hình mà tại đó hàm chi phí có giá trị nhỏ nhất</li>
+</ul>
+:ET

@@ -1,0 +1,38 @@
+## Binary Classification Loss Functions
+
+Phân lớp nhị phân là bài toán mà biến đầu ra (y) chỉ nhận một trong hai giá trị là 1 trong 2 nhãn.
+
+Bài toán thường dưới dạng bài toán dự đoán giá trị 0 hoặc 1 cho lớp đầu tiên hoặc lớp thứ hai và thường được phát biểu như dự đoán xác suất của đầu vào thuộc giá trị lớp 1.
+
+Trong phần này chúng ta sẽ khảo sát các hàm loss cho bài toán phân lớp nhị phân.
+
+Mình sẽ khởi tạo dữ liệu thử nghiệm bằng thư viện scikit-learn, dữ liệu các lớp sẽ dưới dạng hình tròn. Bài toán về các vòng tròn liên quan đến các mẫu được vẽ từ hai vòng tròn đồng tâm trên một mặt phẳng hai chiều, trong đó các điểm trên vòng tròn bên ngoài thuộc lớp 0 và các điểm cho vòng tròn bên trong thuộc lớp 1. Nhiễu được thêm vào các mẫu để tránh overfit khi tìm hiểu.
+
+Mình sẽ tạo ra 1.000 điểm dữ liệu và thêm 10% dữ liệu nhiễu . Trình tạo số giả ngẫu nhiên sẽ được thiết lập với cùng 1 giá trị tham số để đảm bảo rằng chúng ta luôn nhận được 1.000 điểm dữ liệu  giống nhau ở mỗi lần chạy khác nhau.
+
+```python
+# generate circles
+X, y = make_circles(n_samples=1000, noise=0.1, random_state=1)
+```
+
+Mình sẽ vẽ thử các điểm dữ liệu:
+
+```python
+# scatter plot of the circles dataset with points colored by class
+from sklearn.datasets import make_circles
+from numpy import where
+from matplotlib import pyplot
+# generate circles
+X, y = make_circles(n_samples=1000, noise=0.1, random_state=1)
+# select indices of points with each class label
+for i in range(2):
+	samples_ix = where(y == i)
+	pyplot.scatter(X[samples_ix, 0], X[samples_ix, 1], label=str(i))
+pyplot.legend()
+pyplot.show()
+```
+![Scatter Plot cho tập dữ liệu Circles Binary Classification](/assets/img/blog/Scatter-Plot-of-Dataset-for-the-Circles-Binary-Classification-Problem.webp)
+_Scatter Plot cho tập dữ liệu Circles Binary Classification_
+
+Các điểm đã được chia tỷ lệ hợp lý xung quanh 0, gần như trong [-1,1]. Mình sẽ không rescale chúng trong trường hợp này.
+

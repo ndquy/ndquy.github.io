@@ -1,0 +1,17 @@
+I"�<p>Trong bài viết này chúng ta sẽ có cái nhìn tổng quát hơn về machine learning thông qua một bài toán cụ thể trong thực tế với dữ liệu thực tế của một công ty. Sau đây là các bước cần thực hiện:</p>
+
+<ol>
+  <li>Tìm hiểu yêu cầu bài toán</li>
+  <li>Lấy dữ liệu</li>
+  <li>Khám phá và mô phỏng dữ liệu để hiểu về dữ liệu</li>
+  <li>Chuẩn bị dữ liệu và tiền xử lý</li>
+  <li>Lựa chọn mô hình và thực hiện huấn luyện</li>
+  <li>Fine-tune (hiệu chỉnh) lại mô hình</li>
+  <li>Đưa ra giải pháp thực hiện</li>
+  <li>Triển khai, theo dõi và bảo trì hệ thống</li>
+</ol>
+
+<h1 id="dữ-liệu-thực-tế-cần-sử-dụng">Dữ liệu thực tế cần sử dụng</h1>
+
+<p>Khi chúng ta học machine learning, cách tốt nhất để thử nghiệm và tiếp cận đó là sử dụng các dữ liệu thực tế</p>
+:ET
