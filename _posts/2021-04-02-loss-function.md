@@ -312,7 +312,33 @@ Trong trường hợp này, chúng ta có thể thấy rằng MAE thực sự h�
 Trong phần 1 mình đã giới thiệu cho các bạn 2 hàm loss được dùng cho bài toán regression, trong bài tiếp theo (p2) mình sẽ giới thiệu hàm loss cho bài toán Binary classification và phần 3 là các hàm loss cho bài toán phân đa lớp.
 
 
+# Tham khảo
 
+## Posts
+
+*   [Loss and Loss Functions for Training Deep Learning Neural Networks](https://machinelearningmastery.com/loss-and-loss-functions-for-training-deep-learning-neural-networks/)
+
+## Papers
+
+*   [On Loss Functions for Deep Neural Networks in Classification](https://arxiv.org/abs/1702.05659), 2017.
+
+## API
+
+*   [Keras Loss Functions API](https://keras.io/losses/)
+*   [Keras Activation Functions API](https://keras.io/activations/)
+*   [sklearn.preprocessing.StandardScaler API](http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+*   [sklearn.datasets.make_regression API](http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_regression.html)
+*   [sklearn.datasets.make_circles API](http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_circles.html)
+*   [sklearn.datasets.make_blobs API](http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_blobs.html)
+
+## Articles
+
+*   [Mean squared error, Wikipedia](https://en.wikipedia.org/wiki/Mean_squared_error).
+*   [Mean absolute error, Wikipedia](https://en.wikipedia.org/wiki/Mean_absolute_error).
+*   [Cross entropy, Wikipedia](https://en.wikipedia.org/wiki/Cross_entropy).
+*   [Hinge loss, Wikipedia](https://en.wikipedia.org/wiki/Hinge_loss).
+*   [Kullback–Leibler divergence, Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence).
+*   [Loss Functions in Neural Networks](https://isaacchanghau.github.io/post/loss_functions/), 2017.
 
 
 

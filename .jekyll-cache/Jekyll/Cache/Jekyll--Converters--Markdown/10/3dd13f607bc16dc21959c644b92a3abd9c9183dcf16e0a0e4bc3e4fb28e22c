@@ -1,0 +1,465 @@
+I"��<p>Nếu đã tìm hiểu về machine learning, chắc các bạn được nghe rất nhiều đến khái niệm hàm mất mát.</p>
+
+<p>Trong các thuật toán tìm kiếm của trí tuệ nhân tạo cổ điển, hàm mất mát có thể là một hàm mục tiêu của quá trình tìm kiếm. Quá trình tìm kiếm sẽ thực hiện các thay đổi hay phương pháp di chuyển để hàm mục tiêu có giá trị nhỏ nhất hoặc giá trị chấp nhận được.</p>
+
+<p>Còn trong lĩnh vực học máy, bản chất của quá trình học máy là với mỗi dữ liệu đầu vào trong quá trình huấn luyện, thuật toán sẽ tìm cách thay đổi các tham số bên trong mô hình để mô hình trở nên tốt hơn trong việc “dự đoán” ở tương lai với những dữ liệu đầu vào xấp xỉ hoặc tương tự. Việc thay đổi trọng số của mô hình thường được thực hiện bằng các thuật toán di chuyển theo độ dốc (hay còn gọi là Gradient descend).</p>
+
+<p>Hàm mất mát ở đây sẽ đóng vai trò đánh giá độ “tốt” của mô hình với một bộ trọng số tương ứng. Mục đích của quá trình huấn luyện là tìm ra bộ số để độ lớn hàm mất mát (loss function) là nhỏ nhất (cực tiểu). Như vậy ta có thể coi hàm mất mát là hàm mục tiêu trong quá trình huấn luyện.</p>
+
+<p>Là một phần của thuật toán tối ưu hóa, loss đối với trạng thái hiện tại của mô hình phải được ước lượng lặp lại. Điều này đòi hỏi phải lựa chọn một hàm mục tiêu, có thể được sử dụng để ước tính độ lỗi của mô hình để cập nhật các trọng số nhằm giảm lỗi trong lần đánh giá tiếp theo.</p>
+
+<h1 id="mục-tiêu">Mục tiêu</h1>
+<p>Trong thực tế việc lựa chọn hàm mất mát ảnh hưởng rất nhiều đến chất lượng của mô hình khi huấn luyện. Bài viết này sẽ cung cấp cho các bạn nội dung về các hàm mất mát hay sử dụng, so sánh và đánh giá các hàm mất mát trong một số bài toán cụ thể.</p>
+
+<p>Mô hình mạng nơron học cách ánh xạ từ inputs vào output từ các examples và lựa chọn hàm mất mát phải phù hợp với từng mô hình dự đoán cụ thể, ví dụ như các bài toán như phân loại hoặc hồi quy.</p>
+
+<p>Trong bài viết này, mình sẽ trình bày các hàm mất mát cho mạng nơ-ron học sâu cho các bài toán khác nhau. Nội dung bài viết gồm:</p>
+
+<ul>
+  <li>Cách để thiết lập model cho mean squared error và các biến thể của hồi quy (regression)</li>
+  <li>Cách thiết lập model cho cross-entropy và hàm mất mát cho bài toán binary classification.</li>
+  <li>Cách thiết lập model cho cross-entropy và KL divergence loss functions cho bài toán multi-class classification.</li>
+</ul>
+
+<h1 id="regression-loss-functions">Regression Loss Functions</h1>
+
+<p>Một bài toán sử dụng mô hình dự báo hồi quy thường liên quan đến việc dự đoán một đại lượng có giá trị thực. Ví dụ bài toán dự đoán giá nhà, dự đoán giá cổ phiếu…</p>
+
+<p>Trong phần này, chúng ta sẽ khảo sát các loss function phù hợp cho các bài toán regression.</p>
+
+<p>Để tạo dữ liệu demo cho bài toán regression, mình sẽ sử dụng hàm make_regression() có sẵn trong thư viện của scikit-learn. Hàm này sẽ tạo dữ liệu mẫu với các biến đầu vào, nhiễu và các thuộc tính khác…</p>
+
+<p>Chúng ta sẽ sử dụng hàm này để tạo ra dữ liệu gồm 20 features, 10 features có ý nghĩa về mặt dữ liệu và 10 features không có ý nghĩa. Mình sẽ tạo 1,000 điểm dữ liệu ngẫu nhiên cho bài toán. Tham số random_state sẽ đảm bảo cho chúng ta các dữ liệu là như nhau mỗi lần chạy.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># generate regression dataset
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Mạng nơ ron nhìn chung sẽ hoạt động tốt hơn khi các giá trị dữ liệu đầu vào và đầu ra của mô hình được scale về cùng một miền giá trị. Khi đó thuật toán học sẽ hội tụ nhanh hơn việc thuôc tính dữ liệu không cùng miền giá trị. Trong bài toán này, biến target ở dạng phân phối Gaussion, do vậy việc chuẩn hóa dữ liệu rất cần thiết.</p>
+
+<p>Mình sẽ sử dụng class StandardScaler trong thư viện scikit-learn. Còn trong thực tế chúng ta nên xây dựng một bộ scaler cho cả tập training và tập testing. Để đơn giản, mình sẽ scale dữ liệu trước khi chia ra làm tập train và tập test</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># chuẩn hóa dữ liệu
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="mi">1</span><span class="p">))[:,</span><span class="mi">0</span><span class="p">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi scale xong, chúng ta sẽ chia thành tập train và tập test:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># split into train and test
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Để demo việc tìm hiểu về hàm mất mát, mình sẽ sử dụng một model đơn giản đó là Multilayer Perceptron (MLP).</p>
+
+<p>Model sẽ gồm đầu vào là 20 features, mô hình sẽ có 1 lớp ẩn với 25 nodes, sau đó sử dụng hàm kích hoạt ReLU. Đầu ra sẽ gồm 1 node tương ứng với giá trị đầu ra muốn dự đoán, cuối cùng sẽ là một hàm kích hoạt tuyến tính .</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># define model
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Mình sẽ fit mô hình này với thuật toán tối ưu stochastic gradient descent và sử dụng learning rate là 0.01, momentum  0.9</p>
+
+<p>Việc huấn luyện sẽ thực hiện qua 100 epochs và sử dụng tập testing để đánh giá mô hình sau mỗi epoch. Cuối cùng ta có thể vẽ lại được learning curves sau khi thực hiện xong.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> --><td class="rouge-code"><pre><span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'...'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">)</span>
+<span class="c1"># fit model
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Vậy là bây giờ chúng ta đã có bài toán và mô hình, tiếp theo mình sẽ đánh giá 3 hàm mất mát phổ biến thích hợp cho các bài toán hồi quy.</p>
+
+<h2 id="mean-squared-error-loss">Mean Squared Error Loss</h2>
+
+<p>Mean Square Error (MSE) hay còn được gọi là L2 Loss là một loss function cũng được sử dụng cho các mô hình hồi quy, đặc biệt là các mô hình hồi quy tuyến tính. MSE được tính bằng tổng các bình phương của hiệu giữa giá trị thực (y : target) và giá trị mà mô hình của chúng ra dự đoán (y^:predicted).</p>
+
+<p>MSE có thể được sử dụng trong keras với giá trị là ‘mse‘ hoặc ‘mean_squared_error‘ khi huấn luyện mô hình</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'mean_squared_error'</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>MSE được ưu tiên dùng cho mô hình có layer đầu ra có 1 node và sử dụng hàm kích hoạt tuyến tính</p>
+
+<p>Ví dụ:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Code hoàn chỉnh sẽ như sau:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># mlp for regression with mse loss function
+</span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+<span class="c1"># Tạo dataset
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Chuẩn hóa dữ liệu
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="mi">1</span><span class="p">))[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Chia tập dữ liệu training và testing
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+<span class="c1"># Định nghĩa mô hình
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">))</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'mean_squared_error'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">)</span>
+<span class="c1"># Huấn luyện mô hình
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Đánh giá mô hình
+</span><span class="n">train_mse</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">test_mse</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Train: %.3f, Test: %.3f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">train_mse</span><span class="p">,</span> <span class="n">test_mse</span><span class="p">))</span>
+<span class="c1"># Vẽ lại đồ thị hàm mất mát trong quá trình huấn luyện
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Loss / Mean Squared Error'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi chạy, kết quả sẽ in ra giá trị MSE trên tập train và tập test</p>
+
+<blockquote>
+  <p>Chú ý khi chạy, kết quả có thể khác nhau do thuật toán khởi tạo ngẫu nhiên. Chúng ta nên chạy nhiều lần và lấy giá trị trung bình</p>
+</blockquote>
+
+<p>Kết quả in ra sẽ là:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre>Train: 0.000, Test: 0.001
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Biểu đồ đường thể hiện giá trị MSE trong quá trình huấn luyện của tập train (màu xanh) và tập test (màu cam)</p>
+
+<p><img src="/assets/img/blog/Line-plot-of-Mean-Squared-Error-Loss-over-Training-Epochs-When-Optimizing-the-Mean-Squared-Error-Loss-Function.webp" alt="Kết quả huấn luyện" />
+<em>Kết quả huấn luyện dựa trên loss</em></p>
+
+<p>Chúng ta có thể thấy mô hình đã hội tụ nhanh chóng. Như vậy MSE thể hiện tốt trong trường hợp này.</p>
+
+<h2 id="mean-squared-logarithmic-error-loss">Mean Squared Logarithmic Error Loss</h2>
+
+<p>Có một vấn đề với các mô hình hồi quy, đó là giá trị dự đoán có sự chênh lệch lớn hoặc rất lớn, nghĩa là khi chúng ta dự đoán được một giá trị lớn, ta không cần phải đánh phạt trọng số một cách nặng nề (nghĩa là các trọng số không nên được thay đổi nhiều) như khi dùng MSE.</p>
+
+<p>Thay vào đó, trước tiên bạn có thể lấy logarit của từng giá trị dự đoán, sau đó tính sai số bình phương trung bình. Đây được gọi là mất mát lỗi lôgarit trung bình bình phương, viết tắt là MSLE.</p>
+
+<p>Nó có ý nghĩa là giảm việc phạt trọng số khi dự đoán được một giá trị lớn.</p>
+
+<p>Như một phép đo sự mất mát, điều này sẽ giúp mô hình xấp xỉ tốt hơn khi dự đoán các giá trị chưa được scale. Mình sẽ chứng minh hàm mất mát này bằng một bài toán regression đơn giản:</p>
+
+<p>Mình sẽ thay đổi hàm mất mát khi huấn luyện bằng hàm ‘mean_squared_logarithmic_error‘ và để nguyên các mô hình ở các layer đầu ra. Sau đó mình sẽ tính sai số bình phương trung bình để vẽ đồ thị.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'mean_squared_logarithmic_error'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mse'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Code hoàn chỉnh như sau:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># mlp for regression with mse loss function
+</span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+<span class="c1"># Tạo dataset
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Chuẩn hóa dữ liệu
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="mi">1</span><span class="p">))[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Chia tập dữ liệu training và testing
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+<span class="c1"># Định nghĩa mô hình
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">))</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'mean_squared_logarithmic_error'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mse'</span><span class="p">])</span>
+<span class="c1"># Huấn luyện mô hình
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Đánh giá mô hình
+</span><span class="n">train_mse</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">test_mse</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Train: %.3f, Test: %.3f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">train_mse</span><span class="p">,</span> <span class="n">test_mse</span><span class="p">))</span>
+<span class="c1"># Vẽ lại đồ thị hàm mất mát trong quá trình huấn luyện
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Mean Squared Error'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'mean_squared_error'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_mean_squared_error'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chạy đoạn code sẽ sẽ in ra lỗi bình phương trung bình cho mô hình khi huấn luyện và tập dữ liệu thử nghiệm.</p>
+
+<blockquote>
+  <p>Chú ý khi chạy, kết quả có thể khác nhau do thuật toán khởi tạo ngẫu nhiên. Chúng ta nên chạy nhiều lần và lấy giá trị trung bình</p>
+</blockquote>
+
+<p>Trong trường hợp này, chúng ta có thể thấy rằng mô hình dẫn đến MSE kém hơn một chút trên cả tập dữ liệu huấn luyện và kiểm tra. Nó có thể không phù hợp cho bài toán này vì phân phối của biến mục tiêu là một phân phối chuẩn Gaussian .</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="n">Train</span><span class="p">:</span> <span class="mf">0.165</span><span class="p">,</span> <span class="n">Test</span><span class="p">:</span> <span class="mf">0.184</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>Biểu đồ sau thể hiện các giá trị loss MSLE qua mỗi epochs, đường màu xanh thể hiện trên tập huấn luyện, màu cam thể hiện trên tập test</p>
+
+<p>Chúng ta có thể thấy rằng MSLE đã hội tụ tốt khi thực hiện được 100 epochs; còn MSE có vẻ như thay đổi quá mức, loss giảm nhanh và bắt đầu tăng từ 20 epochs trở đi.</p>
+
+<p><img src="/assets/img/blog/Line-plots-of-Mean-Squared-Logistic-Error-Loss-and-Mean-Squared-Error-over-Training-Epochs.webp" alt="Line Plots of Mean Squared Logarithmic Error Loss and Mean Squared Error Over Training Epochs" />
+<em>Line Plots of Mean Squared Logarithmic Error Loss and Mean Squared Error Over Training Epochs</em></p>
+
+<h2 id="mean-absolute-error-loss">Mean Absolute Error Loss</h2>
+
+<p>Trong một số bài toán hồi quy, phân phối của biến mục tiêu có thể chủ yếu là phân phối Gaussian, nhưng có thể có các giá trị ngoại lệ, ví dụ: giá trị lớn hoặc nhỏ khác xa với giá trị trung bình.</p>
+
+<p>Mean Absolute Error (MAE) hay còn được gọi là L1 Loss là một loss function được sử dụng cho
+các mô hình hồi quy, đặc biệt cho các mô hình hồi quy tuyến tính. MAE được tính bằng tổng các
+trị tuyệt đối của hiệu giữa giá trị thực (y : target) và giá trị mà mô hình của chúng ra dự đoán (y^: predicted).</p>
+
+<p><img src="/assets/img/blog/mae.png" alt="Công thức" /></p>
+
+<p>Mình sẽ thay đổi hàm mất mát khi huấn luyện bằng hàm ‘mean_absolute_error‘ và để nguyên các mô hình ở các layer đầu ra. Sau đó mình sẽ tính sai số bình phương trung bình để vẽ đồ thị.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'mean_absolute_error'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mse'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Code hoàn chỉnh như sau:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># mlp for regression with mae loss function
+</span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+<span class="c1"># generate regression dataset
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># standardize dataset
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">().</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="mi">1</span><span class="p">))[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># split into train and test
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+<span class="c1"># define model
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'linear'</span><span class="p">))</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'mean_absolute_error'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'mse'</span><span class="p">])</span>
+<span class="c1"># fit model
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># evaluate the model
+</span><span class="n">_</span><span class="p">,</span> <span class="n">train_mse</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">test_mse</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Train: %.3f, Test: %.3f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">train_mse</span><span class="p">,</span> <span class="n">test_mse</span><span class="p">))</span>
+<span class="c1"># plot loss during training
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Loss'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1"># plot mse during training
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Mean Squared Error'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'mean_squared_error'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_mean_squared_error'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Code sẽ in ra giá trị MLSE cho mô hình trên tập huấn luyện và tập thử nghiệm.</p>
+
+<blockquote>
+  <p>Chú ý khi chạy, kết quả có thể khác nhau do thuật toán khởi tạo ngẫu nhiên. Chúng ta nên chạy nhiều lần và lấy giá trị trung bình</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre>Train: 0.002, Test: 0.002
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>Trong trường hợp này, chúng ta có thể thấy rằng MAE thực sự hội tụ nhưng vẫn có đường gập ghềnh, mặc dù tổng quát của MSE không bị ảnh hưởng nhiều. Chúng ta biết rằng phân phối của biến mục tiêu là một phân phối Gaussian chuẩn không có giá trị ngoại lệ lớn, vì vậy MAE sẽ không phù hợp trong trường hợp này.</p>
+
+<p><img src="/assets/img/blog/Line-plots-of-Mean-Absolute-Error-Loss-and-Mean-Squared-Error-over-Training-Epochs.webp" alt="Line plots of Mean Absolute Error Loss and Mean Squared Error over Training Epochs" /></p>
+
+<h1 id="tổng-kết">Tổng kết</h1>
+
+<p>Trong phần 1 mình đã giới thiệu cho các bạn 2 hàm loss được dùng cho bài toán regression, trong bài tiếp theo (p2) mình sẽ giới thiệu hàm loss cho bài toán Binary classification và phần 3 là các hàm loss cho bài toán phân đa lớp.</p>
+
+<h1 id="tham-khảo">Tham khảo</h1>
+
+<h2 id="posts">Posts</h2>
+
+<ul>
+  <li><a href="https://machinelearningmastery.com/loss-and-loss-functions-for-training-deep-learning-neural-networks/">Loss and Loss Functions for Training Deep Learning Neural Networks</a></li>
+</ul>
+
+<h2 id="papers">Papers</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/abs/1702.05659">On Loss Functions for Deep Neural Networks in Classification</a>, 2017.</li>
+</ul>
+
+<h2 id="api">API</h2>
+
+<ul>
+  <li><a href="https://keras.io/losses/">Keras Loss Functions API</a></li>
+  <li><a href="https://keras.io/activations/">Keras Activation Functions API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">sklearn.preprocessing.StandardScaler API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_regression.html">sklearn.datasets.make_regression API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_circles.html">sklearn.datasets.make_circles API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_blobs.html">sklearn.datasets.make_blobs API</a></li>
+</ul>
+
+<h2 id="articles">Articles</h2>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Mean_squared_error">Mean squared error, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Mean_absolute_error">Mean absolute error, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Cross_entropy">Cross entropy, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Hinge_loss">Hinge loss, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback–Leibler divergence, Wikipedia</a>.</li>
+  <li><a href="https://isaacchanghau.github.io/post/loss_functions/">Loss Functions in Neural Networks</a>, 2017.</li>
+</ul>
+
+:ET
