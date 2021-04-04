@@ -93,7 +93,7 @@ Với p và q là rời rạc (như y - nhãn thật sự và y^ - nhãn dự đ
 
 $$H(\mathbf{p}, \mathbf{q}) =-\sum_{i=1}^C p_i \log q_i ~~~ (1)$$
 
-Trong đó $C$ là số lượng các class cần phân lớp, trong bài toán binary classification thì C = 2.
+Trong đó C là số lượng các class cần phân lớp, trong bài toán binary classification thì C = 2.
 
 Cross-entropy được cung cấp trong Keras bằng cách thiết lập tham số loss=‘binary_crossentropy‘ khi compile mô hình.
 
@@ -370,7 +370,7 @@ Trong phần 2 mình đã giới thiệu cho các bạn 2 hàm loss được dù
 # Tham khảo
 
 ## Posts
-
+*   [Soft Margin Support Vector Machine](https://machinelearningcoban.com/2017/04/13/softmarginsmv/).
 *   [Loss and Loss Functions for Training Deep Learning Neural Networks](https://machinelearningmastery.com/loss-and-loss-functions-for-training-deep-learning-neural-networks/)
 
 ## Papers
@@ -394,6 +394,9 @@ Trong phần 2 mình đã giới thiệu cho các bạn 2 hàm loss được dù
 *   [Hinge loss, Wikipedia](https://en.wikipedia.org/wiki/Hinge_loss).
 *   [Kullback–Leibler divergence, Wikipedia](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence).
 *   [Loss Functions in Neural Networks](https://isaacchanghau.github.io/post/loss_functions/), 2017.
+
+
+
 
 
 

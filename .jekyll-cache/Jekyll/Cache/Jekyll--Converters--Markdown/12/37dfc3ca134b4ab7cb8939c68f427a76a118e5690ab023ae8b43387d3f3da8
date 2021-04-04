@@ -1,0 +1,535 @@
+I"��<p>Phân lớp nhị phân là bài toán mà biến đầu ra (y) chỉ nhận một trong hai giá trị là 1 trong 2 nhãn.</p>
+
+<p>Bài toán thường dưới dạng bài toán dự đoán giá trị 0 hoặc 1 cho lớp đầu tiên hoặc lớp thứ hai và thường được phát biểu như dự đoán xác suất của đầu vào thuộc giá trị lớp 1.</p>
+
+<p>Trong phần này chúng ta sẽ khảo sát các hàm loss cho bài toán phân lớp nhị phân.</p>
+
+<h1 id="chuẩn-bị-dữ-liệu-và-mô-hình">Chuẩn bị dữ liệu và mô hình</h1>
+
+<p>Mình sẽ khởi tạo dữ liệu thử nghiệm bằng thư viện scikit-learn, dữ liệu các lớp sẽ dưới dạng hình tròn. Bài toán về các vòng tròn liên quan đến các mẫu được vẽ từ hai vòng tròn đồng tâm trên một mặt phẳng hai chiều, trong đó các điểm trên vòng tròn bên ngoài thuộc lớp 0 và các điểm cho vòng tròn bên trong thuộc lớp 1. Nhiễu được thêm vào các mẫu để tránh overfit khi tìm hiểu.</p>
+
+<p>Mình sẽ tạo ra 1.000 điểm dữ liệu và thêm 10% dữ liệu nhiễu . Trình tạo số giả ngẫu nhiên sẽ được thiết lập với cùng 1 giá trị tham số để đảm bảo rằng chúng ta luôn nhận được 1.000 điểm dữ liệu  giống nhau ở mỗi lần chạy khác nhau.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c1"># generate circles
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Mình sẽ vẽ thử các điểm dữ liệu:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="c1"># scatter plot of the circles dataset with points colored by class
+</span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_circles</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">where</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+<span class="c1"># generate circles
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># select indices of points with each class label
+</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+	<span class="n">samples_ix</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+	<span class="n">pyplot</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">samples_ix</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">samples_ix</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p><img src="/assets/img/blog/Scatter-Plot-of-Dataset-for-the-Circles-Binary-Classification-Problem.webp" alt="Scatter Plot cho tập dữ liệu Circles Binary Classification" />
+<em>Scatter Plot cho tập dữ liệu Circles Binary Classification</em></p>
+
+<p>Các điểm dữ liệu nằm xung quanh giá trị 0, gần như trong khoảng [-1,1]. Mình sẽ không rescale chúng trong trường hợp này.</p>
+
+<p>Phân chia dữ liệu huấn luyện, kiểm tra:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1"># split into train and test
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chúng ta có thể sử dụng một mô hình MLP đơn giản để giải quyết bài toán này. Bài toán sẽ gồm đầu vào với 2 features, một lớp ẩn với 50 nút. Hàm kích hoạt tuyến tính và layer đầu ra mình sẽ lựa chọn theo mỗi hàm mất mát sẽ sử dụng.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1"># Định nghĩa mô hình
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'...'</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Mô hình sẽ được fit bằng thuật toán SGD với learning rate là 0.01 và momentum là 0.9</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'...'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Mình sẽ huấn luyện mô hình với 200 epochs sau đó đánh giá mô hình với loss và độ chính xác (accuracy) ở mỗi epoch. Sau đó mình sẽ vẽ learning curves.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c1"># fit model
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi đã định nghĩa xong mô hình, bây giờ mình sẽ tiến hành thử nghiệm các hàm lỗi khác nhau và so sánh kết quả giữa các hàm loss để đưa ra nhận xét cho mỗi phương pháp.</p>
+
+<h1 id="binary-cross-entropy-loss">Binary Cross-Entropy Loss</h1>
+
+<p>Cross-entropy là hàm loss được sử dụng mặc định cho bài toán phân lớp nhị phân.</p>
+
+<p>Nó được thiết kế để sử dụng với bài toán phân loại nhị phân trong đó các giá trị mục tiêu nhận một trong 2 giá trị {0, 1}.</p>
+
+<p>Về mặt toán học, nếu như MSE tính khoảng cách giữa 2 đại lượng số thì cross-entropy hiểu nôm na là phương pháp tính khoảng cách giữa 2 phân bố xác suất.</p>
+
+\[H(\mathbf{p}, \mathbf{q}) = \mathbf{E_p}[-\log \mathbf{q}]\]
+
+<p>Với p và q là rời rạc (như y - nhãn thật sự và y^ - nhãn dự đoán ) trong bài toán của chúng ta), công thức này được viết dưới dạng:</p>
+
+\[H(\mathbf{p}, \mathbf{q}) =-\sum_{i=1}^C p_i \log q_i ~~~ (1)\]
+
+<p>Trong đó C là số lượng các class cần phân lớp, trong bài toán binary classification thì C = 2.</p>
+
+<p>Cross-entropy được cung cấp trong Keras bằng cách thiết lập tham số loss=‘binary_crossentropy‘ khi compile mô hình.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'binary_crossentropy'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Hàm yêu cầu layer đầu ra được gồm 1 node và sử dụng kích hoạt ‘sigmoid’ để dự đoán xác suất cho đầu ra.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'sigmoid'</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Code đầy đủ sử dụng hàm loss Cross-entropy được trình bày dưới đây:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+</pre></td><td class="rouge-code"><pre><span class="c1"># mlp for the circles problem with cross entropy loss
+</span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_circles</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+<span class="c1"># Tạo bộ dữ liệu 2 chiều cần phân lớp 
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># split into train and test
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+<span class="c1"># định nghĩa mô hình
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'sigmoid'</span><span class="p">))</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'binary_crossentropy'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+<span class="c1"># huấn luyện mô hình
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Đánh giá mô hình
+</span><span class="n">_</span><span class="p">,</span> <span class="n">train_acc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">test_acc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Train: %.3f, Test: %.3f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">train_acc</span><span class="p">,</span> <span class="n">test_acc</span><span class="p">))</span>
+<span class="c1"># Vẽ đồ thị hàm loss
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Loss'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1"># Vẽ đồ thị độ chính xác
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Accuracy'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_accuracy'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi chạy, kết quả sẽ in ra độ chính xác trên tập train và tập test</p>
+
+<blockquote>
+  <p>Chú ý khi chạy, kết quả có thể khác nhau do thuật toán khởi tạo ngẫu nhiên. Chúng ta nên chạy nhiều lần và lấy giá trị trung bình</p>
+</blockquote>
+
+<p>Kết quả in ra sẽ là:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>Train: 0.836, Test: 0.852
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Trong trường hợp này chúng ta có thể thấy mô hình đạt độ chính xác 83% trên tập dữ liệu huấn luyện và 85% trên tập test. Kết quả độ chính xác trên tập test và tập train khá gần nhau chứng tỏ mô hình không bị underfit hay overfit.</p>
+
+<p>Biểu đồ đường thể hiện giá trị cross-entropy trong quá trình huấn luyện của tập train (màu xanh) và tập test (màu cam)</p>
+
+<p><img src="/assets/img/blog/Line-Plots-of-Cross-Entropy-Loss-and-Classification-Accuracy-over-Training-Epochs-on-the-Two-Circles-Binary-Classification-Problem.webp" alt="Đồ thị đường của hàm mất mát Cross Entropy và độ chính xác" />
+<em>Đồ thị đường của hàm mất mát Cross Entropy và độ chính xác</em></p>
+
+<p>Khi nào sử dụng cross-entropy?</p>
+
+<ul>
+  <li>Bài toán phân lớp</li>
+  <li>Tạo ra các mô hình với độ chắc chắn cao (precision, recall cao)</li>
+</ul>
+
+<h1 id="hinge-loss">Hinge Loss</h1>
+
+<p>Một cách khác để tính cross-entropy cho bài toán phân lớp nhị phân đó là hàm hinge loss. Đây là ý tưởng chính của mô hình Support Vector Machine (SVM).</p>
+
+<p>Nó được thiết kế để sử dụng với bài toán phân loại nhị phân trong đó các giá trị mục tiêu nhận một trong 2 giá trị {-1, 1}.</p>
+
+\[J_n(\mathbf{w}, b) = \max(0, 1 - y_nz_n)\]
+
+<p>Trong đó, $z_n$có thể được coi là score của $x_n$ ứng với cặp hệ số $(\mathbf{w}, b)$ chính là đầu ra mong muốn.</p>
+
+<p>Hàm loss sẽ khuyến khích các điểm dữ liệu có dấu đúng, phạt lỗi nặng hơn nếu có giá trị dự đoán có dấu khác với giá trị mong muốn.</p>
+
+<p>Trong thực tế, hinge loss thường thể hiện tốt hơn cross-entropy trong các bài toán binary classification</p>
+
+<p>Đầu tiên, chúng ta sẽ đưa các nhãn đầu ra thành một trong 2 giá trị -1 và 1</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c1"># đổi y từ {0,1} thành {-1,1}
+</span><span class="n">y</span><span class="p">[</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chúng ta có thể chỉ định hàm loss trong khi compile bằng giá trị loss=’hinge’</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'hinge'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Cuối cùng, lớp đầu ra của mô hình sẽ có 1 node và sử dụng hàm kích hoạt activation=’tanh’ để đảm bảo giá trị đầu ra nằm trong khoảng [-1, 1].</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau đây là đoạn code hoàn chỉnh:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="rouge-code"><pre><span class="c1"># mlp for the circles problem with hinge loss
+</span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_circles</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">where</span>
+<span class="c1"># Tạo dữ liệu 
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># đưa y từ {0,1} thành {-1,1}
+</span><span class="n">y</span><span class="p">[</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="c1"># Chia tập dữ liệu thành 2 tập test và train
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+<span class="c1"># định nghĩa mô hình
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">))</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'hinge'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+<span class="c1"># huấn luyện mô hình
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># đánh giá mô hình
+</span><span class="n">_</span><span class="p">,</span> <span class="n">train_acc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">test_acc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Train: %.3f, Test: %.3f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">train_acc</span><span class="p">,</span> <span class="n">test_acc</span><span class="p">))</span>
+<span class="c1"># vẽ đồ thị giá trị loss sau khi huấn luyện
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Loss'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1"># vẽ đồ thị giá trị độ chính xác sau khi huấn luyện
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Accuracy'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_accuracy'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi chạy, kết quả sẽ in ra độ chính xác của mô hình trên tập train và tập test</p>
+
+<blockquote>
+  <p>Chú ý khi chạy, kết quả có thể khác nhau do thuật toán khởi tạo ngẫu nhiên. Chúng ta nên chạy nhiều lần và lấy giá trị trung bình</p>
+</blockquote>
+
+<p>Kết quả in ra sẽ là:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">Train</span><span class="p">:</span> <span class="mf">0.792</span><span class="p">,</span> <span class="n">Test</span><span class="p">:</span> <span class="mf">0.740</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Trong trường hợp này, chúng ta có thể thấy độ chính xác kém hơn một chút so với việc sử dụng cross-entropy, với mô hình đã chọn có độ chính xác dưới 80% trên tập huấn luyện và tập kiểm tra.</p>
+
+<p>Biểu đồ đường thể hiện độ chính xác trong quá trình huấn luyện của tập train (màu xanh) và tập test (màu cam)</p>
+
+<p><img src="/assets/img/blog/Line-Plots-of-Hinge-Loss-and-Classification-Accuracy-over-Training-Epochs-on-the-Two-Circles-Binary-Classification-Problem.webp" alt="Hinge Loss và Classification Accuracy" />
+<em>Hinge Loss và Classification Accuracy</em></p>
+
+<h1 id="squared-hinge-loss">Squared Hinge Loss</h1>
+
+<p>Hàm hinge loss có nhiều phiên bản mở rộng, thường được sử dụng trong mô hình SVM.</p>
+
+<p>Một phiên bản phổ biến của hinge loss đó là squared hinge loss. Nó có tác dụng trong việc làm giảm sự nhấp nhô của đồ thị hàm loss và dễ thao tác hơn về mặt toán học.</p>
+
+<p>Nếu hàm hinge loss có kết quả tốt trong bài toán phân lớp nhị phân thì squared hinge loss cũng sẽ cho kết quả tương tự.</p>
+
+<p>Giống như hinge loss, chúng ta cũng cần biến đổi các nhãn về giá trị -1 và 1.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="c1"># đổi y từ {0,1} thành {-1,1}
+</span><span class="n">y</span><span class="p">[</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chúng ta có thể chỉ định hàm loss trong khi compile bằng tham số</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'squared_hinge'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Cuối cùng, lớp đầu ra của mô hình sẽ có 1 node và sử dụng hàm kích hoạt activation=’tanh’ để đảm bảo giá trị đầu ra nằm trong khoảng [-1, 1].</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau đây là đoạn code hoàn chỉnh:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="rouge-code"><pre><span class="c1"># mlp for the circles problem with hinge loss
+</span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_circles</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">SGD</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">where</span>
+<span class="c1"># Tạo dữ liệu 
+</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_circles</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># đưa y từ {0,1} thành {-1,1}
+</span><span class="n">y</span><span class="p">[</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="c1"># Chia tập dữ liệu thành 2 tập test và train
+</span><span class="n">n_train</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">trainX</span><span class="p">,</span> <span class="n">testX</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_train</span><span class="p">,</span> <span class="p">:],</span> <span class="n">X</span><span class="p">[</span><span class="n">n_train</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">trainy</span><span class="p">,</span> <span class="n">testy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="p">:]</span>
+<span class="c1"># định nghĩa mô hình
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">input_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'relu'</span><span class="p">,</span> <span class="n">kernel_initializer</span><span class="o">=</span><span class="s">'he_uniform'</span><span class="p">))</span>
+<span class="n">model</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">))</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">SGD</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s">'squared_hinge'</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">])</span>
+<span class="c1"># huấn luyện mô hình
+</span><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">),</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># đánh giá mô hình
+</span><span class="n">_</span><span class="p">,</span> <span class="n">train_acc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">trainX</span><span class="p">,</span> <span class="n">trainy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">test_acc</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">testX</span><span class="p">,</span> <span class="n">testy</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Train: %.3f, Test: %.3f'</span> <span class="o">%</span> <span class="p">(</span><span class="n">train_acc</span><span class="p">,</span> <span class="n">test_acc</span><span class="p">))</span>
+<span class="c1"># vẽ đồ thị giá trị loss sau khi huấn luyện
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Loss'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_loss'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1"># vẽ đồ thị giá trị độ chính xác sau khi huấn luyện
+</span><span class="n">pyplot</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Accuracy'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'accuracy'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'train'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">.</span><span class="n">history</span><span class="p">[</span><span class="s">'val_accuracy'</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">pyplot</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi chạy, kết quả sẽ in ra độ chính xác của mô hình trên tập train và tập test</p>
+
+<blockquote>
+  <p>Chú ý khi chạy, kết quả có thể khác nhau do thuật toán khởi tạo ngẫu nhiên. Chúng ta nên chạy nhiều lần và lấy giá trị trung bình</p>
+</blockquote>
+
+<p>Kết quả in ra sẽ là:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">Train</span><span class="p">:</span> <span class="mf">0.682</span><span class="p">,</span> <span class="n">Test</span><span class="p">:</span> <span class="mf">0.646</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Trong trường hợp này, chúng ta có thể thấy độ chính xác kém hơn một chút so với việc sử dụng Hinge loss, với mô hình đã chọn có độ chính xác dưới 70% trên tập huấn luyện và tập kiểm tra.</p>
+
+<p>Biểu đồ đường thể hiện độ chính xác trong quá trình huấn luyện của tập train (màu xanh) và tập test (màu cam)</p>
+
+<p><img src="/assets/img/blog/Line-Plots-of-Squared-Hinge-Loss-and-Classification-Accuracy-over-Training-Epochs-on-the-Two-Circles-Binary-Classification-Problem.webp" alt="Squared Hinge Loss và Classification Accuracy" />
+<em>Squared Hinge Loss và Classification Accuracy</em></p>
+
+<p>Mô hình có vẻ đã hội tụ, tuy nhiên bề mặt hàm lỗi còn nhiều nhấp nhô, chứng tỏ việc thay đổi trọng số nhỏ ảnh hưởng lớn đến độ lỗi của mô hình.</p>
+
+<h1 id="tổng-kết">Tổng kết</h1>
+
+<p>Trong phần 2 mình đã giới thiệu cho các bạn 2 hàm loss được dùng cho bài toán phân lớp nhị phân, trong bài tiếp theo (p3) mình sẽ giới thiệu hàm loss cho bài toán Multi-Class Classification. (phân nhiều lớp)</p>
+
+<h1 id="tham-khảo">Tham khảo</h1>
+
+<h2 id="posts">Posts</h2>
+<ul>
+  <li><a href="https://machinelearningcoban.com/2017/04/13/softmarginsmv/">Soft Margin Support Vector Machine</a>.</li>
+  <li><a href="https://machinelearningmastery.com/loss-and-loss-functions-for-training-deep-learning-neural-networks/">Loss and Loss Functions for Training Deep Learning Neural Networks</a></li>
+</ul>
+
+<h2 id="papers">Papers</h2>
+
+<ul>
+  <li><a href="https://arxiv.org/abs/1702.05659">On Loss Functions for Deep Neural Networks in Classification</a>, 2017.</li>
+</ul>
+
+<h2 id="api">API</h2>
+
+<ul>
+  <li><a href="https://keras.io/losses/">Keras Loss Functions API</a></li>
+  <li><a href="https://keras.io/activations/">Keras Activation Functions API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">sklearn.preprocessing.StandardScaler API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_regression.html">sklearn.datasets.make_regression API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_circles.html">sklearn.datasets.make_circles API</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_blobs.html">sklearn.datasets.make_blobs API</a></li>
+</ul>
+
+<h2 id="articles">Articles</h2>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Mean_squared_error">Mean squared error, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Mean_absolute_error">Mean absolute error, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Cross_entropy">Cross entropy, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Hinge_loss">Hinge loss, Wikipedia</a>.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback–Leibler divergence, Wikipedia</a>.</li>
+  <li><a href="https://isaacchanghau.github.io/post/loss_functions/">Loss Functions in Neural Networks</a>, 2017.</li>
+</ul>
+
+:ET
