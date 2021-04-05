@@ -53,7 +53,7 @@ Phần thú vị đó là tham số k1, xác định tính bão hòa tần suấ
 ![Sự ảnh hưởng của TF tới Score](/assets/img/blog/80a8f9e5-e42f-4bc0-939d-6b5126d965ac.png)
 _Sự ảnh hưởng của TF tới Score_
 
-$|D|/d_{avg}$  ở mẫu số có nghĩa là tài liệu dài hơn các tài liệu trung bình sẽ dẫn đến mẫu số lớn hơn, dẫn đến giảm điểm. Thực tế cho ta thấy là nếu càng nhiều thuật ngữ trong tài liệu mà không khớp với truy vấn đầu vào thì điểm của tài liệu càng thấp. Nói cách khác, nếu một tài liệu dài 300 trang đề cập đến cụm từ truy vấn một lần, thì nó ít có khả năng liên quan đến truy vấn hơn so với một tài liệu ngắn đề cập đến truy vấn một lần.
+$\|D\|/d_{avg}$  ở mẫu số có nghĩa là tài liệu dài hơn các tài liệu trung bình sẽ dẫn đến mẫu số lớn hơn, dẫn đến giảm điểm. Thực tế cho ta thấy là nếu càng nhiều thuật ngữ trong tài liệu mà không khớp với truy vấn đầu vào thì điểm của tài liệu càng thấp. Nói cách khác, nếu một tài liệu dài 300 trang đề cập đến cụm từ truy vấn một lần, thì nó ít có khả năng liên quan đến truy vấn hơn so với một tài liệu ngắn đề cập đến truy vấn một lần.
 
 Đối với phần tần suất tài liệu nghịch đảo, ${IDF}(q_i, D)$. Với tập ngữ liệu gồm N tài liệu, IDF cho thuật ngữ $q_i$ được tính như sau:
 

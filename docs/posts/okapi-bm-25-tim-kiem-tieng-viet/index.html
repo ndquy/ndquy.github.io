@@ -38,7 +38,7 @@
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"/posts/okapi-bm-25-tim-kiem-tieng-viet/","@type":"BlogPosting","headline":"Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt","dateModified":"2021-04-05T11:28:41+08:00","datePublished":"2021-04-05T11:09:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/okapi-bm-25-tim-kiem-tieng-viet/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trường đại học London những năm 1980 và 1990.","@context":"https://schema.org"}</script>
+{"url":"/posts/okapi-bm-25-tim-kiem-tieng-viet/","@type":"BlogPosting","headline":"Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt","dateModified":"2021-04-05T11:31:24+08:00","datePublished":"2021-04-05T11:09:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/okapi-bm-25-tim-kiem-tieng-viet/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trường đại học London những năm 1980 và 1990.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -605,7 +605,7 @@
   
     data-toggle="tooltip"
     data-placement="bottom"
-    title="Mon, Apr  5, 2021, 10:28 AM +0700"
+    title="Mon, Apr  5, 2021, 10:31 AM +0700"
   
 
   prefix="Updated "
@@ -618,7 +618,7 @@
     Apr  5
   
 
-  <i class="unloaded">2021-04-05T11:28:41+08:00</i>
+  <i class="unloaded">2021-04-05T11:31:24+08:00</i>
 
 </span>
 
@@ -640,7 +640,7 @@
 
 
 <!-- return element -->
-<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="2341 words">13 min</span>
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="2339 words">12 min</span>
 
 
           <!-- page views -->
@@ -714,15 +714,7 @@
 <p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/blog/80a8f9e5-e42f-4bc0-939d-6b5126d965ac.png" alt="Sự ảnh hưởng của TF tới Score" />
 <em>Sự ảnh hưởng của TF tới Score</em></p>
 
-<div class="table-wrapper"><table>
-  <tbody>
-    <tr>
-      <td>$</td>
-      <td>D</td>
-      <td>/d_{avg}$  ở mẫu số có nghĩa là tài liệu dài hơn các tài liệu trung bình sẽ dẫn đến mẫu số lớn hơn, dẫn đến giảm điểm. Thực tế cho ta thấy là nếu càng nhiều thuật ngữ trong tài liệu mà không khớp với truy vấn đầu vào thì điểm của tài liệu càng thấp. Nói cách khác, nếu một tài liệu dài 300 trang đề cập đến cụm từ truy vấn một lần, thì nó ít có khả năng liên quan đến truy vấn hơn so với một tài liệu ngắn đề cập đến truy vấn một lần.</td>
-    </tr>
-  </tbody>
-</table></div>
+<p>$|D|/d_{avg}$  ở mẫu số có nghĩa là tài liệu dài hơn các tài liệu trung bình sẽ dẫn đến mẫu số lớn hơn, dẫn đến giảm điểm. Thực tế cho ta thấy là nếu càng nhiều thuật ngữ trong tài liệu mà không khớp với truy vấn đầu vào thì điểm của tài liệu càng thấp. Nói cách khác, nếu một tài liệu dài 300 trang đề cập đến cụm từ truy vấn một lần, thì nó ít có khả năng liên quan đến truy vấn hơn so với một tài liệu ngắn đề cập đến truy vấn một lần.</p>
 
 <p>Đối với phần tần suất tài liệu nghịch đảo, ${IDF}(q_i, D)$. Với tập ngữ liệu gồm N tài liệu, IDF cho thuật ngữ $q_i$ được tính như sau:</p>
 
