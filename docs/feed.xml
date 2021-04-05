@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-05T11:44:32+08:00</updated>
+  <updated>2021-04-05T12:02:09+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -24,7 +24,7 @@
     <link href="/posts/okapi-bm-25-tim-kiem-tieng-viet/" rel="alternate" type="text/html" title="10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt" />
     <published>2021-04-05T11:09:00+08:00</published>
   
-    <updated>2021-04-05T11:34:05+08:00</updated>
+    <updated>2021-04-05T11:44:58+08:00</updated>
   
     <id>/posts/okapi-bm-25-tim-kiem-tieng-viet/</id>
     <content src="/posts/okapi-bm-25-tim-kiem-tieng-viet/" />
@@ -47,6 +47,46 @@
 
 
       Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trườ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Triển khai hàng đợi xử lý bằng python với Redis</title>
+    <link href="/posts/cai-dat-queue-python-production/" rel="alternate" type="text/html" title="Triển khai hàng đợi xử lý bằng python với Redis" />
+    <published>2021-04-05T11:09:00+08:00</published>
+  
+    <updated>2021-04-05T11:09:00+08:00</updated>
+  
+    <id>/posts/cai-dat-queue-python-production/</id>
+    <content src="/posts/cai-dat-queue-python-production/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Lập Trình" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Hàng đợi queue là gì?
+
+Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.
+
+Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.
+
+Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc phản hồi cho user ngay tức t...
     </summary>
   
 
@@ -165,42 +205,6 @@ Mình sẽ khởi...
 Trong các thuật toán tìm kiếm của trí tuệ nhân tạo cổ điển, hàm mất mát có thể là một hàm mục tiêu của quá trình tìm kiếm. Quá trình tìm kiếm sẽ thực hiện các thay đổi hay phương pháp di chuyển để hàm mục tiêu có giá trị nhỏ nhất hoặc giá trị chấp nhận được.
 
 Còn trong lĩnh vực học máy, bản chất củ...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>6. Bài toán phân lớp và các phương pháp đánh giá</title>
-    <link href="/posts/bai-toan-phan-lop-va-danh-gia/" rel="alternate" type="text/html" title="6. Bài toán phân lớp và các phương pháp đánh giá" />
-    <published>2021-04-03T05:47:00+08:00</published>
-  
-    <updated>2021-04-03T17:50:12+08:00</updated>
-  
-    <id>/posts/bai-toan-phan-lop-va-danh-gia/</id>
-    <content src="/posts/bai-toan-phan-lop-va-danh-gia/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Machine Learning" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.
-
-Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thuật toán và thường được gọi là bộ dữ liệu “Hello World” trong Machine learning. Nói chung là ai học...
     </summary>
   
 

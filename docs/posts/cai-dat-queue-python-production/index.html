@@ -22,27 +22,27 @@
 
   <!-- Begin Jekyll SEO tag v2.7.1 -->
 <meta name="generator" content="Jekyll v4.2.0" />
-<meta property="og:title" content="Hồi quy Logistic" />
+<meta property="og:title" content="Triển khai hàng đợi xử lý bằng python với Redis" />
 <meta name="author" content="Quy Nguyen" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &gt; 50% thì mô hình dự đoán có thể khẳng định được điểm dữ liệu đó thuộc về lớp 1 (nhãn là 1) hoặc ngược lại (nhãn là 0). Việc này được gọi là phân loại nhị phân (chỉ có 0 với 1)" />
-<meta property="og:description" content="Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &gt; 50% thì mô hình dự đoán có thể khẳng định được điểm dữ liệu đó thuộc về lớp 1 (nhãn là 1) hoặc ngược lại (nhãn là 0). Việc này được gọi là phân loại nhị phân (chỉ có 0 với 1)" />
-<link rel="canonical" href="/posts/hoi-quy-logistic/" />
-<meta property="og:url" content="/posts/hoi-quy-logistic/" />
+<meta name="description" content="Hàng đợi queue là gì?" />
+<meta property="og:description" content="Hàng đợi queue là gì?" />
+<link rel="canonical" href="/posts/cai-dat-queue-python-production/" />
+<meta property="og:url" content="/posts/cai-dat-queue-python-production/" />
 <meta property="og:site_name" content="Quy’s blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2021-04-03T05:46:00+08:00" />
+<meta property="article:published_time" content="2021-04-05T11:09:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Hồi quy Logistic" />
+<meta property="twitter:title" content="Triển khai hàng đợi xử lý bằng python với Redis" />
 <meta name="twitter:site" content="@dinhquy94" />
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"/posts/hoi-quy-logistic/","headline":"Hồi quy Logistic","dateModified":"2021-04-03T17:50:12+08:00","datePublished":"2021-04-03T05:46:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/hoi-quy-logistic/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &gt; 50% thì mô hình dự đoán có thể khẳng định được điểm dữ liệu đó thuộc về lớp 1 (nhãn là 1) hoặc ngược lại (nhãn là 0). Việc này được gọi là phân loại nhị phân (chỉ có 0 với 1)","@context":"https://schema.org"}</script>
+{"url":"/posts/cai-dat-queue-python-production/","headline":"Triển khai hàng đợi xử lý bằng python với Redis","dateModified":"2021-04-05T11:09:00+08:00","datePublished":"2021-04-05T11:09:00+08:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/cai-dat-queue-python-production/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Hàng đợi queue là gì?","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  <title>5. Hồi quy Logistic | Quy's blog
+  <title>Triển khai hàng đợi xử lý bằng python với Redis | Quy's blog
   </title>
 
   <!--
@@ -133,27 +133,6 @@
 
 <script defer src="/assets/js/dist/post.min.js"></script>
 
-
-  <!-- MathJax -->
-  <script>
-  // see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options>
-  MathJax = {
-    tex: {
-      inlineMath: [              // start/end delimiter pairs for in-line math
-        ['$','$'],
-        ['\\(','\\)']
-      ],
-      displayMath: [             // start/end delimiter pairs for display math
-        ['$$', '$$'],
-        ['\\[', '\\]']
-      ]
-    }
-  };
-  </script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script type="text/javascript" id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-  </script>
 
 
 
@@ -471,7 +450,7 @@
       
 
         
-          <span>5. Hồi quy Logistic</span>
+          <span>Triển khai hàng đợi xử lý bằng python với Redis</span>
 
         
 
@@ -527,20 +506,6 @@
 
 
 
-  
-
-  
-
-  <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
-  
-  
-
-  
-
-  
-
-
-
 <!-- return -->
 <div class="row">
 
@@ -548,7 +513,7 @@
 
     <div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
 
-      <h1 data-toc-skip>5. Hồi quy Logistic</h1>
+      <h1 data-toc-skip>Triển khai hàng đợi xử lý bằng python với Redis</h1>
 
       <div class="post-meta text-muted d-flex flex-column">
         <!-- Published date and author -->
@@ -569,7 +534,7 @@
   
     data-toggle="tooltip"
     data-placement="bottom"
-    title="Sat, Apr  3, 2021,  5:46 AM +0800"
+    title="Mon, Apr  5, 2021, 11:09 AM +0800"
   
 
   
@@ -579,10 +544,10 @@
   
 
   
-    Apr  3
+    Apr  5
   
 
-  <i class="unloaded">2021-04-03T05:46:00+08:00</i>
+  <i class="unloaded">2021-04-05T11:09:00+08:00</i>
 
 </span>
 
@@ -590,39 +555,6 @@
 
         <div>
           <!-- lastmod -->
-          
-          <span>
-            <!--
-  Date format snippet
-  See: /assets/js/_utils/timeage.js
--->
-
-
-
-
-
-<span class="timeago lastmod"
-  
-    data-toggle="tooltip"
-    data-placement="bottom"
-    title="Sat, Apr  3, 2021,  4:50 PM +0700"
-  
-
-  prefix="Updated "
-   >
-
-  
-  
-
-  
-    Apr  3
-  
-
-  <i class="unloaded">2021-04-03T17:50:12+08:00</i>
-
-</span>
-
-          </span>
           
 
           <!-- read time -->
@@ -640,7 +572,7 @@
 
 
 <!-- return element -->
-<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1011 words">5 min</span>
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1256 words">6 min</span>
 
 
           <!-- page views -->
@@ -654,57 +586,47 @@
 
         
 
-        <p>Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &gt; 50% thì mô hình dự đoán có thể khẳng định được điểm dữ liệu đó thuộc về lớp 1 (nhãn là 1) hoặc ngược lại (nhãn là 0). Việc này được gọi là phân loại nhị phân (chỉ có 0 với 1)</p>
+        <h1 id="hàng-đợi-queue-là-gì">Hàng đợi queue là gì?</h1>
 
-<h1 id="ước-lượng-xác-suất">Ước lượng xác suất</h1>
+<p>Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.</p>
 
-<p>Làm thế nào để ước lượng được xác suất 1 điểm dữ liệu thuộc vào lớp nào? giống như mô hình hồi quy tuyến tính, mô hình hồi quy Logistic sẽ tính tổng các tích trọng số (weighted sum) với features đầu vào (có cộng thêm bias). Nhưng thay vì trả kết quả trực tiếp giống mô hình Linear Regression thì nó sẽ đi qua 1 hàm logistic để cho kết quả.</p>
+<p>Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.</p>
 
-\[\hat p = h_θ(x) = σ(x^Tθ)  (\text{Hàm ước lượng xác suất})\]
+<p>Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc phản hồi cho user ngay tức thì rồi chạy trong nền sẽ tạo trải nghiệm người dùng tốt hơn. Hệ thống cũng có khả năng phục vụ nhiều user hơn.</p>
 
-<p>Trong đó σ(·) là hàm sigmoid, đầu ra của nó sẽ là khoảng giá trị từ 0 đến 1.</p>
+<p>Các công việc phát sinh từ nghiệp vụ chính, làm việc với nhiều service ngoài nhưng không critical. Ví dụ thu thập lịch sử hệ thống, gửi email, cập nhật thông tin từ các nguồn,…</p>
 
-\[\sigma(t) = \frac{1}{1 + exp(-t)}\]
+<p>Các công việc mang tính độc lập và ít ảnh hưởng bởi dây chuyền hay thứ tự. Đảm bảo điều này để có thể scale hệ thống bằng cách thêm nhiều worker cùng lúc.</p>
 
-<p>Chúng ta nhận xét đây là một hàm số đặc biệt, với mọi giá trị của t, hàm luôn nằm trong khoảng [0,1] và có đồ thị như sau:</p>
+<h1 id="vì-sao-phải-cần-đến-queue">Vì sao phải cần đến Queue</h1>
 
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/blog/1_a04iKNbchayCAJ7-0QlesA.png" alt="Đồ thị hàm sigmoid" />
-<em>Đồ thị hàm sigmoid</em></p>
+<p>Hệ thống của bạn xử lý 1 công việc mất 0.5 giây, không có gì phải bàn.</p>
 
-<p>Sau khi đã tính được xác suất $\hat p = h_\theta(x)$ ta sẽ dễ dàng xác định được x thuộc về lớp nào, hay  $\hat y$:</p>
+<p>Hệ thống của bạn xử lý 1 công việc mất 10 giây. Và người dùng sẽ phải ngồi nhìn trình duyệt quay quay trong 10s để biết có gì xảy ra tiếp theo.</p>
 
-\[\hat y =\begin{cases}0 &amp; \text{if $\hat p  &lt; 0.5 $} \\1 &amp; \text{if $\hat p \ge 0.5 $}\end{cases}\]
+<p>Hệ thống cùng lúc chỉ có thể mở 100 kết nối. Vậy kết nối thứ 101 sẽ phải chờ 10s,… rồi kết nối phía sau sẽ bị chờ đợi, chờ đợi hoài, chờ đợi mãi,… rồi timeout.</p>
 
-<p>Để ý rằng $σ(t) &lt; 0.5$ khi $t&lt;0$ và $σ(t) \ge 0.5$ khi $t \ge 0$ vì vậy hồi quy Logistic sẽ dự đoán là 1 khi $x^T \theta$ là dương và 0 khi $x^T \theta$ âm.</p>
+<p>Và đó là lúc bạn phải nghĩ tới queue và background job. Bạn chỉ cần mất 0.5s để ghi lại yêu cầu của khách hàng vào queue, phản hồi lại họ rằng bạn sẽ xử lý, rồi ngắt kết nối với họ và tạo các background job xử lý yêu cầu này trên các worker.</p>
 
-<h1 id="hàm-chi-phí-và-huấn-luyện-mô-hình">Hàm chi phí và huấn luyện mô hình</h1>
+<h1 id="các-khái-niệm">Các khái niệm</h1>
+<h2 id="job">Job</h2>
+<p>Job là các công việc cần xử lý, ví dụ như việc gửi email, ghi log… được thực hiện dưới nền dưới sự điều hành của worker</p>
+<h2 id="worker">Worker</h2>
+<p>Worker là những thành phần riêng biệt và thường là các process hoặc service xử lý một số công việc chuyên biệt nào đó. Có thể có nhiều worker cùng làm việc để xử lý các công việc</p>
 
-<p>Vì ta phân lớp dựa trên xác suất nên hàm chi phí sẽ được tính dựa trên xác suất xảy ra. Vì vậy mục tiêu của việc training sẽ là tìm ra vector tham số θ để mô hình ước lượng xác suất cao cho các điểm dữ liệu thuộc vào lớp 1 (positive) và xác suất thấp cho các điểm dữ liệu thuộc vào lớp 2 (negative) nên ta sẽ có hàm chi phí cho điểm dữ liệu x như sau:</p>
+<h1 id="triển-khai-bằng-python">Triển khai bằng python</h1>
 
-\[c(\theta) =\begin{cases}-log(\hat p) &amp; \text{if $ y = 1 $} \\-log(1- \hat p) &amp; \text{if $ y = 0 $}\end{cases}\]
+<p>Mình sử dụng RQ (Redis Queue)  để xử lý các tác vụ chạy trong nền bằng python. Thư viện này khá dễ sử dụng, và ưu điểm là nó dùng redis để đưa các job vào hàng đợi</p>
 
-<p>Hàm chi phí rất “nhạy” bởi vì – log(t) sẽ tăng nhanh khi t xấp xỉ 0. Nếu ta dự đoán dữ liệu thuộc lớp 1 có xác xuất nhỏ thì chi phí sẽ lớn (trường hợp dự đoán sai) và nếu ta dữ đoán dữ liệu thuộc lớp 0 mà có xác suất nhỏ thì chi phí sẽ nhỏ và xấp xỉ dần về 0. Đây chính là mục tiêu của chúng ta khi huấn luyện mô hình.</p>
+<h2 id="cài-đặt-thư-viện">Cài đặt thư viện</h2>
 
-<p>Hàm chi phí trong toàn bộ tập huấn chỉ đơn giản là chi phí trung bình trên tất cả các điểm dữ liệu huấn luyện. Nên chúng ta có thể viết gộp lại thành biểu thức sau:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>pip <span class="nb">install </span>rq
+</pre></td></tr></tbody></table></code></div></div>
 
-\[J(\theta)=-\frac{1}{m}\sum_{i=1}{m}[y^{(i)} log(\hat p^{(i)}) + (1-y^{(i)})log(1-\hat p^{(i)})]\]
+<p>RQ chạy trên redis nên bạn cần cài Redis trước. Hướng dẫn cài redis <a href="https://redis.io/topics/quickstart">tại đây</a></p>
 
-<p>Ở công thức này chúng ta không thể tính được tham số θ để tối thiểu hóa hàm chi phí một cách trực tiếp. Tuy nhiên thì hàm này là hàm lồi, vì vậy nên ta có thể sử dụng Gradient Descent  (hoặc bất kì thuật toán tối ưu nào) như ở bài trước để thực hiện tìm cực tiểu (nếu learning rate không quá lớn và bạn chờ đủ lâu). Đạo hàm từng phần của hàm chi phí $ \theta_j $ được tính như sau (tiến hành đạo hàm theo θ):</p>
-
-\[\frac{\delta J(\theta) }{\delta \theta_j}= \frac{1}{m}\sum_{1}^{m}(\sigma (\theta^Tx^{(i)}) - y^{(i)})x_j^{(i)}\]
-
-<p>Qua mỗi điểm dữ liệu, chúng ta sẽ tính toán lỗi của việc dự đoán và nhân nó với x thứ j rồi thực hiện tính trung bình trên toàn bộ tập huấn luyện.</p>
-
-<p>Khi đó chúng ta có  gradient vector chứa tất cả các đạo hàm riêng để thực hiện thuật toán Batch Gradient Descent. Và theo công thức cập nhật θ  chúng ta sẽ có:</p>
-
-<p>$ \theta = \theta - η\frac{\delta J(\theta)}{\delta \theta} $ Với η là learning rate</p>
-
-<p>Và thay vì tính toán trên toàn bộ tập huấn luyện, bạn cũng có thể sử dụng Mini-batch GD hoặc Stochastic GD như mình giới thiệu ở bài trước.</p>
-
-<h1 id="lập-trình">Lập trình</h1>
-<p>Mình sẽ thử lập trình với BGD, tập dữ liệu được sử dụng ở đây là dữ liệu bài tập trong khoá học ML của giáo sư Andrew Ng.</p>
-
-<p>Mã nguồn các bạn có thể xem tại đây, dataset thì tại đây (https://github.com/dinhquy94/codecamp.vn/blob/master/ex2.ipynb)</p>
+<h2 id="tạo-worker">Tạo worker</h2>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -715,77 +637,121 @@
 7
 8
 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-</pre></td><td class="rouge-code"><pre><span class="c1"># gradient descent max step
-</span><span class="n">INTERATIONS</span> <span class="o">=</span> <span class="mi">200000</span>
-<span class="c1"># learning rate
-</span><span class="n">ALPHA</span> <span class="o">=</span> <span class="mf">0.001</span>
-
-<span class="c1"># calc sigmoid function
-</span><span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">z</span><span class="p">))</span>
-
-<span class="c1"># calc J function
-</span><span class="k">def</span> <span class="nf">compute_cost</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
-    <span class="c1"># number of training examples
-</span>    <span class="n">m</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">size</span>
-    <span class="c1"># activation
-</span>    <span class="n">h</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span>
-    <span class="c1"># cost
-</span>    <span class="n">j</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span>  <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">h</span><span class="p">))</span> <span class="o">/</span> <span class="n">m</span>
-    <span class="k">return</span> <span class="n">j</span>
-
-<span class="c1"># implement BGD
-</span><span class="k">def</span> <span class="nf">gradient_descent</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">num_inters</span><span class="p">):</span>
-    <span class="c1"># number of training examples
-</span>    <span class="n">m</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">size</span>
-    <span class="n">jHistory</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">(</span><span class="n">num_inters</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_inters</span><span class="p">):</span>
-        <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">theta</span><span class="p">))</span><span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">m</span>
-        <span class="n">theta</span> <span class="o">-=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">delta</span>
-        <span class="n">jHistory</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">compute_cost</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">theta</span><span class="p">,</span> <span class="n">jHistory</span>
-
-<span class="c1"># train
-</span><span class="n">theta</span><span class="p">,</span> <span class="n">jHistory</span> <span class="o">=</span> <span class="n">gradient_descent</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">X</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">ALPHA</span><span class="p">,</span> <span class="n">INTERATIONS</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-<span class="c1"># theta: [-7.45017822  0.06550395  0.05898701]
-</span></pre></td></tr></tbody></table></code></div></div>
-<p>Kết quả</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre># theta: [-7.45017822  0.06550395  0.05898701]
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">os</span> <span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">from</span> <span class="nn">rq</span> <span class="kn">import</span> <span class="n">Worker</span><span class="p">,</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Connection</span>
+<span class="n">listen</span> <span class="o">=</span> <span class="p">[</span><span class="s">'high'</span><span class="p">,</span> <span class="s">'default'</span><span class="p">,</span> <span class="s">'low'</span><span class="p">]</span>
+<span class="n">redis_url</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">'REDISTOGO_URL'</span><span class="p">,</span> <span class="s">'redis://localhost:6379'</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">redis</span><span class="p">.</span><span class="n">from_url</span><span class="p">(</span><span class="n">redis_url</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">Connection</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">Worker</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Queue</span><span class="p">,</span> <span class="n">listen</span><span class="p">))</span>
+        <span class="n">worker</span><span class="p">.</span><span class="n">work</span><span class="p">()</span>
 </pre></td></tr></tbody></table></code></div></div>
 
-<p>Nguồn tham khảo: Blog Do Minh Hai</p>
+<p>Giờ chúng ta chạy thử worker bằng lệnh</p>
 
+<div class="language-bash highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>python worker.py
+</pre></td></tr></tbody></table></code></div></div>
+
+<h2 id="viết-hàm-để-xử-lý-các-job">Viết hàm để xử lý các job</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">requests</span>
+<span class="k">def</span> <span class="nf">count_words_at_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">split</span><span class="p">())</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>Function này đơn giản chỉ là thực hiện request đến 1 URL sau đó sẽ đếm chiều dài của chuỗi trả về trong kết quả. Hàm này sẽ là hàm xử lý mỗi khi job được đẩy vào queue.</p>
+
+<h2 id="tạo-hàng-đợi">Tạo hàng đợi</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">rq</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">worker</span> <span class="kn">import</span> <span class="n">conn</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">(</span><span class="n">connection</span><span class="o">=</span><span class="n">conn</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>Chỗ này sẽ tạo ra hàng đợi q với tham số truyền vào là đối kết nối của redis</p>
+
+<h2 id="đẩy-job-vào-cho-hàng-đợi">Đẩy job vào cho hàng đợi</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">count_words_at_url</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">count_words_at_url</span><span class="p">,</span> <span class="s">'http://codecamp.vn)
+</span></pre></td></tr></tbody></table></code></div></div>
+
+<p>Sau khi được enqueue, công việc sẽ được đẩy vào queue và worker sẽ thực hiện. Bạn theo dõi các worker sẽ thấy các tiến trình đang hoạt động.</p>
+
+<p>Sau khi thực worker thực hiện xong các job, nó sẽ tiếp tục lắng nghe hàng đợi và xử lý khi có job tiếp theo. Trong 1 thời điểm, mỗi worker chỉ xử lý duy nhất 1 job và xử lý theo cơ chế tuần tự. Vì vậy giả sử mỗi job xử lý mất 5s thì nếu có 10 job, queue sẽ mất 50s để xử lý. Vậy có cách nào để tăng số lượng worker xử lý lên không. Câu trả lời là Có.</p>
+
+<h1 id="tăng-số-lượng-worker-để-xử-lý">Tăng số lượng worker để xử lý</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">start_worker</span><span class="p">():</span>
+	<span class="n">Worker</span><span class="p">([</span><span class="n">q</span><span class="p">],</span> <span class="n">connection</span><span class="o">=</span><span class="n">conn</span><span class="p">).</span><span class="n">work</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>Hàm này sẽ tạo ra 1 worker để xử lý, ý tưởng bây giờ là chúng ta sẽ tạo thêm nhiều process và mỗi process tương ứng với 1 worker.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">multiprocessingfrom</span> <span class="n">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">Process</span>
+<span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">procsfor</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_WORKERS</span><span class="p">):</span>
+	<span class="n">proc</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">start_worker</span><span class="p">)</span>
+    <span class="n">procs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
+    <span class="n">proc</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>Ở đây mình sử dụng 10 process tương ứng với 10 worker cùng làm việc.</p>
+
+<p>Nếu quá trình chạy có lỗi hệ điều hành không cho phép python chạy multiprocess, bạn chạy thêm lệnh này để cho phép</p>
+
+<blockquote>
+  <p>export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES</p>
+</blockquote>
+
+<h1 id="khi-nào-thì-không-nên-dùng">Khi nào thì không nên dùng?</h1>
+
+<p>Còn sau đây là những ví dụ không khuyến khích sử dụng queue và background job trừ khi có kiến trúc phù hợp:</p>
+
+<ul>
+  <li>Các hệ thống chuyên đọc có tính chất hoạt động như các hệ thống đọc bài viết, sản phẩm,… Các hệ thống này sẽ được optimize bằng con đường khác.</li>
+  <li>Các công việc mang tính chất quan trọng, có tính quyết định nhưng có thời gian phản hồi không quá dài. Ví dụ các request liên quan tới việc thanh toán, tranh giành unique key hệ thống (như đặt chỗ, mua sản phẩm)</li>
+</ul>
+
+<p>Một vài ví dụ thực tế</p>
+
+<p>Đây là một số hệ thống thực tế mình đã áp dụng queue và background job. Các bạn có thể tham khảo để có cái nhìn sát hơn:</p>
+
+<ul>
+  <li>Hệ thống tracking: client gọi lên tracking system để ghi lại các thông tin người dùng như thông tin trình duyệt, ngày giờ truy cập, ip,… Khi đó hệ thống API sẽ đẩy thông tin đó vào queue trên redis trước, sau đó response OK cho client. Sau đó worker mới lấy thông tin từ queue và ghi vào database. Do số lượng request rất lớn và lượng data ghi vào db rất nhiều nên dùng queue sẽ tránh quá tải database</li>
+  <li>Hệ thống logging: Sau hoạt động gì đó của user với hệ thống API, như login, logout, change profile, update post, view post,… hệ thống sẽ phát sinh ra các event, nhưng các event này không được xử lý ngay mà đưa vào queue nhằm tránh block hoạt động của người dùng.</li>
+  <li>Hệ thống notification: Hệ thống này phụ trách việc gửi thông báo, sms, email cho người dùng. Đây là công việc phát sinh từ nghiệp vụ chính, không criticalvà sử dụng nhiều service bên ngoài nên sẽ được đẩy vào queue và gửi lần lượt.</li>
+  <li>Hệ thống analytic: đây là hệ thống báo cáo nội bộ, tuy số lượng báo cáo không nhiều, nhưng mỗi báo cáo lại rất tốn thời gian để phản hồi vì phải tổng hợp số liệu. Do vậy đẩy vào queue để tạo trải nghiệm người dùng tốt hơn. Người dùng sẽ gửi yêu cầu xuất báo cáo và nhận được phản hồi đang xử lý. Sau khi được các worker xử lý xong sẽ thông báo lại cho user qua notification.</li>
+</ul>
+
+<h1 id="nguồn-tham-khảo">Nguồn tham khảo:</h1>
+
+<ul>
+  <li>Tài liệu từ RQ https://python-rq.org/docs/</li>
+  <li>Tham khảo từ Viblo <a href="https://techtalk.vn/background-job-va-queue-cho-nguoi-nong-dan.html">Link</a></li>
+</ul>
 
 
       </div>
@@ -797,7 +763,7 @@
         <div class="post-meta mb-3">
           <i class="far fa-folder-open fa-fw mr-1"></i>
           
-            <a href='/categories/machine-learning/'>Machine Learning</a>
+            <a href='/categories/l%E1%BA%ADp-tr%C3%ACnh/'>Lập Trình</a>
         </div>
         
 
@@ -806,8 +772,11 @@
         <div class="post-tags">
           <i class="fa fa-tags fa-fw mr-1"></i>
           
-          <a href="/tags/machine-learning/"
-            class="post-tag no-text-decoration" >Machine learning</a>
+          <a href="/tags/queue/"
+            class="post-tag no-text-decoration" >queue</a>
+          
+          <a href="/tags/redis/"
+            class="post-tag no-text-decoration" >redis</a>
           
           </div>
         
@@ -834,19 +803,19 @@
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=5. Hồi quy Logistic - Quy's blog&url=/posts/hoi-quy-logistic/" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=Triển khai hàng đợi xử lý bằng python với Redis - Quy's blog&url=/posts/cai-dat-queue-python-production/" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=5. Hồi quy Logistic - Quy's blog&u=/posts/hoi-quy-logistic/" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=Triển khai hàng đợi xử lý bằng python với Redis - Quy's blog&u=/posts/cai-dat-queue-python-production/" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://telegram.me/share?text=5. Hồi quy Logistic - Quy's blog&url=/posts/hoi-quy-logistic/" data-toggle="tooltip" data-placement="top"
+        <a href="https://telegram.me/share?text=Triển khai hàng đợi xử lý bằng python với Redis - Quy's blog&url=/posts/cai-dat-queue-python-production/" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -1131,6 +1100,13 @@
   </div> <!-- .access -->
 
   
+    <!-- BS-toc.js will be loaded at medium priority -->
+    <script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+    <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+      <span class="pl-3 pt-2 mb-2">Contents</span>
+      <nav id="toc" data-toggle="toc"></nav>
+    </div>
+  
 
 </div> <!-- #panel-wrapper -->
 
@@ -1177,72 +1153,72 @@
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
   
 
   
@@ -1345,6 +1321,41 @@
 
 
 
+  
+    
+    
+      
+      
+        
+        
+        
+      
+    
+  
+    
+    
+  
+    
+    
+      
+      
+        
+        
+        
+      
+    
+  
+    
+    
+      
+      
+        
+        
+        
+          
+
+
+
 
 
   <div id="related-posts" class="mt-5 mb-2 mb-sm-4">
@@ -1355,7 +1366,7 @@
       
       
       <div class="card">
-        <a href="/posts/gioi-thieu-machine-learning/">
+        <a href="/posts/okapi-bm-25-tim-kiem-tieng-viet/">
           <div class="card-body">
             <!--
   Date format snippet
@@ -1376,14 +1387,14 @@
   
 
   
-    Apr  1
+    Apr  5
   
 
-  <i class="unloaded">2021-04-01T14:32:00+08:00</i>
+  <i class="unloaded">2021-04-05T11:09:00+08:00</i>
 
 </span>
 
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>1. Phân loại các thuật toán Machine Learning</h3>
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</h3>
             <div class="text-muted small">
               <p>
                 
@@ -1392,11 +1403,7 @@
 
 
 
-                Phân loại các thuật toán
-
-Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:
-
-  Quá trình huấn luyện có cần sự giám sát của con ngư...
+                Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra và...
               </p>
             </div>
           </div>
@@ -1406,7 +1413,7 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
       
       
       <div class="card">
-        <a href="/posts/linear-regression-part1/">
+        <a href="/posts/loss-function-p3/">
           <div class="card-body">
             <!--
   Date format snippet
@@ -1427,14 +1434,14 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
   
 
   
-    Apr  2
+    Apr  4
   
 
-  <i class="unloaded">2021-04-02T05:45:00+08:00</i>
+  <i class="unloaded">2021-04-04T16:47:00+08:00</i>
 
 </span>
 
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>2. Huấn luyện mô hình Linear Regression</h3>
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>9. Loss function P3 - hàm mất mát cho bài toán multi-class classification</h3>
             <div class="text-muted small">
               <p>
                 
@@ -1443,7 +1450,9 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
 
 
 
-                Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện ...
+                Phân đa lớp là những bài toán mà mô hình dự đoán trong đó các đầu vào được chỉ định là một trong nhiều hơn hai lớp.
+
+Mô hình dự đoán một giá trị số nguyên, trong đó mỗi lớp được gán một giá trị số ...
               </p>
             </div>
           </div>
@@ -1453,7 +1462,7 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
       
       
       <div class="card">
-        <a href="/posts/softmax-regression/">
+        <a href="/posts/loss-function-p2/">
           <div class="card-body">
             <!--
   Date format snippet
@@ -1474,14 +1483,14 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
   
 
   
-    Apr  2
+    Apr  4
   
 
-  <i class="unloaded">2021-04-02T05:45:00+08:00</i>
+  <i class="unloaded">2021-04-04T16:47:00+08:00</i>
 
 </span>
 
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>3. Softmax Regression</h3>
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>8. Loss function P2 - hàm mất mát cho bài toán binary classification</h3>
             <div class="text-muted small">
               <p>
                 
@@ -1490,7 +1499,9 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
 
 
 
-                Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các ...
+                Phân lớp nhị phân là bài toán mà biến đầu ra (y) chỉ nhận một trong hai giá trị là 1 trong 2 nhãn.
+
+Bài toán thường dưới dạng bài toán dự đoán giá trị 0 hoặc 1 cho lớp đầu tiên hoặc lớp thứ hai và ...
               </p>
             </div>
           </div>
@@ -1508,16 +1519,16 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
 
 <div class="post-navigation d-flex justify-content-between">
   
-  <a href="/posts/gradient-descent-2/" class="btn btn-outline-primary"
+  <a href="/posts/loss-function-p3/" class="btn btn-outline-primary"
     prompt="Older">
-    <p>4. Gradient Descent</p>
+    <p>9. Loss function P3 - hàm mất mát cho bài toán multi-class classification</p>
   </a>
   
 
   
-  <a href="/posts/bai-toan-phan-lop-va-danh-gia/" class="btn btn-outline-primary"
+  <a href="/posts/okapi-bm-25-tim-kiem-tieng-viet/" class="btn btn-outline-primary"
     prompt="Newer">
-    <p>6. Bài toán phân lớp và các phương pháp đánh giá</p>
+    <p>10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</p>
   </a>
   
 
@@ -1532,18 +1543,6 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
 
 </div> <!-- .row -->
 
-
-
-  <!--
-  image lazy load: https://github.com/ApoorvSaxena/lozad.js
--->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
-
-<script type="text/javascript">
-  const imgs = document.querySelectorAll('.post-content img');
-  const observer = lozad(imgs);
-  observer.observe();
-</script>
 
 
 
