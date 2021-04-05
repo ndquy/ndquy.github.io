@@ -37,20 +37,20 @@ $$\begin{align}\mbox{BM25}(D, Q) = \sum_{i=1}^n IDF(q_i, D) \frac{f(q_i, D) \cdo
 
 Trong đó:
 
-$f(q_i, D)$$$ Là số lần mà term  $q_i$ xuất hiện trong tất cả các tài liệu $D$
+- $f(q_i, D)$ Là số lần mà term  $q_i$ xuất hiện trong tất cả các tài liệu $D$
 
-$|D|$ là số từ trong tất cả các tài liệu $D$
+- $|D|$ là số từ trong tất cả các tài liệu $D$
 
-$d_{avg}$ là số lượng từ trung bình trong mỗi tài liệu
+- $d_{avg}$ là số lượng từ trung bình trong mỗi tài liệu
 
-$b$ và $k1$ là các tham số của BM25
+- $b$ và $k1$ là các tham số của BM25
 
-$f(q_i, D)$ cho ta thấy rằng nếu một từ xuất hiện trong tài liệu càng nhiều thì điểm của tài liệu càng cao.
+- $f(q_i, D)$ cho ta thấy rằng nếu một từ xuất hiện trong tài liệu càng nhiều thì điểm của tài liệu càng cao.
 
 Phần thú vị đó là tham số k1, xác định tính bão hòa tần suất. Giá trị càng cao, độ bão hòa càng chậm. Nghĩa là nếu một từ xuất hiện nhiều sẽ làm điểm của tài liệu cao, nhưng sẽ nhiều với một mức độ nào đó và mức độ ảnh hưởng tới điểm sẽ giảm dần.
 
 
-![Sự ảnh hưởng của TF tới Score](assets/img/blog/80a8f9e5-e42f-4bc0-939d-6b5126d965ac.png)
+![Sự ảnh hưởng của TF tới Score](/assets/img/blog/80a8f9e5-e42f-4bc0-939d-6b5126d965ac.png)
 _Sự ảnh hưởng của TF tới Score_
 
 $|D|/d_{avg}$  ở mẫu số có nghĩa là tài liệu dài hơn các tài liệu trung bình sẽ dẫn đến mẫu số lớn hơn, dẫn đến giảm điểm. Thực tế cho ta thấy là nếu càng nhiều thuật ngữ trong tài liệu mà không khớp với truy vấn đầu vào thì điểm của tài liệu càng thấp. Nói cách khác, nếu một tài liệu dài 300 trang đề cập đến cụm từ truy vấn một lần, thì nó ít có khả năng liên quan đến truy vấn hơn so với một tài liệu ngắn đề cập đến truy vấn một lần.

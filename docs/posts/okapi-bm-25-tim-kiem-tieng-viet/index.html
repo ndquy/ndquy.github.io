@@ -658,27 +658,33 @@
 
 <p>Trong đó:</p>
 
-<p>$f(q_i, D)$$$ Là số lần mà term  $q_i$ xuất hiện trong tất cả các tài liệu $D$</p>
-
-<div class="table-wrapper"><table>
-  <tbody>
-    <tr>
-      <td>$</td>
-      <td>D</td>
-      <td>$ là số từ trong tất cả các tài liệu $D$</td>
-    </tr>
-  </tbody>
-</table></div>
-
-<p>$d_{avg}$ là số lượng từ trung bình trong mỗi tài liệu</p>
-
-<p>$b$ và $k1$ là các tham số của BM25</p>
-
-<p>$f(q_i, D)$ cho ta thấy rằng nếu một từ xuất hiện trong tài liệu càng nhiều thì điểm của tài liệu càng cao.</p>
+<ul>
+  <li>
+    <p>$f(q_i, D)$ Là số lần mà term  $q_i$ xuất hiện trong tất cả các tài liệu $D$</p>
+  </li>
+  <li>
+    <div class="table-wrapper"><table>
+      <tbody>
+        <tr>
+          <td>$</td>
+          <td>D</td>
+          <td>$ là số từ trong tất cả các tài liệu $D$</td>
+        </tr>
+      </tbody>
+    </table></div>
+  </li>
+  <li>
+    <p>$d_{avg}$ là số lượng từ trung bình trong mỗi tài liệu</p>
+  </li>
+  <li>
+    <p>$b$ và $k1$ là các tham số của BM25</p>
+  </li>
+  <li>$f(q_i, D)$ cho ta thấy rằng nếu một từ xuất hiện trong tài liệu càng nhiều thì điểm của tài liệu càng cao.</li>
+</ul>
 
 <p>Phần thú vị đó là tham số k1, xác định tính bão hòa tần suất. Giá trị càng cao, độ bão hòa càng chậm. Nghĩa là nếu một từ xuất hiện nhiều sẽ làm điểm của tài liệu cao, nhưng sẽ nhiều với một mức độ nào đó và mức độ ảnh hưởng tới điểm sẽ giảm dần.</p>
 
-<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="assets/img/blog/80a8f9e5-e42f-4bc0-939d-6b5126d965ac.png" alt="Sự ảnh hưởng của TF tới Score" />
+<p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/blog/80a8f9e5-e42f-4bc0-939d-6b5126d965ac.png" alt="Sự ảnh hưởng của TF tới Score" />
 <em>Sự ảnh hưởng của TF tới Score</em></p>
 
 <div class="table-wrapper"><table>
