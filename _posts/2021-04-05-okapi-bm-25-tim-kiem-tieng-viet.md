@@ -39,7 +39,7 @@ Trong đó:
 
 - $f(q_i, D)$ Là số lần mà term  $q_i$ xuất hiện trong tất cả các tài liệu $D$
 
-- $|D|$ là số từ trong tất cả các tài liệu $D$
+- $\|D\|$ là số từ trong tất cả các tài liệu $D$
 
 - $d_{avg}$ là số lượng từ trung bình trong mỗi tài liệu
 

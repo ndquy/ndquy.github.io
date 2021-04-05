@@ -38,7 +38,7 @@
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"/posts/okapi-bm-25-tim-kiem-tieng-viet/","@type":"BlogPosting","headline":"Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt","dateModified":"2021-04-05T11:09:00+08:00","datePublished":"2021-04-05T11:09:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/okapi-bm-25-tim-kiem-tieng-viet/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trường đại học London những năm 1980 và 1990.","@context":"https://schema.org"}</script>
+{"url":"/posts/okapi-bm-25-tim-kiem-tieng-viet/","@type":"BlogPosting","headline":"Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt","dateModified":"2021-04-05T11:28:41+08:00","datePublished":"2021-04-05T11:09:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/okapi-bm-25-tim-kiem-tieng-viet/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trường đại học London những năm 1980 và 1990.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -591,6 +591,39 @@
         <div>
           <!-- lastmod -->
           
+          <span>
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago lastmod"
+  
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="Mon, Apr  5, 2021, 10:28 AM +0700"
+  
+
+  prefix="Updated "
+   >
+
+  
+  
+
+  
+    Apr  5
+  
+
+  <i class="unloaded">2021-04-05T11:28:41+08:00</i>
+
+</span>
+
+          </span>
+          
 
           <!-- read time -->
           <!--
@@ -607,7 +640,7 @@
 
 
 <!-- return element -->
-<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="2343 words">13 min</span>
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="2341 words">13 min</span>
 
 
           <!-- page views -->
@@ -663,15 +696,7 @@
     <p>$f(q_i, D)$ Là số lần mà term  $q_i$ xuất hiện trong tất cả các tài liệu $D$</p>
   </li>
   <li>
-    <div class="table-wrapper"><table>
-      <tbody>
-        <tr>
-          <td>$</td>
-          <td>D</td>
-          <td>$ là số từ trong tất cả các tài liệu $D$</td>
-        </tr>
-      </tbody>
-    </table></div>
+    <p>$|D|$ là số từ trong tất cả các tài liệu $D$</p>
   </li>
   <li>
     <p>$d_{avg}$ là số lượng từ trung bình trong mỗi tài liệu</p>
@@ -679,7 +704,9 @@
   <li>
     <p>$b$ và $k1$ là các tham số của BM25</p>
   </li>
-  <li>$f(q_i, D)$ cho ta thấy rằng nếu một từ xuất hiện trong tài liệu càng nhiều thì điểm của tài liệu càng cao.</li>
+  <li>
+    <p>$f(q_i, D)$ cho ta thấy rằng nếu một từ xuất hiện trong tài liệu càng nhiều thì điểm của tài liệu càng cao.</p>
+  </li>
 </ul>
 
 <p>Phần thú vị đó là tham số k1, xác định tính bão hòa tần suất. Giá trị càng cao, độ bão hòa càng chậm. Nghĩa là nếu một từ xuất hiện nhiều sẽ làm điểm của tài liệu cao, nhưng sẽ nhiều với một mức độ nào đó và mức độ ảnh hưởng tới điểm sẽ giảm dần.</p>
@@ -1248,6 +1275,11 @@ tài liệu đầu tiên chứa thuật ngữ ‘đẹp’ 1 lần.</p>
         
         
         
+        <li><a href="/posts/okapi-bm-25-tim-kiem-tieng-viet/">10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</a></li>
+      
+        
+        
+        
         <li><a href="/posts/loss-function/">7. Loss function P1 - hàm mất mát cho bài toán regression</a></li>
       
         
@@ -1264,11 +1296,6 @@ tài liệu đầu tiên chứa thuật ngữ ‘đẹp’ 1 lần.</p>
         
         
         <li><a href="/posts/hoi-quy-logistic/">5. Hồi quy Logistic</a></li>
-      
-        
-        
-        
-        <li><a href="/posts/bai-toan-phan-lop-va-danh-gia/">6. Bài toán phân lớp và các phương pháp đánh giá</a></li>
       
 
       </ul>
