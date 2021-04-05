@@ -1,6 +1,21 @@
 [
   
   {
+    "title": "10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt",
+    "url": "/posts/okapi-bm-25-tim-kiem-tieng-viet/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-04-05 11:09:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi..."
+  },
+  
+  {
     "title": "9. Loss function P3 - hàm mất mát cho bài toán multi-class classification",
     "url": "/posts/loss-function-p3/",
     "categories": "Machine Learning",
