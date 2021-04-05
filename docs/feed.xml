@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-05T11:33:53+08:00</updated>
+  <updated>2021-04-05T11:44:32+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -24,7 +24,7 @@
     <link href="/posts/okapi-bm-25-tim-kiem-tieng-viet/" rel="alternate" type="text/html" title="10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt" />
     <published>2021-04-05T11:09:00+08:00</published>
   
-    <updated>2021-04-05T11:31:24+08:00</updated>
+    <updated>2021-04-05T11:34:05+08:00</updated>
   
     <id>/posts/okapi-bm-25-tim-kiem-tieng-viet/</id>
     <content src="/posts/okapi-bm-25-tim-kiem-tieng-viet/" />

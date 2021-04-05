@@ -75,7 +75,7 @@ Triển khai code với python
 
 Sau khi đã có các công thức tính, ta sẽ áp dụng bài toán này vào tìm kiếm đối với tiếng Việt.
 
-Tiền xử lý
+## Tiền xử lý
 
 Trong bài này mình sử dụng thư viện pyvi để thực hiện tách từ tiếng việt. Tách từ là một bước cực kỳ quan trọng trong xử lý các bài toán tiếng Việt.
 
@@ -219,7 +219,7 @@ class BM25:
 ```
 
 
-<b>Tham số mô hình</b>
+## Tham số mô hình
 
 * k1 : float, mặc định là 1.5
 
@@ -242,7 +242,7 @@ tài liệu đầu tiên chứa thuật ngữ 'đẹp' 1 lần.
 
 * avg_doc_len_ : float Giá trị trung bình các thuật ngữ trong một tài liệu của ngữ liệu
 
-# Chuẩn bị dữ liệu
+## Chuẩn bị dữ liệu
 
 Trong bài viết này mình sẽ dùng bộ dữ liệu demo của wikipedia tiếng việt, các bạn có thể download tại:
 
