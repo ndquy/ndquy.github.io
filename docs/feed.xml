@@ -4,7 +4,7 @@
   <id>/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-04-05T12:02:09+08:00</updated>
+  <updated>2021-04-05T12:14:38+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>/</uri>
@@ -82,11 +82,15 @@
 
       Hàng đợi queue là gì?
 
-Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.
 
-Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.
-
-Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc phản hồi cho user ngay tức t...
+  
+    Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.
+  
+  
+    Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.
+  
+  
+    Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc ph...
     </summary>
   
 

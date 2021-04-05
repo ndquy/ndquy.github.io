@@ -8,25 +8,25 @@ tags: [queue, redis]
 
 # Hàng đợi queue là gì?
 
-Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.
+- Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.
 
-Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.
+- Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.
 
-Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc phản hồi cho user ngay tức thì rồi chạy trong nền sẽ tạo trải nghiệm người dùng tốt hơn. Hệ thống cũng có khả năng phục vụ nhiều user hơn.
+- Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc phản hồi cho user ngay tức thì rồi chạy trong nền sẽ tạo trải nghiệm người dùng tốt hơn. Hệ thống cũng có khả năng phục vụ nhiều user hơn.
 
-Các công việc phát sinh từ nghiệp vụ chính, làm việc với nhiều service ngoài nhưng không critical. Ví dụ thu thập lịch sử hệ thống, gửi email, cập nhật thông tin từ các nguồn,…
+- Các công việc phát sinh từ nghiệp vụ chính, làm việc với nhiều service ngoài nhưng không critical. Ví dụ thu thập lịch sử hệ thống, gửi email, cập nhật thông tin từ các nguồn,…
 
-Các công việc mang tính độc lập và ít ảnh hưởng bởi dây chuyền hay thứ tự. Đảm bảo điều này để có thể scale hệ thống bằng cách thêm nhiều worker cùng lúc.
+- Các công việc mang tính độc lập và ít ảnh hưởng bởi dây chuyền hay thứ tự. Đảm bảo điều này để có thể scale hệ thống bằng cách thêm nhiều worker cùng lúc.
 
 # Vì sao phải cần đến Queue
 
-Hệ thống của bạn xử lý 1 công việc mất 0.5 giây, không có gì phải bàn.
+- Hệ thống của bạn xử lý 1 công việc mất 0.5 giây, không có gì phải bàn.
 
-Hệ thống của bạn xử lý 1 công việc mất 10 giây. Và người dùng sẽ phải ngồi nhìn trình duyệt quay quay trong 10s để biết có gì xảy ra tiếp theo.
+- Hệ thống của bạn xử lý 1 công việc mất 10 giây. Và người dùng sẽ phải ngồi nhìn trình duyệt quay quay trong 10s để biết có gì xảy ra tiếp theo.
 
-Hệ thống cùng lúc chỉ có thể mở 100 kết nối. Vậy kết nối thứ 101 sẽ phải chờ 10s,… rồi kết nối phía sau sẽ bị chờ đợi, chờ đợi hoài, chờ đợi mãi,… rồi timeout.
+- Hệ thống cùng lúc chỉ có thể mở 100 kết nối. Vậy kết nối thứ 101 sẽ phải chờ 10s,… rồi kết nối phía sau sẽ bị chờ đợi, chờ đợi hoài, chờ đợi mãi,… rồi timeout.
 
-Và đó là lúc bạn phải nghĩ tới queue và background job. Bạn chỉ cần mất 0.5s để ghi lại yêu cầu của khách hàng vào queue, phản hồi lại họ rằng bạn sẽ xử lý, rồi ngắt kết nối với họ và tạo các background job xử lý yêu cầu này trên các worker.
+- Và đó là lúc bạn phải nghĩ tới queue và background job. Bạn chỉ cần mất 0.5s để ghi lại yêu cầu của khách hàng vào queue, phản hồi lại họ rằng bạn sẽ xử lý, rồi ngắt kết nối với họ và tạo các background job xử lý yêu cầu này trên các worker.
 
 # Các khái niệm
 ## Job

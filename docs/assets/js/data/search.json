@@ -27,7 +27,7 @@
 
 
 
-    "snippet": "Hàng đợi queue là gì?Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.Các hệ thống có thời gia..."
+    "snippet": "Hàng đợi queue là gì?      Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.        Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.        Cá..."
   },
   
   {
