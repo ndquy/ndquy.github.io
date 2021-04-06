@@ -1,0 +1,182 @@
+I";<h1 id="hàng-đợi-queue-là-gì">Hàng đợi queue là gì?</h1>
+
+<ul>
+  <li>
+    <p>Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.</p>
+  </li>
+  <li>
+    <p>Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.</p>
+  </li>
+  <li>
+    <p>Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc phản hồi cho user ngay tức thì rồi chạy trong nền sẽ tạo trải nghiệm người dùng tốt hơn. Hệ thống cũng có khả năng phục vụ nhiều user hơn.</p>
+  </li>
+  <li>
+    <p>Các công việc phát sinh từ nghiệp vụ chính, làm việc với nhiều service ngoài nhưng không critical. Ví dụ thu thập lịch sử hệ thống, gửi email, cập nhật thông tin từ các nguồn,…</p>
+  </li>
+  <li>
+    <p>Các công việc mang tính độc lập và ít ảnh hưởng bởi dây chuyền hay thứ tự. Đảm bảo điều này để có thể scale hệ thống bằng cách thêm nhiều worker cùng lúc.</p>
+  </li>
+</ul>
+
+<h1 id="vì-sao-phải-cần-đến-queue">Vì sao phải cần đến Queue</h1>
+
+<ul>
+  <li>
+    <p>Hệ thống của bạn xử lý 1 công việc mất 0.5 giây, không có gì phải bàn.</p>
+  </li>
+  <li>
+    <p>Hệ thống của bạn xử lý 1 công việc mất 10 giây. Và người dùng sẽ phải ngồi nhìn trình duyệt quay quay trong 10s để biết có gì xảy ra tiếp theo.</p>
+  </li>
+  <li>
+    <p>Hệ thống cùng lúc chỉ có thể mở 100 kết nối. Vậy kết nối thứ 101 sẽ phải chờ 10s,… rồi kết nối phía sau sẽ bị chờ đợi, chờ đợi hoài, chờ đợi mãi,… rồi timeout.</p>
+  </li>
+  <li>
+    <p>Và đó là lúc bạn phải nghĩ tới queue và background job. Bạn chỉ cần mất 0.5s để ghi lại yêu cầu của khách hàng vào queue, phản hồi lại họ rằng bạn sẽ xử lý, rồi ngắt kết nối với họ và tạo các background job xử lý yêu cầu này trên các worker.</p>
+  </li>
+</ul>
+
+<h1 id="các-khái-niệm">Các khái niệm</h1>
+<h2 id="job">Job</h2>
+<p>Job là các công việc cần xử lý, ví dụ như việc gửi email, ghi log… được thực hiện dưới nền dưới sự điều hành của worker</p>
+<h2 id="worker">Worker</h2>
+<p>Worker là những thành phần riêng biệt và thường là các process hoặc service xử lý một số công việc chuyên biệt nào đó. Có thể có nhiều worker cùng làm việc để xử lý các công việc</p>
+
+<h1 id="triển-khai-bằng-python">Triển khai bằng python</h1>
+
+<p>Mình sử dụng RQ (Redis Queue)  để xử lý các tác vụ chạy trong nền bằng python. Thư viện này khá dễ sử dụng, và ưu điểm là nó dùng redis để đưa các job vào hàng đợi</p>
+
+<h2 id="cài-đặt-thư-viện">Cài đặt thư viện</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre>pip <span class="nb">install </span>rq
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>RQ chạy trên redis nên bạn cần cài Redis trước. Hướng dẫn cài redis <a href="https://redis.io/topics/quickstart">tại đây</a></p>
+
+<h2 id="tạo-worker">Tạo worker</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td> --><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">os</span> <span class="kn">import</span> <span class="nn">redis</span>
+<span class="kn">from</span> <span class="nn">rq</span> <span class="kn">import</span> <span class="n">Worker</span><span class="p">,</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Connection</span>
+<span class="n">listen</span> <span class="o">=</span> <span class="p">[</span><span class="s">'high'</span><span class="p">,</span> <span class="s">'default'</span><span class="p">,</span> <span class="s">'low'</span><span class="p">]</span>
+<span class="n">redis_url</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">'REDISTOGO_URL'</span><span class="p">,</span> <span class="s">'redis://localhost:6379'</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">redis</span><span class="p">.</span><span class="n">from_url</span><span class="p">(</span><span class="n">redis_url</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">Connection</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">Worker</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Queue</span><span class="p">,</span> <span class="n">listen</span><span class="p">))</span>
+        <span class="n">worker</span><span class="p">.</span><span class="n">work</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Giờ chúng ta chạy thử worker bằng lệnh</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre>python worker.py
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="viết-hàm-để-xử-lý-các-job">Viết hàm để xử lý các job</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> --><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">requests</span>
+<span class="k">def</span> <span class="nf">count_words_at_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">split</span><span class="p">())</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Function này đơn giản chỉ là thực hiện request đến 1 URL sau đó sẽ đếm chiều dài của chuỗi trả về trong kết quả. Hàm này sẽ là hàm xử lý mỗi khi job được đẩy vào queue.</p>
+
+<h2 id="tạo-hàng-đợi">Tạo hàng đợi</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> --><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">rq</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">worker</span> <span class="kn">import</span> <span class="n">conn</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">(</span><span class="n">connection</span><span class="o">=</span><span class="n">conn</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chỗ này sẽ tạo ra hàng đợi q với tham số truyền vào là đối kết nối của redis</p>
+
+<h2 id="đẩy-job-vào-cho-hàng-đợi">Đẩy job vào cho hàng đợi</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td> --><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">count_words_at_url</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">count_words_at_url</span><span class="p">,</span> <span class="s">'http://codecamp.vn)
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi được enqueue, công việc sẽ được đẩy vào queue và worker sẽ thực hiện. Bạn theo dõi các worker sẽ thấy các tiến trình đang hoạt động.</p>
+
+<p>Sau khi thực worker thực hiện xong các job, nó sẽ tiếp tục lắng nghe hàng đợi và xử lý khi có job tiếp theo. Trong 1 thời điểm, mỗi worker chỉ xử lý duy nhất 1 job và xử lý theo cơ chế tuần tự. Vì vậy giả sử mỗi job xử lý mất 5s thì nếu có 10 job, queue sẽ mất 50s để xử lý. Vậy có cách nào để tăng số lượng worker xử lý lên không. Câu trả lời là Có.</p>
+
+<h1 id="tăng-số-lượng-worker-để-xử-lý">Tăng số lượng worker để xử lý</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td> --><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">start_worker</span><span class="p">():</span>
+	<span class="n">Worker</span><span class="p">([</span><span class="n">q</span><span class="p">],</span> <span class="n">connection</span><span class="o">=</span><span class="n">conn</span><span class="p">).</span><span class="n">work</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Hàm này sẽ tạo ra 1 worker để xử lý, ý tưởng bây giờ là chúng ta sẽ tạo thêm nhiều process và mỗi process tương ứng với 1 worker.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td> --><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">multiprocessingfrom</span> <span class="n">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">Process</span>
+<span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">procsfor</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_WORKERS</span><span class="p">):</span>
+	<span class="n">proc</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">start_worker</span><span class="p">)</span>
+    <span class="n">procs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
+    <span class="n">proc</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Ở đây mình sử dụng 10 process tương ứng với 10 worker cùng làm việc.</p>
+
+<p>Nếu quá trình chạy có lỗi hệ điều hành không cho phép python chạy multiprocess, bạn chạy thêm lệnh này để cho phép</p>
+
+<blockquote>
+  <p>export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES</p>
+</blockquote>
+
+<h1 id="khi-nào-thì-không-nên-dùng">Khi nào thì không nên dùng?</h1>
+
+<p>Còn sau đây là những ví dụ không khuyến khích sử dụng queue và background job trừ khi có kiến trúc phù hợp:</p>
+
+<ul>
+  <li>Các hệ thống chuyên đọc có tính chất hoạt động như các hệ thống đọc bài viết, sản phẩm,… Các hệ thống này sẽ được optimize bằng con đường khác.</li>
+  <li>Các công việc mang tính chất quan trọng, có tính quyết định nhưng có thời gian phản hồi không quá dài. Ví dụ các request liên quan tới việc thanh toán, tranh giành unique key hệ thống (như đặt chỗ, mua sản phẩm)</li>
+</ul>
+
+<p>Một vài ví dụ thực tế</p>
+
+<p>Đây là một số hệ thống thực tế mình đã áp dụng queue và background job. Các bạn có thể tham khảo để có cái nhìn sát hơn:</p>
+
+<ul>
+  <li>Hệ thống tracking: client gọi lên tracking system để ghi lại các thông tin người dùng như thông tin trình duyệt, ngày giờ truy cập, ip,… Khi đó hệ thống API sẽ đẩy thông tin đó vào queue trên redis trước, sau đó response OK cho client. Sau đó worker mới lấy thông tin từ queue và ghi vào database. Do số lượng request rất lớn và lượng data ghi vào db rất nhiều nên dùng queue sẽ tránh quá tải database</li>
+  <li>Hệ thống logging: Sau hoạt động gì đó của user với hệ thống API, như login, logout, change profile, update post, view post,… hệ thống sẽ phát sinh ra các event, nhưng các event này không được xử lý ngay mà đưa vào queue nhằm tránh block hoạt động của người dùng.</li>
+  <li>Hệ thống notification: Hệ thống này phụ trách việc gửi thông báo, sms, email cho người dùng. Đây là công việc phát sinh từ nghiệp vụ chính, không criticalvà sử dụng nhiều service bên ngoài nên sẽ được đẩy vào queue và gửi lần lượt.</li>
+  <li>Hệ thống analytic: đây là hệ thống báo cáo nội bộ, tuy số lượng báo cáo không nhiều, nhưng mỗi báo cáo lại rất tốn thời gian để phản hồi vì phải tổng hợp số liệu. Do vậy đẩy vào queue để tạo trải nghiệm người dùng tốt hơn. Người dùng sẽ gửi yêu cầu xuất báo cáo và nhận được phản hồi đang xử lý. Sau khi được các worker xử lý xong sẽ thông báo lại cho user qua notification.</li>
+</ul>
+
+<h1 id="nguồn-tham-khảo">Nguồn tham khảo:</h1>
+
+<ul>
+  <li>Tài liệu từ RQ https://python-rq.org/docs/</li>
+  <li>Tham khảo từ Viblo <a href="https://techtalk.vn/background-job-va-queue-cho-nguoi-nong-dan.html">Link</a></li>
+</ul>
+:ET

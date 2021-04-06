@@ -1,7 +1,7 @@
 ---
 title: 11. Các phương pháp scaling data
 author: Quy Nguyen
-date: 2021-04-04 15:47:00 +0700
+date: 2021-04-06 15:47:00 +0700
 categories: [Machine Learning]
 tags: [Machine learning]
 math: true

@@ -1,0 +1,503 @@
+I"۝<p>Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trường đại học London những năm 1980 và 1990.</p>
+
+<p>BM25 là một phương pháp xếp hạng được sử dụng rộng rãi trong tìm kiếm. Trong Web search những hàm xếp hạng này thường được sử dụng như một phần của các phương pháp tích hợp để dùng trong machine learning, xếp hạng.</p>
+
+<p>Một trong những kỹ thuật tìm kiếm nỗi tiếng hiện nay đang sử dụng thuật toán này là Elasticsearch. Khi tìm kiếm, Elascticsearch trả về cho mình ngoài các kết quả tìm được, còn có đánh giá độ liên quan của kết quả dựa trên giá trị thực dương score. Elasticsearch sẽ sắp xếp các kết quả trả về của các query theo thứ tự score giảm dần. Đây là điểm mà mình thấy rất thú vị trong Elasticsearch, và mình sẽ dành bài viết này để nói về cách làm thế nào người ta tính toán và đưa ra được giá trị score và từ đó hiểu được thuật toán BM25.</p>
+
+<h1 id="một-số-khái-niệm">Một số khái niệm</h1>
+
+<ul>
+  <li>
+    <p>Thuật ngữ (term): Dùng để chỉ thành phần của một truy vấn, ví dụ ta có truy vấn: “Thủ đô của Hà Nội là gì”, thuật ngữ của truy vấn sẽ là: ‘Thủ đô’, ‘của’, ‘Hà Nội’. Hiểu đơn giản, thuật ngữ là các từ trong truy vấn/văn bản mang ý nghĩa.</p>
+  </li>
+  <li>
+    <p>Tài liệu: Các văn bản thông thường cần tìm kiếm, truy vấn cũng có thể coi là tài liệu.</p>
+  </li>
+  <li>
+    <p>Tần suất thuật ngữ hay còn gọi là tf: tần suất thuật ngữ xuất hiện trong tài liệu? 3 lần? 10 lần?</p>
+  </li>
+  <li>
+    <p>Tần suất tài liệu nghịch đảo hay còn gọi là idf: được tính bằng số lượng tài liệu mà thuật ngữ xuất hiện. Tần suất tài liệu nghịch đảo (1 / df) cho biết mức độ quan trọng của thuật ngữ. Thuật ngữ có phải là một từ hiếm (chỉ xảy ra trong một tài liệu) hay không? Hay thuật ngữ này phổ biến (xảy ra trong gần như tất cả các tài liệu)?</p>
+  </li>
+</ul>
+
+<p>Sử dụng hai yếu tố này, TFIDF cho biết độ tương đối của một thuật ngữ trong một tài liệu nào đó.</p>
+
+<p>Nếu một thuật ngữ  phổ biến trong tài liệu này, nhưng hiếm ở tài liệu khác, thì điểm TFIDF sẽ cao và tài liệu có điểm TFIDF cao hơn sẽ được coi là  phù hợp với cụm từ tìm kiếm.</p>
+
+<p>BM25 cải thiện dựa trên TFIDF bằng cách sử dụng mức độ liên quan với một bài toán xác suất. BM25 sẽ đưa ra điểm liên quan, để xác định xem một truy vấn có mức độ liên quan thế nào đến các tài liệu. Sau đó xếp hạng các điểm liên quan đó để đưa ra kết quả các tài liệu phù hợp với truy vấn.</p>
+
+<h1 id="công-thức-tính-bm25">Công thức tính BM25</h1>
+
+<p>Để xác định mức độ liên quan giữa một truy vấn (tài liệu) với một tài liệu khác, chúng ta có thể sử dụng công thức tính BM25 như sau:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>[\begin{align}\mbox{BM25}(D, Q) = \sum_{i=1}^n IDF(q_i, D) \frac{f(q_i, D) \cdot (k_1 + 1)}{f(q_i) + k_1 \cdot (1-b + b \cdot</td>
+      <td>D</td>
+      <td>/d_{avg}))}\end{align}]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Trong đó:</p>
+
+<ul>
+  <li>
+    <p>$f(q_i, D)$ Là số lần mà term  $q_i$ xuất hiện trong tất cả các tài liệu $D$</p>
+  </li>
+  <li>
+    <p>$|D|$ là số từ trong tất cả các tài liệu $D$</p>
+  </li>
+  <li>
+    <p>$d_{avg}$ là số lượng từ trung bình trong mỗi tài liệu</p>
+  </li>
+  <li>
+    <p>$b$ và $k1$ là các tham số của BM25</p>
+  </li>
+  <li>
+    <p>$f(q_i, D)$ cho ta thấy rằng nếu một từ xuất hiện trong tài liệu càng nhiều thì điểm của tài liệu càng cao.</p>
+  </li>
+</ul>
+
+<p>Phần thú vị đó là tham số k1, xác định tính bão hòa tần suất. Giá trị càng cao, độ bão hòa càng chậm. Nghĩa là nếu một từ xuất hiện nhiều sẽ làm điểm của tài liệu cao, nhưng sẽ nhiều với một mức độ nào đó và mức độ ảnh hưởng tới điểm sẽ giảm dần.</p>
+
+<p><img src="/assets/img/blog/80a8f9e5-e42f-4bc0-939d-6b5126d965ac.png" alt="Sự ảnh hưởng của TF tới Score" />
+<em>Sự ảnh hưởng của TF tới Score</em></p>
+
+<p>$|D|/d_{avg}$  ở mẫu số có nghĩa là tài liệu dài hơn các tài liệu trung bình sẽ dẫn đến mẫu số lớn hơn, dẫn đến giảm điểm. Thực tế cho ta thấy là nếu càng nhiều thuật ngữ trong tài liệu mà không khớp với truy vấn đầu vào thì điểm của tài liệu càng thấp. Nói cách khác, nếu một tài liệu dài 300 trang đề cập đến cụm từ truy vấn một lần, thì nó ít có khả năng liên quan đến truy vấn hơn so với một tài liệu ngắn đề cập đến truy vấn một lần.</p>
+
+<p>Đối với phần tần suất tài liệu nghịch đảo, ${IDF}(q_i, D)$. Với tập ngữ liệu gồm N tài liệu, IDF cho thuật ngữ $q_i$ được tính như sau:</p>
+
+<p>[\begin{align} \mbox{IDF}(q_i, D) = \log \frac{N - N(q_i) + 0.5}{N(q_i) + 0.5} \end{align}]</p>
+
+<p>Với</p>
+
+<p>$N(q_i)$ là số lượng các tài liệu trong ngữ liệu chứa  $q_i$.Phần tần suất tài liệu nghịch đảo giống với TFIDF, có vai trò đảm bảo các từ hiếm hơn sẽ có điểm cao hơn và đóng góp nhiều hơn vào điểm xếp hạng.</p>
+
+<p>Lưu ý rằng công thức IDF ở trên có một nhược điểm khi sử dụng nó cho các cụm từ xuất hiện trong hơn một nửa kho ngữ liệu IDF sẽ là giá trị âm, dẫn đến điểm xếp hạng trở thành số âm. ví dụ. nếu chúng ta có 10 tài liệu trong kho ngữ liệu và thuật ngữ “là” xuất hiện trong 6 tài liệu đó, IDF của nó sẽ là log (10 - 6 + 0.5 / 6 + 0.5) = log (4.5 / 6.5). Mặc dù trong quá trình tiền xử lý chúng ta đã loại bỏ các stop-words(từ dừng) vì các từ này ít mang ý nghĩa trong câu, tuy nhiên ta vẫn cần phải tính đến trường hợp này.</p>
+
+<p>Thêm 1 vào biểu thức:</p>
+
+<p>[\begin{align} \mbox{IDF}(q_i) = \log \big( 1 + \frac{N - N(q_i) + 0.5}{N(q_i) + 0.5} \big) \end{align}]</p>
+
+<p>Đối với cụm từ dẫn đến giá trị IDF âm, hãy hoán đổi nó với một giá trị dương nhỏ, thường được ký hiệu là $epsilon$</p>
+
+<p>Triển khai code với python</p>
+
+<p>Sau khi đã có các công thức tính, ta sẽ áp dụng bài toán này vào tìm kiếm đối với tiếng Việt.</p>
+
+<h2 id="tiền-xử-lý">Tiền xử lý</h2>
+
+<p>Trong bài này mình sử dụng thư viện pyvi để thực hiện tách từ tiếng việt. Tách từ là một bước cực kỳ quan trọng trong xử lý các bài toán tiếng Việt.</p>
+
+<p>Để cài đặt bạn hãy chạy <code class="language-plaintext highlighter-rouge">pip install pyvi</code></p>
+
+<p>Import thư viện:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td> --><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">pyvi.ViTokenizer</span> <span class="kn">import</span> <span class="n">tokenize</span>
+<span class="kn">import</span> <span class="nn">re</span><span class="p">,</span> <span class="n">os</span><span class="p">,</span> <span class="n">string</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Xóa bỏ các ký tự thừa trong text</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> --><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="s">'&lt;.*?&gt;'</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="n">text</span><span class="p">).</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="s">'(\s)+'</span><span class="p">,</span> <span class="sa">r</span><span class="s">'\1'</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Chuẩn hóa văn bản, xóa bỏ các ký tự _ và chuyển sang chữ thường</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td> --><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">normalize_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">listpunctuation</span> <span class="o">=</span> <span class="n">string</span><span class="p">.</span><span class="n">punctuation</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'_'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listpunctuation</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">' '</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">.</span><span class="n">lower</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Loại bỏ các stop-words:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># list stopwords
+</span><span class="n">filename</span> <span class="o">=</span> <span class="s">'../input/stopword/stopwords.csv'</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">)</span>
+<span class="n">list_stopwords</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'stopwords'</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">remove_stopword</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">pre_text</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">list_stopwords</span><span class="p">:</span>
+            <span class="n">pre_text</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="n">text2</span> <span class="o">=</span> <span class="s">' '</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">pre_text</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">text2</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Thực hiện tách từ</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> --><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">word_segment</span><span class="p">(</span><span class="n">sent</span><span class="p">):</span>
+    <span class="n">sent</span> <span class="o">=</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">sent</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">sent</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="định-nghĩa-mô-hình">Định nghĩa mô hình</h1>
+
+<p>Chúng ta sẽ xây dựng mô hình BM25 như sau:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+</pre></td> --><td class="rouge-code"><pre><span class="k">class</span> <span class="nc">BM25</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k1</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.75</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">k1</span> <span class="o">=</span> <span class="n">k1</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus</span><span class="p">):</span>
+        <span class="s">"""
+        Fit the various statistics that are required to calculate BM25 ranking
+        score using the corpus given.
+
+        Parameters
+        ----------
+        corpus : list[list[str]]
+            Each element in the list represents a document, and each document
+            is a list of the terms.
+
+        Returns
+        -------
+        self
+        """</span>
+        <span class="n">tf</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">idf</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">doc_len</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">corpus_size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">corpus</span><span class="p">:</span>
+            <span class="n">corpus_size</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">doc_len</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">document</span><span class="p">))</span>
+
+            <span class="c1"># compute tf (term frequency) per document
+</span>            <span class="n">frequencies</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">document</span><span class="p">:</span>
+                <span class="n">term_count</span> <span class="o">=</span> <span class="n">frequencies</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">frequencies</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="n">term_count</span>
+
+            <span class="n">tf</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">frequencies</span><span class="p">)</span>
+
+            <span class="c1"># compute df (document frequency) per term
+</span>            <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">frequencies</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">df_count</span> <span class="o">=</span> <span class="n">df</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">term</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_count</span>
+
+        <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">df</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">idf</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">corpus_size</span> <span class="o">-</span> <span class="n">freq</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">freq</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="p">.</span><span class="n">tf_</span> <span class="o">=</span> <span class="n">tf</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">df_</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">idf_</span> <span class="o">=</span> <span class="n">idf</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">doc_len_</span> <span class="o">=</span> <span class="n">doc_len</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">corpus_</span> <span class="o">=</span> <span class="n">corpus</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">corpus_size_</span> <span class="o">=</span> <span class="n">corpus_size</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">avg_doc_len_</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">doc_len</span><span class="p">)</span> <span class="o">/</span> <span class="n">corpus_size</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">_score</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">corpus_size_</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">scores</span>
+
+    <span class="k">def</span> <span class="nf">_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">doc_len</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">doc_len_</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tf_</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">term</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frequencies</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">freq</span> <span class="o">=</span> <span class="n">frequencies</span><span class="p">[</span><span class="n">term</span><span class="p">]</span>
+            <span class="n">numerator</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">idf_</span><span class="p">[</span><span class="n">term</span><span class="p">]</span> <span class="o">*</span> <span class="n">freq</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">k1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">denominator</span> <span class="o">=</span> <span class="n">freq</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">k1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">b</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">doc_len</span> <span class="o">/</span> <span class="bp">self</span><span class="p">.</span><span class="n">avg_doc_len_</span><span class="p">)</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="p">(</span><span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">score</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="tham-số-mô-hình">Tham số mô hình</h2>
+
+<ul>
+  <li>
+    <p>k1 : float, mặc định là 1.5</p>
+  </li>
+  <li>
+    <p>b : float, mặc định là 0.75</p>
+  </li>
+</ul>
+
+<p><b>Các thuộc tính</b></p>
+
+<ul>
+  <li>
+    <p>tf_ : list[dict[str, int]] Số lần xuất hiện của từ trong tài liệu. Ví dụ [{‘đẹp’: 1}] nghĩa là
+tài liệu đầu tiên chứa thuật ngữ ‘đẹp’ 1 lần.</p>
+  </li>
+  <li>
+    <p>df_ : dict[str, int] Số tài liệu trong tập ngữ liệu chứa thuật ngữ</p>
+  </li>
+  <li>
+    <p>idf_ : dict[str, float] IDF của thuật ngữ.</p>
+  </li>
+  <li>
+    <p>doc_len_ : list[int] Số thuật ngữ (từ) trong mỗi tài liệu. Ví dụ [3] Nghĩa là tài liệu chứa 3 thuật ngữ (từ).</p>
+  </li>
+  <li>
+    <p>corpus_ : list[list[str]] Tập ngữ liệu đầu vào</p>
+  </li>
+  <li>
+    <p>corpus_size_ : int Số lượng tài liệu trong bộ ngữ liệu</p>
+  </li>
+  <li>
+    <p>avg_doc_len_ : float Giá trị trung bình các thuật ngữ trong một tài liệu của ngữ liệu</p>
+  </li>
+</ul>
+
+<h2 id="chuẩn-bị-dữ-liệu">Chuẩn bị dữ liệu</h2>
+
+<p>Trong bài viết này mình sẽ dùng bộ dữ liệu demo của wikipedia tiếng việt, các bạn có thể download tại:</p>
+
+<p>https://drive.google.com/file/d/1Uuj3s2Zr5ZQ9KHk6fWsQJ-AUwKkhjvPe/view?usp=sharing</p>
+
+<p>Sau khi download, các bạn giải nén ra máy tính.</p>
+
+<p>Ngoài ra mình cũng sử dụng danh sách stop-word của một bài viết trên viblo:</p>
+
+<p>https://drive.google.com/file/d/1E0vtC2tPPKE5bWbFP3A3J7zfCVwHNg2M/view?usp=sharing</p>
+
+<p>Tiến hành đọc dữ liệu từ tập ngữ liệu:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td> --><td class="rouge-code"><pre><span class="n">path_to_corpus</span> <span class="o">=</span> <span class="s">'../input/demo-wiki'</span>
+
+<span class="k">def</span> <span class="nf">get_docs</span><span class="p">(</span><span class="n">docs_dir</span><span class="p">):</span>
+    <span class="n">docs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1">#     f_w = open('./datatrain.txt', 'w')
+</span>    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sub_dir</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path_to_corpus</span><span class="p">)):</span>
+        <span class="n">path_to_subdir</span> <span class="o">=</span> <span class="n">path_to_corpus</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">sub_dir</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">path_to_subdir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path_to_subdir</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path_to_subdir</span><span class="p">)):</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_subdir</span> <span class="o">+</span> <span class="s">'/'</span> <span class="o">+</span> <span class="n">file_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_r</span><span class="p">:</span>
+                    <span class="n">contents</span> <span class="o">=</span> <span class="n">f_r</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">strip</span><span class="p">().</span><span class="n">split</span><span class="p">(</span><span class="s">'&lt;/doc&gt;'</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">):</span>
+                            <span class="k">continue</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="n">word_segment</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="n">remove_stopword</span><span class="p">(</span><span class="n">normalize_text</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+                        <span class="n">docs</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+     <span class="k">return</span> <span class="n">docs</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td> --><td class="rouge-code"><pre><span class="n">docs</span> <span class="o">=</span> <span class="n">get_docs</span><span class="p">(</span><span class="n">path_to_corpus</span><span class="p">)</span>
+
+<span class="n">texts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">document</span><span class="p">.</span><span class="n">lower</span><span class="p">().</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">list_stopwords</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">document</span> <span class="ow">in</span> <span class="n">docs</span>
+<span class="p">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="huấn-luyện-mô-hình">Huấn luyện mô hình</h1>
+
+<p>Trong phần này chúng ta chỉ cần đưa danh sách các tài liệu (mỗi tài liệu là một vector các từ) vào trong hàm fit() của mô hình BM25.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td> --><td class="rouge-code"><pre><span class="n">bm25</span> <span class="o">=</span> <span class="n">BM25</span><span class="p">()</span>
+<span class="n">bm25</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="thực-hiện-tìm-kiếm">Thực hiện tìm kiếm</h1>
+<p>Chúng ta sẽ xếp hạng các tài liệu dựa trên score, tài liệu nào có điểm cao hơn sẽ có thứ hạng cao hơn:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td> --><td class="rouge-code"><pre><span class="n">limit</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s">'Hội đồng nhân dân'</span>
+
+<span class="n">query</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">word_segment</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">remove_stopword</span><span class="p">(</span><span class="n">normalize_text</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">bm25</span><span class="p">.</span><span class="n">search</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+<span class="n">scores_index</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="n">scores_index</span> <span class="o">=</span> <span class="n">scores_index</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="n">docs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scores_index</span><span class="p">])[:</span><span class="n">limit</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="kết-quả-tìm-kiếm">Kết quả tìm kiếm</h1>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td> --><td class="rouge-code"><pre><span class="p">[</span>  <span class="mi">0</span>  <span class="mi">71</span>  <span class="mi">70</span>  <span class="mi">69</span>  <span class="mi">68</span>  <span class="mi">67</span>  <span class="mi">66</span>  <span class="mi">64</span>  <span class="mi">63</span>  <span class="mi">62</span>  <span class="mi">72</span>  <span class="mi">61</span>  <span class="mi">59</span>  <span class="mi">58</span>  <span class="mi">57</span>  <span class="mi">56</span> <span class="mi">109</span>  <span class="mi">54</span>
+  <span class="mi">52</span>  <span class="mi">51</span>  <span class="mi">50</span>  <span class="mi">60</span>  <span class="mi">74</span>  <span class="mi">76</span>  <span class="mi">77</span> <span class="mi">108</span> <span class="mi">107</span> <span class="mi">106</span> <span class="mi">105</span> <span class="mi">104</span> <span class="mi">103</span> <span class="mi">101</span>  <span class="mi">99</span>  <span class="mi">98</span>  <span class="mi">96</span>  <span class="mi">95</span>
+  <span class="mi">94</span>  <span class="mi">93</span>  <span class="mi">91</span>  <span class="mi">86</span>  <span class="mi">85</span>  <span class="mi">84</span>  <span class="mi">82</span>  <span class="mi">81</span>  <span class="mi">80</span>  <span class="mi">79</span>  <span class="mi">49</span>  <span class="mi">48</span>  <span class="mi">55</span>  <span class="mi">46</span>  <span class="mi">24</span>  <span class="mi">23</span>  <span class="mi">19</span>  <span class="mi">18</span>
+  <span class="mi">17</span>  <span class="mi">16</span>  <span class="mi">15</span>  <span class="mi">14</span>  <span class="mi">13</span>  <span class="mi">12</span>  <span class="mi">11</span>  <span class="mi">10</span>   <span class="mi">9</span>   <span class="mi">8</span>   <span class="mi">5</span>   <span class="mi">3</span>   <span class="mi">2</span>  <span class="mi">25</span>  <span class="mi">28</span>  <span class="mi">21</span> <span class="mi">110</span>  <span class="mi">36</span>
+  <span class="mi">35</span>  <span class="mi">38</span>  <span class="mi">33</span>  <span class="mi">32</span>  <span class="mi">37</span>  <span class="mi">40</span>  <span class="mi">39</span>  <span class="mi">43</span>  <span class="mi">31</span>  <span class="mi">44</span>  <span class="mi">30</span>  <span class="mi">45</span>  <span class="mi">41</span>  <span class="mi">29</span>  <span class="mi">92</span>  <span class="mi">65</span>  <span class="mi">20</span>  <span class="mi">90</span>
+  <span class="mi">83</span>   <span class="mi">6</span>  <span class="mi">26</span>  <span class="mi">78</span>  <span class="mi">47</span>   <span class="mi">7</span>  <span class="mi">87</span>  <span class="mi">27</span>   <span class="mi">4</span>  <span class="mi">75</span>  <span class="mi">42</span>  <span class="mi">89</span>  <span class="mi">73</span>   <span class="mi">1</span> <span class="mi">102</span>  <span class="mi">53</span>  <span class="mi">22</span>  <span class="mi">88</span>
+  <span class="mi">34</span>  <span class="mi">97</span> <span class="mi">100</span><span class="p">]</span>
+<span class="p">[</span><span class="s">'chính_quyền địa_phương ở việt_nam chính_quyền địa_phương ở việt_nam bao_gồm ủy_ban nhân_dân hành_pháp hội_đồng nhân_dân lập_pháp ở ba cấp xã huyện và tỉnh và tòa_án nhân_dân tư_pháp ở hai cấp huyện và tỉnh khác với chế_độ liên_bang federation của một_số nước chính_quyền địa_phương của việt_nam là một bộ_phận hợp_thành của chế_độ đơn_nhất unitary state chính_quyền địa_phương việt_nam bao_gồm khái_niệm chính_quyền địa_phương là khái_niệm phát_sinh từ khái_niệm hệ_thống các cơ_quan nhà_nước ở địa_phương khái_niệm này được sử_dụng khá phổ_biến trong nhiều văn_bản pháp_luật của nhà_nước là một khái_niệm được sử_dụng nhiều trong tổ_chức và hoạt_động của nhà_nước vào đời_sống thực_tế xã_hội tuy_nhiên hiện_nay vẫn chưa có một văn_bản pháp_luật nào định_nghĩa khái_niệm chính_quyền địa_phương bao_gồm những thiết chế nào mối quan_hệ và cơ_chế hoạt_động cụ_thể của các bộ_phận cấu_thành xuất_phát từ góc_độ nghiên_cứu lý_luận từ góc_độ thực_tiễn hay cách_thức tiếp_cận v...]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+:ET
