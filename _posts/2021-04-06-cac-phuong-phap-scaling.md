@@ -261,7 +261,7 @@ Như vậy chúng ta sẽ sử dụng mô hình để tiến hành các thử ng
 
 ## MLP với dữ liệu chưa được rescale
 
-Để demo việc tìm hiểu về hàm mất mát, mình sẽ sử dụng một model đơn giản đó là Multilayer Perceptron (MLP).
+Để demo việc tìm hiểu về sự ảnh hưởng của scaling, mình sẽ sử dụng một model đơn giản đó là Multilayer Perceptron (MLP).
 
 Model sẽ gồm đầu vào là 20 features, mô hình sẽ có 1 lớp ẩn với 25 nodes, sau đó sử dụng hàm kích hoạt ReLU.
 Đầu ra sẽ gồm 1 node tương ứng với giá trị đầu ra muốn dự đoán, cuối cùng sẽ là một hàm kích hoạt tuyến tính .
