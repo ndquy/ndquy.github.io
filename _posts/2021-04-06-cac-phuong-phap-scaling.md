@@ -4,6 +4,7 @@ author: Quy Nguyen
 date: 2021-04-06 15:47:00 +0700
 categories: [Machine Learning]
 tags: [Machine learning]
+math: true
 ---
 
 Trong các thuật toán machine learning nói chung, và trong deep learning nói riêng, các mô hình học cách dự đoán đầu ra từ đầu vào thông qua các ví dụ trong tập dữ liệu huấn luyện.
