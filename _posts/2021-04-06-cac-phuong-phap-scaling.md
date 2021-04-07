@@ -1,5 +1,5 @@
 ---
-title: 11. Các phương pháp scale duwx l
+title: 11. Các phương pháp scale dữ liệu trong machine learning
 author: Quy Nguyen
 date: 2021-04-06 15:47:00 +0700
 categories: [Machine Learning]
