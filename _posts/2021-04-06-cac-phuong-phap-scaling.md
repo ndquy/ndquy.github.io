@@ -1,5 +1,5 @@
 ---
-title: 11. Các phương pháp scaling data
+title: 11. Các phương pháp scale dữ liệu trong machine learning
 author: Quy Nguyen
 date: 2021-04-06 15:47:00 +0700
 categories: [Machine Learning]
@@ -7,56 +7,54 @@ tags: [Machine learning]
 math: true
 ---
 
-Trong các thuật toán machine learning nói chung, và trong deep learning nói riêng, các mô hình học các dữ đoán các đầu ra từ đầu vào từ các ví dụ trong tập dữ liệu huấn luyện.
+Trong các thuật toán machine learning nói chung, và trong deep learning nói riêng, các mô hình học cách dự đoán đầu ra từ đầu vào thông qua các ví dụ trong tập dữ liệu huấn luyện.
 
-Các trọng số của mô hình được khở tạo từ các giá trị ngẫu nhiên nhỏ và được cập nhật thông qua thuật toán tối ưu trong quá trình backward bằng cách ước lượng lỗi dự đoán trong tập huấn luyện.
+Các điểm dữ liệu đôi khi được đo đạc với những đơn vị khác nhau, m và feet chẳng hạn. Hoặc có hai thành phần (của vector dữ liệu) chênh lệch nhau quá lớn, một thành phần có khoảng giá trị từ 0 đến 1000, thành phần kia chỉ có khoảng giá trị từ 0 đến 1 chẳng hạn. Lúc này, chúng ta cần chuẩn hóa dữ liệu trước khi thực hiện các bước tiếp theo. (theo https://machinelearningcoban.com/general/2017/02/06/featureengineering)
 
-Với các trọng số nhỏ của mô hình và được cập nhật dựa vào lỗi dự đoán, việc scale giá trị của đầu vào X và đầu ra Y được sử dụng để huấn luyện mô hình là một yếu tố quan trọng.
-Nếu đầu vào không được scaling có thể dẫn đến quá trình training không ổn định. Ngoài ra nếu đầu ra Y không được scale trong các bài toán regression có thể dẫn đến exploding gradient khiến thuật toán không hiệu quả.
+Các trọng số của mô hình được khởi tạo từ các giá trị ngẫu nhiên nhỏ và được cập nhật bằng thuật toán tối ưu trong quá trình backward, việc cập nhật dựa trên lỗi dự đoán (loss) trong quá trình huấn luyện.
+
+Vì các trọng số nhỏ của mô hình nhỏ và được cập nhật dựa vào lỗi dự đoán nên việc scale giá trị của đầu vào X và đầu ra Y của tập dữ liệu huấn  luyện là một yếu tố quan trọng.
+Nếu đầu vào không được scaling có thể dẫn đến quá trình huấn luyện không ổn định. Ngoài ra nếu đầu ra Y không được scale trong các bài toán regression có thể dẫn đến exploding gradient khiến thuật toán không chạy được.
 
 Scaling có thể tạo ra sự khác biệt giữa một mô hình kém và một mô hình tốt.
 
 Bước tiền xử lý dữ liệu liên quan đến kỹ thuật normalization và standardization để rescale lại input và output trước khi huấn luyện mô hình.
 
-Trong bài viết này, chúng ta sẽ tìm hiểu các để cải thiện một mô hình sao cho hiệu quả và ổn định bằng việc scaling data
+Trong bài viết này, chúng ta sẽ tìm hiểu các để cải thiện một mô hình sao cho hiệu quả và ổn định bằng việc scale dữ liệu.
 
-Sau bài viết này bạn sẽ nắm được nội dung:
+Mục tiêu bài viết
 
-* Data scaling là một bước nên được thực hiện trong quá trình tiền xử lý khi cài đặt với mô hình mạng nơ ron
+* Data scaling là một bước cần được thực hiện trong quá trình tiền xử lý khi cài đặt với mô hình mạng nơ ron
 * Thực hiện được scale data bằng kỹ thuật normalization hoặc standardization.
-* Áp dụng standardization và normalization để cải thiện mô hình Multilayer Perceptron với bài toán regression.
+* Áp dụng standardization và normalization để cải thiện mô hình Multilayer Perceptron với bài toán regression sau đó đưa ra đánh giá.
 
-# Scaling các biến đầu vào
+# Scale các biến đầu vào
 
 Các biến đầu vào là các biến đưa vào mạng neuron để dự đoán.
 
-Một nguyên tắc chung là các biến đầu vào phải có giá trị nhỏ, có thể nằm trong khoảng 0-1 hoặc được chuẩn hóa với giá trị trung bình bằng 0 và độ lệch chuẩn (standard deviation) bằng 1.
-
-Các biến đầu vào có cần phải scaling hay không phụ thuộc vào từng bài toán cụ thể và từng biến cụ thể.
+Một nguyên tắc chung là các biến đầu vào phải có giá trị nhỏ, có thể nằm trong khoảng 0-1 hoặc được chuẩn hóa với giá trị trung bình bằng 0 và độ lệch chuẩn (standard deviation) bằng 1. Các biến đầu vào có cần phải scaling hay không phụ thuộc vào từng bài toán cụ thể và từng biến cụ thể.
 
 Nếu phân bố các giá trị của biến là phân bố chuẩn thì biến nên được standardization, nếu không dữ liệu nên được normalization. Điều này áp dụng khi phạm vi giá trị lớn (10, 100...) hoặc nhỏ (0.01, 0.0001).
 
 Nếu giá trị của biến nhỏ (gần trong khoảng 0-1) và phân phối bị giới hạn (ví dụ độ lệch chuẩn gần với 1) thì chúng ta không cần phải scale dữ liệu.
 
-Các bài toán có thể phức tạp hoặc không rõ ràng trong việc sử dụng kỹ thuật nào để scale dữ liệu tốt nhất.
+Các bài toán có thể phức tạp hoặc không rõ ràng nên ta không xác định được việc sử dụng kỹ thuật nào để scale dữ liệu là tốt nhất. Vì thế nên thường thì mình hay thử nghiệm scale dữ liệu và không scale có khác biệt nhau thế nào bằng việc cho mô hình chạy rồi tiến hành đánh giá.
 
-Vì thế nên thường thì mình hay thử nghiệm scale dữ liệu và không scale có khác biệt nhau thế nào bằng việc cho mô hình chạy rồi tiến hành đánh giá.
-
-# Scaling biến đầu ra
+# Scale biến đầu ra
 
 Biến đầu ra Y là biến được dự đoán bởi mô hình.
 
-Chúng ta cần đảm bảo là giá trị của Y phải khớp với phạm vi biểu diễn của hàm kích hoạt (activation function) trong lớp output của mô hình mạng.
+Chúng ta cần đảm bảo là giá trị của Y phải khớp với phạm vi biểu diễn của hàm kích hoạt (activation function) trong lớp output của mô hình mạng nơ-ron.
 
 Nếu đầu ra của activation function thuộc vào miền [0, 1] thì giá trị biến đầu ra Y cũng phải nằm trong miền giá trị này. Tuy nhiên chúng ta nên chọn hàm kích hoạt phù hợp với phân bố của đầu ra Y hơn là đưa Y về miền giá trị của hàm kích hoạt.
 
 Ví dụ nếu bài toán của bạn là regression thì đầu ra sẽ là một giá trị số thực. Mô hình tốt nhất cho bài toán này đó là lựa chọn hàm kích hoạt tuyến tính (linear activation). Nếu đầu ra có phân bố chuẩn thì chúng ta có thể standardize biến đầu ra. Nếu không thì đầu ra Y có thể được normalize.
 
-## Các phương pháp data scaling
+# Các phương pháp data scaling
 
 Có 2 cách để scale dữ liệu đó là normalization và standardization tạm dịch là Bình thường hóa dữ liệu và Chuẩn hóa dữ liệu
-                                 
-2 cách này đều được cung cấp trong thư viện scikit-learn
+
+Cả 2 cách này đều được cung cấp trong thư viện scikit-learn
 
 ## Data Normalization
 
@@ -75,7 +73,7 @@ y là biến sau normalize, x là biến trước normalize.
 
 Trong đó x là giá trị cần được normalize, maximum và minium là giá trị lớn nhất và nhỏ nhất của trong tất cả các quan sát của feature trong tập dữ liệu.
 
-Ví dụ với một tập dữ liệu bất kỳ, chúng ta xác định được giá trị lớn nhất của 1 feature là 30, giá trị nhỏ nhất là -10. Như vậy, với 1 giá trị bất kỳ là 18 và 8, ta có thể normalize như sau:
+Ví dụ với một tập dữ liệu bất kỳ, chúng ta xác định được giá trị lớn nhất của 1 feature là 30, giá trị nhỏ nhất là -10. Như vậy, với 1 giá trị bất kỳ là 18.8, ta có thể normalize như sau:
 
 ```
 y = (x - min) / (max - min)
@@ -84,7 +82,7 @@ y = 28.8 / 40
 y = 0.72
 ```
 
-Bạn có thể thấy nếu giá trị x nằm ngoài giới hạn của giá trị minimum và maximum, giá trị kết quả sẽ không nằm trong phạm vi 0 và 1. 
+Bạn có thể thấy nếu giá trị x nằm ngoài giới hạn của giá trị minimum và maximum, giá trị kết quả sẽ không nằm trong phạm vi 0 và 1.
 Nếu đã xác định giá trị max và min cho trước, một điểm dữ liệu nào đó nằm ngoài khoảng max và min đó ta có thể loại bỏ khỏi tập dữ liệu.
 
 Bạn có thể thực hiện normalize dữ liệu sử dụng thư viện scikit-learn với MinMaxScaler.
@@ -136,7 +134,7 @@ inverse = scaler.inverse_transform(normalized)
 
 ## Data Standardization
 
-Chuẩn hóa dữ liệu là việc scale dữ liệu về phân phối trong đó giá trị trung bình của các quan sát bằng 0 và độ lệch chuẩn = 1. Kỹ thuật này còn được gọi là “whitening.”.
+Chuẩn hóa dữ liệu là việc scale dữ liệu về một phân bố trong đó giá trị trung bình của các quan sát bằng 0 và độ lệch chuẩn = 1. Kỹ thuật này còn được gọi là “whitening.”.
 Nhờ việc chuẩn hóa, các thuật toán như linear regression, logistic regression được cải thiện.
 
 Công thức chuẩn hóa như sau:
@@ -149,13 +147,13 @@ với $\bar{x}$ và $\sigma$ lần lượt là kỳ vọng và phương sai (sta
 
 Giống như normalization, standardization có thể có hiệu quả và thậm chí bắt buộc nếu giá trị dữ liệu đầu vào thuộc vào các miền giá trị khác nhau.
 
-Standardization giả định các quan sát có phân phối Gaussian (dạng hình chuông úp ngược). Nếu phân phối dữ liệu không có dạng phân phối chuẩn thì việc áp dụng standardize cũng không hiệu quả.
+Standardization giả định các quan sát có phân phối Gaussian (dạng hình chuông). Nếu phân phối dữ liệu không có dạng phân phối chuẩn thì việc áp dụng standardize cũng không hiệu quả.
 
-Để thực hiện standardize dữ liệu, chúng ta cần tính được giá trị trung bình và độ lệch chuẩn trên các quan sát. 
+Để thực hiện standardize dữ liệu, chúng ta cần tính được giá trị trung bình và độ lệch chuẩn dựa trên các quan sát.
 
 Công thức chuẩn hóa:
 
-``` 
+```
 y = (x - mean) / standard_deviation
 ```
 
@@ -173,7 +171,7 @@ standard_deviation = sqrt( sum( (x - mean)^2 ) / count(x))
 
 Giả sử giá trị trung bình là 10, độ lệch chuẩn là 5, Với giá trị 20.7 sẽ được chuẩn hóa như sau:
 
-``` 
+```
 y = (x - mean) / standard_deviation
 y = (20.7 - 10) / 5
 y = (10.7) / 5
@@ -260,13 +258,13 @@ _Phân bố của 2 biến trong số 12 biến_
 ![Phân bố của biến mục tiêu](/assets/img/blog/Histogram-of-the-Target-Variable-for-the-Regression-Problem.webp)
 _Phân bố của biến mục tiêu_
 
-Như vậy chúng ta sẽ sử dụng mô hình để tiến hành các thử nghiệm và đánh giá. 
+Như vậy chúng ta sẽ sử dụng mô hình để tiến hành các thử nghiệm và đánh giá.
 
-## Perceptron nhiều lớp với dữ liệu chưa được rescale
+## MLP với dữ liệu chưa được rescale
 
-Để demo việc tìm hiểu về hàm mất mát, mình sẽ sử dụng một model đơn giản đó là Multilayer Perceptron (MLP). 
+Để demo việc tìm hiểu về sự ảnh hưởng của scaling, mình sẽ sử dụng một model đơn giản đó là Multilayer Perceptron (MLP).
 
-Model sẽ gồm đầu vào là 20 features, mô hình sẽ có 1 lớp ẩn với 25 nodes, sau đó sử dụng hàm kích hoạt ReLU. 
+Model sẽ gồm đầu vào là 20 features, mô hình sẽ có 1 lớp ẩn với 25 nodes, sau đó sử dụng hàm kích hoạt ReLU.
 Đầu ra sẽ gồm 1 node tương ứng với giá trị đầu ra muốn dự đoán, cuối cùng sẽ là một hàm kích hoạt tuyến tính .
 
 ```python
@@ -343,7 +341,7 @@ pyplot.show()
 
 Sau khi chạy code, chúng ta sẽ có giá trị MSE trên tập train và tập test.
 
-Trong trường hợp này, mô hình không học được gì cả, dẫn đến giá trị dự đoán là NaN. 
+Trong trường hợp này, mô hình không học được gì cả, dẫn đến giá trị dự đoán là NaN.
 Các trọng số của mô hình bị explode trong quá trình huấn luyện do giá trị mất mát lớn ảnh hưởng đến việc cập nhật trọng bằng Gradient descent.
 
 ```
@@ -354,14 +352,14 @@ Như vậy việc scale dữ liệu là hoàn toàn cần thiết khi xây dựn
 
 Do giá trị lỗi là NaN nên trong trường hợp này ta không thể vẽ được đồ thị hàm lỗi.
 
-## Perceptron nhiều lớp với việc scale biến mục tiêu
+## MLP với việc scale biến mục tiêu
 
 
 Chúng ta sẽ tiến hành cập nhật lại mô hình bằng cách scale lại biến đầu ra y của tập dữ liệu.
 
 Khi đưa biến mục tiêu về cùng miền giá trị sẽ làm giảm kích thước gradient để cập nhật lại trọng số. Điều này sẽ làm mô hình và quá trình huấn luyện ổn định hơn.
 
-Với biến mục tiêu có phân phối Gausian, chúng ta sẽ sử dụng phương pháp thay đổi tỉ lệ giá trị của biến bằng kỹ thuật standardize. 
+Với biến mục tiêu có phân phối Gausian, chúng ta sẽ sử dụng phương pháp thay đổi tỉ lệ giá trị của biến bằng kỹ thuật standardize.
 Chúng ta cần tính giá trị trung bình (mean) và độ lệch chuẩn (std) của biến để áp dụng phương pháp này.
 
 Thư viện scikit-learn cần đầu vào dữ liệu là 1 ma trận 2 chiều gồm các dòng và các cột. Vì vậy biến mục tiêu Y từ ma trận 1D phải được reshape về 2D.
