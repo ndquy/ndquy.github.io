@@ -1,1 +1,217 @@
-<feed xmlns="http://www.w3.org/2005/Atom"> <id>/</id><title>Quy's blog</title><subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle> <updated>2021-04-07T02:38:28+08:00</updated> <author> <name>Nguyễn Đình Quý</name> <uri>/</uri> </author><link rel="self" type="application/atom+xml" href="/feed.xml"/><link rel="alternate" type="text/html" hreflang="en-US" href="/"/> <generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator> <rights> © 2021 Nguyễn Đình Quý </rights> <icon>/assets/img/favicons/favicon.ico</icon> <logo>/assets/img/favicons/favicon-96x96.png</logo> <entry><title>11. Các phương pháp scaling data</title><link href="/posts/cac-phuong-phap-scaling/" rel="alternate" type="text/html" title="11. Các phương pháp scaling data" /><published>2021-04-06T16:47:00+08:00</published> <updated>2021-04-06T16:47:00+08:00</updated> <id>/posts/cac-phuong-phap-scaling/</id> <content src="/posts/cac-phuong-phap-scaling/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Trong các thuật toán machine learning nói chung, và trong deep learning nói riêng, các mô hình học các dữ đoán các đầu ra từ đầu vào từ các ví dụ trong tập dữ liệu huấn luyện. Các trọng số của mô hình được khở tạo từ các giá trị ngẫu nhiên nhỏ và được cập nhật thông qua thuật toán tối ưu trong quá trình backward bằng cách ước lượng lỗi dự đoán trong tập huấn luyện. Với các trọng số nhỏ của mô... </summary> </entry> <entry><title>10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</title><link href="/posts/okapi-bm-25-tim-kiem-tieng-viet/" rel="alternate" type="text/html" title="10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt" /><published>2021-04-05T11:09:00+08:00</published> <updated>2021-04-05T11:44:58+08:00</updated> <id>/posts/okapi-bm-25-tim-kiem-tieng-viet/</id> <content src="/posts/okapi-bm-25-tim-kiem-tieng-viet/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trườ... </summary> </entry> <entry><title>Triển khai hàng đợi xử lý bằng python với Redis</title><link href="/posts/cai-dat-queue-python-production/" rel="alternate" type="text/html" title="Triển khai hàng đợi xử lý bằng python với Redis" /><published>2021-04-05T11:09:00+08:00</published> <updated>2021-04-05T12:14:51+08:00</updated> <id>/posts/cai-dat-queue-python-production/</id> <content src="/posts/cai-dat-queue-python-production/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Lập Trình" /> <summary> Hàng đợi queue là gì? Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database. Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp. Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc ph... </summary> </entry> <entry><title>9. Loss function P3 - hàm mất mát cho bài toán multi-class classification</title><link href="/posts/loss-function-p3/" rel="alternate" type="text/html" title="9. Loss function P3 - hàm mất mát cho bài toán multi-class classification" /><published>2021-04-04T16:47:00+08:00</published> <updated>2021-04-04T16:47:00+08:00</updated> <id>/posts/loss-function-p3/</id> <content src="/posts/loss-function-p3/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Phân đa lớp là những bài toán mà mô hình dự đoán trong đó các đầu vào được chỉ định là một trong nhiều hơn hai lớp. Mô hình dự đoán một giá trị số nguyên, trong đó mỗi lớp được gán một giá trị số nguyên duy nhất từ ​​0 đến (num_classes - 1). Bài toán thường được thực hiện như là dự đoán xác suất của điểm dữ liệu thuộc về một lớp nào đó đã biết. num_classes là số class Trong phần này, chúng ta... </summary> </entry> <entry><title>8. Loss function P2 - hàm mất mát cho bài toán binary classification</title><link href="/posts/loss-function-p2/" rel="alternate" type="text/html" title="8. Loss function P2 - hàm mất mát cho bài toán binary classification" /><published>2021-04-04T16:47:00+08:00</published> <updated>2021-04-04T18:43:45+08:00</updated> <id>/posts/loss-function-p2/</id> <content src="/posts/loss-function-p2/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Phân lớp nhị phân là bài toán mà biến đầu ra (y) chỉ nhận một trong hai giá trị là 1 trong 2 nhãn. Bài toán thường dưới dạng bài toán dự đoán giá trị 0 hoặc 1 cho lớp đầu tiên hoặc lớp thứ hai và thường được phát biểu như dự đoán xác suất của đầu vào thuộc giá trị lớp 1. Trong phần này chúng ta sẽ khảo sát các hàm loss cho bài toán phân lớp nhị phân. Chuẩn bị dữ liệu và mô hình Mình sẽ khởi... </summary> </entry> </feed>
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>/</id>
+  <title>Quy's blog</title>
+  <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
+  <updated>2021-04-07T10:13:14+08:00</updated>
+  <author>
+    <name>Nguyễn Đình Quý</name>
+    <uri>/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en-US"
+    href="/"/>
+  <generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator>
+  <rights> © 2021 Nguyễn Đình Quý </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>11. Các phương pháp scale duwx l</title>
+    <link href="/posts/cac-phuong-phap-scaling/" rel="alternate" type="text/html" title="11. Các phương pháp scale duwx l" />
+    <published>2021-04-06T16:47:00+08:00</published>
+  
+    <updated>2021-04-07T02:38:50+08:00</updated>
+  
+    <id>/posts/cac-phuong-phap-scaling/</id>
+    <content src="/posts/cac-phuong-phap-scaling/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong các thuật toán machine learning nói chung, và trong deep learning nói riêng, các mô hình học cách dự đoán đầu ra từ đầu vào thông qua các ví dụ trong tập dữ liệu huấn luyện.
+
+Các điểm dữ liệu đôi khi được đo đạc với những đơn vị khác nhau, m và feet chẳng hạn. Hoặc có hai thành phần (của vector dữ liệu) chênh lệch nhau quá lớn, một thành phần có khoảng giá trị từ 0 đến 1000, thành phần ki...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</title>
+    <link href="/posts/okapi-bm-25-tim-kiem-tieng-viet/" rel="alternate" type="text/html" title="10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt" />
+    <published>2021-04-05T11:09:00+08:00</published>
+  
+    <updated>2021-04-05T11:44:58+08:00</updated>
+  
+    <id>/posts/okapi-bm-25-tim-kiem-tieng-viet/</id>
+    <content src="/posts/okapi-bm-25-tim-kiem-tieng-viet/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trườ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>Triển khai hàng đợi xử lý bằng python với Redis</title>
+    <link href="/posts/cai-dat-queue-python-production/" rel="alternate" type="text/html" title="Triển khai hàng đợi xử lý bằng python với Redis" />
+    <published>2021-04-05T11:09:00+08:00</published>
+  
+    <updated>2021-04-05T12:14:51+08:00</updated>
+  
+    <id>/posts/cai-dat-queue-python-production/</id>
+    <content src="/posts/cai-dat-queue-python-production/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Lập Trình" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Hàng đợi queue là gì?
+
+
+  
+    Các hệ thống chuyên ghi với cường độ lớn (như log, tracking,…). Đẩy vào xử lý queue và background job sẽ giảm nguy cơ quá tải cho database.
+  
+  
+    Các hệ thống chuyên đọc nhưng có tính chất báo cáo, report, số lượng request ít nhưng rất mất thời gian tổng hợp.
+  
+  
+    Các hệ thống có thời gian phản hồi lâu vì tính chất công việc, giới hạn khách quan,… Việc ph...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>9. Loss function P3 - hàm mất mát cho bài toán multi-class classification</title>
+    <link href="/posts/loss-function-p3/" rel="alternate" type="text/html" title="9. Loss function P3 - hàm mất mát cho bài toán multi-class classification" />
+    <published>2021-04-04T16:47:00+08:00</published>
+  
+    <updated>2021-04-04T16:47:00+08:00</updated>
+  
+    <id>/posts/loss-function-p3/</id>
+    <content src="/posts/loss-function-p3/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Phân đa lớp là những bài toán mà mô hình dự đoán trong đó các đầu vào được chỉ định là một trong nhiều hơn hai lớp.
+
+Mô hình dự đoán một giá trị số nguyên, trong đó mỗi lớp được gán một giá trị số nguyên duy nhất từ ​​0 đến (num_classes - 1). Bài toán thường được thực hiện như là dự đoán xác suất của điểm dữ liệu thuộc về một lớp nào đó đã biết. num_classes là số class
+
+Trong phần này, chúng ta...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>8. Loss function P2 - hàm mất mát cho bài toán binary classification</title>
+    <link href="/posts/loss-function-p2/" rel="alternate" type="text/html" title="8. Loss function P2 - hàm mất mát cho bài toán binary classification" />
+    <published>2021-04-04T16:47:00+08:00</published>
+  
+    <updated>2021-04-04T18:43:45+08:00</updated>
+  
+    <id>/posts/loss-function-p2/</id>
+    <content src="/posts/loss-function-p2/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Phân lớp nhị phân là bài toán mà biến đầu ra (y) chỉ nhận một trong hai giá trị là 1 trong 2 nhãn.
+
+Bài toán thường dưới dạng bài toán dự đoán giá trị 0 hoặc 1 cho lớp đầu tiên hoặc lớp thứ hai và thường được phát biểu như dự đoán xác suất của đầu vào thuộc giá trị lớp 1.
+
+Trong phần này chúng ta sẽ khảo sát các hàm loss cho bài toán phân lớp nhị phân.
+
+Chuẩn bị dữ liệu và mô hình
+
+Mình sẽ khởi...
+    </summary>
+  
+
+  </entry>
+
+</feed>
+
+
