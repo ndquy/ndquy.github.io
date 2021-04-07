@@ -50,7 +50,7 @@ Nếu đầu ra của activation function thuộc vào miền [0, 1] thì giá t
 
 Ví dụ nếu bài toán của bạn là regression thì đầu ra sẽ là một giá trị số thực. Mô hình tốt nhất cho bài toán này đó là lựa chọn hàm kích hoạt tuyến tính (linear activation). Nếu đầu ra có phân bố chuẩn thì chúng ta có thể standardize biến đầu ra. Nếu không thì đầu ra Y có thể được normalize.
 
-## Các phương pháp data scaling
+# Các phương pháp data scaling
 
 Có 2 cách để scale dữ liệu đó là normalization và standardization tạm dịch là Bình thường hóa dữ liệu và Chuẩn hóa dữ liệu
 
