@@ -6,7 +6,6 @@ theme: jekyll-theme-chirpy
 # Only if your site type is GitHub Project sites and doesn't have a custom domain,
 # change below value to '/projectname'.
 baseurl: ''
-
 # the HTML language tag › https://www.w3.org/International/questions/qa-choosing-language-tags
 lang: en-US
 
@@ -25,7 +24,7 @@ description: >-                        # used by seo meta and the atom feed
   machine learning cơ bản và nâng cao.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ''
+url: 'https://ndquy.github.io'
 
 github:
   username: dinhquy94             # change to your github username
