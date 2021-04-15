@@ -57,7 +57,7 @@ Trong bài viết này mình sẽ tiếp cận theo hướng tiếp cận sâu.
 Để xây dựng mô hình xác định ý định câu hỏi, mình sẽ sử dụng ontology là các cặp "câu hỏi - ý định" được thu thập từ sinh viên trường Đại học Xây dựng.
 Mình sẽ đưa bài toán về việc xây dựng một mô hình phân lớp với các class là các ý định của người hỏi. Ví dụ sau đây là các câu hỏi trong tập dữ liệu:
 
-```json
+```
 {'content': 'thưa thầy cô, bảng điểm của em hiện tại giờ được 1 môn C+ 2 tín chỉ, 2 môn ghi F là em bảo lưu ạ, nhưng điểm hệ số 4 của em lại ghi 0.45 là  như nào ạ, mong các thầy cô giải đáp hộ em', 'intent': 'DIEM'}
 {'content': 'với tiêu chí xét học bổng năm 2 là bắt buộc qua tacb1,2 hay phải đạt 250 toeic ạ ', 'intent': 'HOC_BONG'}
 {'content': 'Em chào thầy cô ạ. Em xin được có một vài lời về vấn đề học bổng của nhà trường ạ. Trước tiên em xin chân thành cảm ơn quý thầy cô và nhà trường đã tạo điều kiện cho em cũng như các anh chị, các bạn sinh viên được học tập và thêm vào đó là những suất học bổng những phần quà để động viên tinh thần học tập của sinh viên chúng em. Theo em được biết thì trong khoảng thời gian trước thời điểm hiện tại thì nhà trường đã tiến hành trao học bổng cho sinh viên trong diện được xét học bổng của kì học trước. Một vài bạn trong lớp em đã nhận được học bổng nhưng riêng về cá nhân em thì em vẫn chưa nhận được học bổng ạ. Em không rõ là do có sai sót gì không nên em rất mong nhà trường xem xét lại và cho em lời đáp ạ. Những lời em nói ở trên nếu có chỗ nào không phù hợp thì cho em xin lỗi ạ. Em rất mong nhận được hồi âm ạ. Em xin chân thành cảm ơn ạ!', 'intent': 'HOC_BONG'}
@@ -227,7 +227,9 @@ input_text = fast_text_model.wv.get_vector("hôm_nay")
 print(input_text.shape)
 ```
 
-```(150,)```
+```
+(150,)
+```
 
 ## Biểu diễn từ và biểu diễn câu
 
@@ -280,7 +282,7 @@ Vì dữ liệu trong các class là không đều nhau, vì vậy để đánh 
 
 Đây là hình ảnh số lượng các câu hỏi trong các class tương ứng:
 
-![Số lượng các câu hỏi trong các class](/assets/img/blog/Screen Shot 2021-04-15 at 23.05.49)
+![Số lượng các câu hỏi trong các class](/assets/img/blog/Screen Shot 2021-04-15 at 23.05.49.png)
 _Số lượng các câu hỏi trong các class_
 
 Để phân chia sao cho các câu hỏi trong các class của tập validate như nhau ta thực hiện như sau: 
