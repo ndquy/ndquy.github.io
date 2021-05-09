@@ -1,11 +1,11 @@
 ---
 title: 14. Kỹ thuật data augmentation trong NLP với Tiếng Việt
 author: Quy Nguyen
-date: 2021-04-10 15:47:00 +0700
+date: 2021-05-08 15:47:00 +0700
 categories: [Machine Learning]
 tags: [Machine learning]
 ---
- 
+
 
 Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.
 Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.
@@ -24,7 +24,7 @@ Vậy nếu giờ chúng ta phải xử lý bài toán có giữ liệu giới h
 
     * Outlier - một số trường hợp kết quả sai khác rất nhiều,
     * Nhiễu với đầu vào ảnh hưởng lớn tới chất lượng dự đoán
-    
+
 … vân vân và mây mây. [1]
 
 # Bài toán
@@ -35,10 +35,10 @@ Trong blog này mình sẽ bàn luận chủ yếu về kỹ thuật data augmen
 
 ## Giới thiệu về bài toán
 
-Bài toán mình đưa ra được áp dụng trong hệ thống hỏi đáp sử dụng với chatbot. Đó là module xác định ý định câu hỏi của người dùng đặt câu hỏi cho chatbot. 
-Về cơ bản việc xác định ý định của câu hỏi sẽ được chúng ta đưa về bài toán phân loại văn bản, với các ý định là các class (lớp) tương ứng. 
+Bài toán mình đưa ra được áp dụng trong hệ thống hỏi đáp sử dụng với chatbot. Đó là module xác định ý định câu hỏi của người dùng đặt câu hỏi cho chatbot.
+Về cơ bản việc xác định ý định của câu hỏi sẽ được chúng ta đưa về bài toán phân loại văn bản, với các ý định là các class (lớp) tương ứng.
 
-Cụ thể hơn, mình đang thực hiện xây dựng hệ thống hỏi đáp dành cho sinh viên trường Đại học Xây dựng. Ý tưởng là sinh viên sẽ đặt câu hỏi cho hệ thống, sau đó hệ thống sẽ tìm ra những câu trả lời phù hợp bằng cách tìm kiếm câu hỏi trong tập dữ liệu câu hỏi - câu trả lời để xem câu hỏi đó gần với câu hỏi nào nhất để đưa ra câu trả lời tương ứng. 
+Cụ thể hơn, mình đang thực hiện xây dựng hệ thống hỏi đáp dành cho sinh viên trường Đại học Xây dựng. Ý tưởng là sinh viên sẽ đặt câu hỏi cho hệ thống, sau đó hệ thống sẽ tìm ra những câu trả lời phù hợp bằng cách tìm kiếm câu hỏi trong tập dữ liệu câu hỏi - câu trả lời để xem câu hỏi đó gần với câu hỏi nào nhất để đưa ra câu trả lời tương ứng.
 Và để đưa ra được câu trả lời chính xác thì chúng ta cần phải xác định được ý định của câu hỏi mà người dùng muốn hỏi là gì. Và phần này sẽ tập trung chính vào kỹ thuật sinh câu hỏi tương ứng với ý định của người dùng để bổ sung thêm dữ liệu vào tập dữ liệu huấn luyện.
 
 Tất cả các câu hỏi của sinh viên trong trường được chia ra thành các class như sau, mỗi class tương ứng với ý định hỏi của người dùng. Như vậy việc xác định ý định chính là việc phân lớp 1 câu hỏi thuộc vào class nào:
@@ -52,17 +52,17 @@ Như hình trên các bạn có thể thấy số lượng các câu hỏi trong
 
 Một số phương pháp thêm dữ liệu:
 
-1. Collect more data. Đúng nghĩa đen xì là lấy thêm dữ liệu. Trả tiền, lấy dữ liệu trên mạng, .v.v. 
+1. Collect more data. Đúng nghĩa đen xì là lấy thêm dữ liệu. Trả tiền, lấy dữ liệu trên mạng, .v.v.
 1. Data synthesis: Tạo dữ liệu giả. Đối với một số bài toán dữ liệu có thể được mô phỏng qua computer graphic. Như ảnh depth, ảnh ở chiều góc nhìn khác nhau, .v.v.
 3. Data Augmentation. Là kỹ thuật đơn giản nhất bằng việc xử lý đơn giản dữ liệu sẵn có bằng các phép tuyến tính hay phi tuyến (như tạo dữ liệu qua mạng GAN)
 
 Phương pháp `1` thì quá tốt nếu thực hiện được, tuy nhiên vì nhiều lý do và điều kiện ta không thể thu thập thêm được dữ liệu vì việc này tốn thời gian, công sức và cả tiền nữa.
 
-Phương pháp số `2` thì khó có thể áp dụng được cho bài toán xử lý ngôn ngữ tự nhiên NLP. 
+Phương pháp số `2` thì khó có thể áp dụng được cho bài toán xử lý ngôn ngữ tự nhiên NLP.
 
 Phương pháp số `3` sẽ phù hợp hơn trong bài toán này và mình sẽ đề cập trong phần tiếp theo.
 
-# BERT 
+# BERT
 
 BERT được coi là bước đột phá trong công nghệ xử lý ngôn ngữ tự nhiên của Google. Năm 2018 Google giới thiệu BERT, BERT là viết tắt của Bidirectional Encoder Representations from Transformers được hiểu là một mô hình học sẵn hay còn gọi là pre-train model, học ra các vector đại diện theo ngữ cảnh 2 chiều của từ, được sử dụng để transfer sang các bài toán khác trong lĩnh vực xử lý ngôn ngữ tự nhiên. BERT đã thành công trong việc cải thiện những công việc gần đây trong việc tìm ra đại diện của từ trong không gian số (không gian mà máy tính có thể hiểu được) thông qua ngữ cảnh của nó. [2]
 
@@ -70,10 +70,10 @@ Như chúng ta đã biết, xử lý ngôn ngữ tự nhiên luôn gặp phải 
 
 #BERT trong Tiếng Việt - phoBERT
 
-Khi google đưa ra mã nguồn mở của BERT, có rất nhiều dự án dựa trên BERT được chia sẻ. Đối với Tiếng Việt chúng ta có [phoBert](https://github.com/VinAIResearch/PhoBERT) do VinAI public. 
+Khi google đưa ra mã nguồn mở của BERT, có rất nhiều dự án dựa trên BERT được chia sẻ. Đối với Tiếng Việt chúng ta có [phoBert](https://github.com/VinAIResearch/PhoBERT) do VinAI public.
 
-PhoBert được huấn luyện dựa trên tập dữ liệu Tiếng Việt khá lớn nên khi sử dụng phoBERT nhìn chung cải thiện khá tốt các bài toán NLP với Tiếng Việt. 
-Các bạn có thể sử dụng 
+PhoBert được huấn luyện dựa trên tập dữ liệu Tiếng Việt khá lớn nên khi sử dụng phoBERT nhìn chung cải thiện khá tốt các bài toán NLP với Tiếng Việt.
+Các bạn có thể sử dụng
 
 Để sử dụng phoBERT, bạn cài đặt các gói sau:
 
@@ -82,7 +82,7 @@ Các bạn có thể sử dụng
 !pip3 install fastbpe
 ```
 
-## Download pretrained bert model 
+## Download pretrained bert model
 
 Đầu tiên chúng ta cần download toàn bộ pretrain của model bằng lệnh sau:
 
@@ -91,14 +91,14 @@ Các bạn có thể sử dụng
 !tar -xzvf PhoBERT_base_fairseq.tar.gz
 ```
 
-Trong thư mục tải về sẽ có 3 file sau: 
+Trong thư mục tải về sẽ có 3 file sau:
 
 * `bpe.codes`: BPE token dùng để mã hóa bằng bpe.
 
 * `dict.txt`:   Từ điển của tập dữ liệu dùng huấn luyện mô hình.
 
 * `model.pt`: File pretrain chính của model.
-                                                
+
 ## Load model bằng python
 
 ```python
@@ -124,7 +124,7 @@ Trước tiên bạn cần download mã nguồn của fairseq:
 
 Sau đó switch vào thư mục vừa download
 
-```bash 
+```bash
 import os
 
 os.chdir("fairseq")
@@ -146,7 +146,7 @@ Installing collected packages: fairseq
 Successfully installed fairseq
 
 ```
-  
+
 Sau đây là các bước thực hiện finetune phoBERT
 
 ## Dữ liệu huấn luyện
@@ -155,7 +155,7 @@ Dữ liệu trong bài toán này của mình là các câu hỏi trong tập d�
 
 Ví dụ một câu hỏi như sau: "Cô ơi cho e hỏi về việc đăng kí và hủy môn học , môn e đăng kí vừa mới có điểm và e muốn hủy đăng kí môn đó vào kì 3 có đc không ạ" có nhãn là `Đăng ký môn học` vì người hỏi có ý định hỏi về việc đăng ký môn học.
 
-Dữ liệu huấn luyện sẽ cần phải được encode về dạng bpe (Byte Pair Encoding) trước khi đưa vào mô hình. 
+Dữ liệu huấn luyện sẽ cần phải được encode về dạng bpe (Byte Pair Encoding) trước khi đưa vào mô hình.
 
 ### Tìm hiểu về mã hóa BPE
 
@@ -202,7 +202,7 @@ phoBERT.decode(tokens)  # 'Hello world!'
 
 ```
 
-Kết quả 
+Kết quả
 
 ```
 tokens list :  tensor([    0, 11623, 31433, 1232, 2])
@@ -226,7 +226,7 @@ Chúng ta sẽ sử dụng thư viện vncorenlp để tiến hành tách từ t
 !wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/VnCoreNLP-1.1.1.jar
 !wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab
 !wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/wordsegmenter.rdr
-!mv VnCoreNLP-1.1.1.jar vncorenlp/ 
+!mv VnCoreNLP-1.1.1.jar vncorenlp/
 !mv vi-vocab vncorenlp/models/wordsegmenter/
 !mv wordsegmenter.rdr vncorenlp/models/wordsegmenter/
 ```
@@ -260,7 +260,7 @@ def clean_text(text):
     return text
 
 def remove_numbers(text_in):
-  for ele in text_in.split(): 
+  for ele in text_in.split():
     if ele.isdigit():
         text_in = text_in.replace(ele, "@")
   for character in text_in:
@@ -279,11 +279,11 @@ def word_segment(sent):
   return sent
 
 
-def preprocess(text_in):  
+def preprocess(text_in):
     text = clean_text(text_in)
     text = remove_special_characters(text)
-    text = remove_numbers(text) 
-    text = word_segment(text) 
+    text = remove_numbers(text)
+    text = word_segment(text)
     return text
 
 ```
@@ -293,21 +293,21 @@ def preprocess(text_in):
 Sau khi khai báo các hàm tiền xử lý, chúng ta sẽ tiến hành đọc dữ liệu từ file:
 
 ```python
-import json 
-    
+import json
+
 qa_data_path = '/content/drive/MyDrive/NUCE/NLP/QA/intent_db_v2.json'
 
 def read_data(path):
-    traindata = [] 
+    traindata = []
     with open(qa_data_path) as json_file:
-        qa_data = json.load(json_file)  
-        for question in qa_data: 
+        qa_data = json.load(json_file)
+        for question in qa_data:
             if 'content' in question :
               content = preprocess(question['content'])
               traindata.append(content.split())
     print("Dataset loaded")
     return qa_data
-train_data, qa_data = read_data(wiki_data_path) 
+train_data, qa_data = read_data(wiki_data_path)
 ```
 
 ## Chuẩn hóa dữ liệu
@@ -316,10 +316,10 @@ train_data, qa_data = read_data(wiki_data_path)
 
 `<s> CLASS_NAME </s> content </s>`
 
-Lý do vì sao sử dụng phương pháp này, các bạn có thể đọc thêm paper [CG-BERT: Conditional Text Generation with BERT for Generalized Few-shot Intent Detection](https://arxiv.org/pdf/2004.01881.pdf): 
- 
+Lý do vì sao sử dụng phương pháp này, các bạn có thể đọc thêm paper [CG-BERT: Conditional Text Generation with BERT for Generalized Few-shot Intent Detection](https://arxiv.org/pdf/2004.01881.pdf):
 
-![Data](/assets/img/blog/05/dataaugument.png) 
+
+![Data](/assets/img/blog/05/dataaugument.png)
 
 
 ```python
@@ -351,8 +351,8 @@ Kết quả sau khi chuẩn hóa sẽ là:
   '<s> DIEM </s> em có thắc_mắc muốn hỏi là @ tín_đồ án tốt_nghiệp đatn có tính vào số tín_chỉ tích_luỹ hay không\xa0lí do vì em thấy trên trang đào_tạo sau khi đã up điểm đatn của em lên lại không thấy tính @ tín_chỉ này vào số tính chỉ tích_luỹ ảnh chụp kèm theo là điểm của em </s>',
   '<s> DIEM </s> dạ em chào thầy_cô thưa thầy_cô là điểm của em trên trang đào_tạo thầy vào điểm sai cho em và em đã hỏi thầy thầy có nói đã sửa lại điểm thế nên cho em hỏi bao_giờ đào_tạo cập_nhật lại điểm ạ e xin cảm_ơn thầy_cô ạ </s>']
 ```
- 
-Ở đây mình sử dụng token `<s>` như là token bắt đầu của câu, `</s>` là token phân cách câu. 
+
+Ở đây mình sử dụng token `<s>` như là token bắt đầu của câu, `</s>` là token phân cách câu.
 
 ## Phân chia dữ liệu huấn luyện
 
@@ -407,7 +407,7 @@ encode_bpe(train_data, "train", save_path)
 ! fairseq-preprocess --only-source   --srcdict /path/to/save_path --workers 60
 ```
 
-Bước này xử lý khá nhanh, chỉ vài giây là xong do tập dữ liệu của mình hơi ít. Sau khi chạy xong, dữ liệu sẽ được lưu vào thư mục 
+Bước này xử lý khá nhanh, chỉ vài giây là xong do tập dữ liệu của mình hơi ít. Sau khi chạy xong, dữ liệu sẽ được lưu vào thư mục
 
 ```text
 2021-05-08 15:37:31 | INFO | fairseq_cli.preprocess | Namespace(align_suffix=None, alignfile=None, all_gather_list_size=16384, azureml_logging=False, bf16=False, bpe=None, cpu=False, criterion='cross_entropy', dataset_impl='mmap', destdir='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/data-bin/finetune_data', empty_cache_freq=0, fp16=False, fp16_init_scale=128, fp16_no_flatten_grads=False, fp16_scale_tolerance=0.0, fp16_scale_window=None, joined_dictionary=False, log_file=None, log_format=None, log_interval=100, lr_scheduler='fixed', memory_efficient_bf16=False, memory_efficient_fp16=False, min_loss_scale=0.0001, model_parallel_size=1, no_progress_bar=False, nwordssrc=-1, nwordstgt=-1, only_source=True, optimizer=None, padding_factor=8, plasma_path='/tmp/plasma', profile=False, quantization_config_path=None, reset_logging=False, scoring='bleu', seed=1, source_lang=None, srcdict='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/PhoBERT_base_fairseq/dict.txt', suppress_crashes=False, target_lang=None, task='translation', tensorboard_logdir=None, testpref='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.test.bpe', tgtdict=None, threshold_loss_scale=None, thresholdsrc=0, thresholdtgt=0, tokenizer=None, tpu=False, trainpref='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.train.bpe', use_plasma_view=False, user_dir=None, validpref='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.valid.bpe', wandb_project=None, workers=60)
@@ -418,7 +418,7 @@ Bước này xử lý khá nhanh, chỉ vài giây là xong do tập dữ liệu
 2021-05-08 15:37:45 | INFO | fairseq_cli.preprocess | [None] Dictionary: 64000 types
 2021-05-08 15:37:51 | INFO | fairseq_cli.preprocess | [None] /content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.test.bpe: 50 sents, 3150 tokens, 53.1% replaced by <unk>
 2021-05-08 15:37:51 | INFO | fairseq_cli.preprocess | Wrote preprocessed data to /content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/data-bin/finetune_data
-``` 
+```
 
 ### Mã hóa dataset thành file binary để huấn luyện model
 
@@ -427,7 +427,7 @@ Trong bước này sẽ yêu cầu các bạn cung cấp file từ điển `dict
 
 ```bash
 ! fairseq-preprocess --only-source   --srcdict PhoBERT_base_fairseq/dict.txt --trainpref data-bin/fintune_data/finetune.train.bpe  --validpref finetune.valid.bpe  --testpref data-bin/finetune_data/finetune.test.bpe --workers 60
-``` 
+```
 
 Sau khi xây dựng được tập dữ liệu huấn luyện, bước cuối cùng đó là thực hiện fine-tune thôi nào.
 
@@ -435,7 +435,7 @@ Sau khi xây dựng được tập dữ liệu huấn luyện, bước cuối c�
 
 Chúng ta chạy lệnh sau:
 
-```bash 
+```bash
 !fairseq-train --fp16 data-bin/finetune_data \
  --task masked_lm --lr 2e-05 --criterion masked_lm \
 --arch roberta_base --sample-break-mode complete \
@@ -464,13 +464,13 @@ Quá trình huấn luyện khá lâu, mình khuyên các bạn nếu máy tính 
 
 ## Sinh văn bản bằng phoBERT đã fine-tune
 
-Trong bài toán này chúng ta sẽ sinh ra các câu mới bằng cách điền các từ hợp lý vào các vị trí còn trống của câu. 
+Trong bài toán này chúng ta sẽ sinh ra các câu mới bằng cách điền các từ hợp lý vào các vị trí còn trống của câu.
 
 Mô hình BERT tạo ra các biểu diễn từ từ quá trình ẩn các vị trí token một cách ngẫu nhiên trong câu input và dự báo chính chính từ đó ở output dựa trên bối cảnh là các từ xung quanh.
 
 Như vậy khi đã biết các từ xung quanh, chúng ta hoàn toàn có thể dự báo được từ phù hợp nhất với vị trí đã được masking.
 
-Ý tưởng của việc sinh văn bản đó là mình sẽ tiến hành che lần lượt các từ trong câu và tìm ra các từ bị che, sau đó ghép lại các tử bị che thành câu mới. 
+Ý tưởng của việc sinh văn bản đó là mình sẽ tiến hành che lần lượt các từ trong câu và tìm ra các từ bị che, sau đó ghép lại các tử bị che thành câu mới.
 
 Các bước thực hiện như sau:
 
@@ -499,7 +499,7 @@ import re
 
 seed = "Cho em hỏi bao giờ thì có bằng tốt nghiệp ạ"
 intent = "TN"
-words = preprocess(seed).split()   
+words = preprocess(seed).split()
 
 seed = " ".join(words)
 
@@ -509,14 +509,14 @@ for i in range(len(words)):
     words[i] = "<mask>"
     mask = "<s>'+intent+'</s> " + ' '.join(words) + "</s>"
     print(mask)
-    topk_filled_outputs = phoBERT.fill_mask(mask , topk=1) 
+    topk_filled_outputs = phoBERT.fill_mask(mask , topk=1)
     words[i] = tmp
     gen_sentence.append(topk_filled_outputs[0][2])
 
 print(gen_sentence)
 ```
 
-Kết quả in ra sẽ là: 
+Kết quả in ra sẽ là:
 
 ```text
 Xin tôi hỏi khi_nào sẽ có giấy_chứng_nhận tốt_nghiệp
