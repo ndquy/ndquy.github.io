@@ -1,4 +1,704 @@
-<!DOCTYPE html><html lang="en-US" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="pv-cache-enabled" content="false"><meta name="generator" content="Jekyll v4.2.0" /><meta property="og:title" content="Softmax Regression" /><meta name="author" content="Quy Nguyen" /><meta property="og:locale" content="en_US" /><meta name="description" content="Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \in {1,\ldots,K} $ với K là số lớp cần dự đoán." /><meta property="og:description" content="Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \in {1,\ldots,K} $ với K là số lớp cần dự đoán." /><link rel="canonical" href="/posts/softmax-regression/" /><meta property="og:url" content="/posts/softmax-regression/" /><meta property="og:site_name" content="Quy’s blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-04-02T05:45:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Softmax Regression" /><meta name="twitter:site" content="@dinhquy94" /><meta name="twitter:creator" content="@Quy Nguyen" /><meta name="google-site-verification" content="google_meta_tag_verification" /> <script type="application/ld+json"> {"headline":"Softmax Regression","url":"/posts/softmax-regression/","datePublished":"2021-04-02T05:45:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/softmax-regression/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \\in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \\in {1,\\ldots,K} $ với K là số lớp cần dự đoán.","dateModified":"2021-04-03T16:19:04+08:00","@type":"BlogPosting","@context":"https://schema.org"}</script><title>3. Softmax Regression | Quy's blog</title><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon.png"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon-precomposed.png"><link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicons/apple-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/assets/img/favicons/apple-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicons/apple-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicons/apple-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicons/apple-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicons/apple-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicons/apple-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicons/apple-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-icon-180x180.png"><link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicons/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/manifest.json"><meta name='msapplication-config' content='/assets/img/favicons/browserconfig.xml'><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="/assets/img/favicons/ms-icon-144x144.png"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://fonts.gstatic.com"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="cdn.jsdelivr.net"><link rel="dns-prefetch" href="cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script defer src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.15.0,npm/bootstrap@4/dist/js/bootstrap.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script> // see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options> MathJax = { tex: { inlineMath: [ // start/end delimiter pairs for in-line math ['$','$'], ['\\(','\\)'] ], displayMath: [ // start/end delimiter pairs for display math ['$$', '$$'], ['\\[', '\\]'] ] } }; </script> <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script> <script defer src="/app.js"></script> <script defer src="https://www.googletagmanager.com/gtag/js?id="></script> <script> document.addEventListener("DOMContentLoaded", function(event) { window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', ''); }); </script><body data-spy="scroll" data-target="#toc"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="/assets/img/blog/quynd_avarta.jpg" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">Quy's blog</a></div><div class="site-subtitle font-italic">Lập trình, Machine learning và Khoa học dữ liệu</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>Trang chủ</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center"> <a href="https://github.com/dinhquy94" aria-label="github" class="order-3" target="_blank" rel="noopener"> <i class="fab fa-github-alt"></i> </a> <a href="https://twitter.com/dinhquy94" aria-label="twitter" class="order-4" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['dinhquy94','gmail.com'].join('@')" aria-label="email" class="order-5" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" class="order-6" > <i class="fas fa-rss"></i> </a> <span class="icon-border order-2"></span> <span id="mode-toggle-wrapper" class="order-1"> <i class="mode-toggle fas fa-adjust"></i> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } var self = this; /* always follow the system prefers */ this.sysDarkPrefers.addListener(function() { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.updateMermaid(); }); } /* constructor() */ setDark() { $('html').attr(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_KEY); sessionStorage.removeItem(ModeToggle.MODE_KEY); } get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode == ModeToggle.DARK_MODE; } get isLightMode() { return this.mode == ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer) ) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } updateMermaid() { if (typeof mermaid !== "undefined") { let expectedTheme = (this.modeStatus === ModeToggle.DARK_MODE? "dark" : "default"); let config = { theme: expectedTheme }; /* re-render the SVG › <https://github.com/mermaid-js/mermaid/issues/311#issuecomment-332557344> */ $(".mermaid").each(function() { let svgCode = $(this).prev().children().html(); $(this).removeAttr("data-processed"); $(this).html(svgCode); }); mermaid.initialize(config); mermaid.init(undefined, ".mermaid"); } } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.updateMermaid(); } /* flipMode() */ } /* ModeToggle */ let toggle = new ModeToggle(); $(".mode-toggle").click(function() { toggle.flipMode(); }); </script> </span></div></div><div id="topbar-wrapper" class="row justify-content-center topbar-down"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Posts </a> </span> <span>3. Softmax Regression</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" placeholder="Search..."> <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="post-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>3. Softmax Regression</h1><div class="post-meta text-muted d-flex flex-column"><div> <span class="semi-bold"> Quy Nguyen </span> <span class="timeago " data-toggle="tooltip" data-placement="bottom" title="Fri, Apr 2, 2021, 5:45 AM +0800" prep="on" > Apr 2 <i class="unloaded">2021-04-02T05:45:00+08:00</i> </span></div><div> <span> <span class="timeago lastmod" data-toggle="tooltip" data-placement="bottom" title="Sat, Apr 3, 2021, 3:19 PM +0700" prefix="Updated " > Apr 3 <i class="unloaded">2021-04-03T16:19:04+08:00</i> </span> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1376 words">7 min</span></div></div><div class="post-content"><p>Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \in {1,\ldots,K} $ với K là số lớp cần dự đoán.</p><h1 id="định-nghĩa-mô-hình">Định nghĩa mô hình</h1><p>Chúng ta có tập dữ liệu huấn luyện ${ (x^{(1)}, y^{(1)}), \ldots, (x^{(m)}, y^{(m)}) }$ với m dữ liệu được đánh nhãn với input features x $ x^{(i)} \in \Re^{n}$. Với hồi quy logistic chúng ta có mô hình phân loại nhị phân, vì vậy $y^{(i)} \in {0,1} $. Chúng ta có giả thiết sau:</p><p>\(\begin{align} h_\theta(x) = \frac{1}{1+\exp(-\theta^\top x)}, \end{align}\) Và tham số mô hình θ đã được huấn luyện để tối ưu hàm chi phí</p>\[\begin{align} J(\theta) = -\left[ \sum_{i=1}^m y^{(i)} \log h_\theta(x^{(i)}) + (1-y^{(i)}) \log (1-h_\theta(x^{(i)})) \right] \end{align}\]<p>Trong softmax regression, chúng ta quan tâm tới việc phân loại nhiều lớp và nhãn y có thể là 1 trong K giá trị khác nhau thay vì chỉ 2 như logistic. Vì vậy trong tập huấn luyện ${ (x^{(1)}, y^{(1)}), \ldots, (x^{(m)}, y^{(m)}) }$, chúng ta có $y^{(i)} \in {1, 2, \ldots, K}$ (chú ý chúng ta quy ước sẽ đánh chỉ số cho các lớp bắt đầu từ 1, thay vì từ 0). Ví dụ trong nhận diện số viết tay dùng tập MNIST, chúng ta sẽ có K=10 lớp khác nhau. <br /> Cho 1 dữ liệu đầu vào x, chúng ta cần phải ước lượng được xác xuất thuộc vào 1 lớp nào đó $ P(y=k | x) $ với $ k = 1, \ldots, K $. Sẽ có K giá trị xác suất khác nhau, vì vậy giả thiết của chúng ta sẽ đưa ra vector K chiều gồm các giá trị xác suất. Cụ thể, giả thiết $ h_{\theta}(x) $ sẽ có dạng:</p>\[\begin{align} h_\theta(x) = \begin{bmatrix} P(y = 1 | x; \theta) \\ P(y = 2 | x; \theta) \\ \vdots \\ P(y = K | x; \theta) \end{bmatrix} = \frac{1}{ \sum_{j=1}^{K}{\exp(\theta^{(j)\top} x) }} \begin{bmatrix} \exp(\theta^{(1)\top} x ) \\ \exp(\theta^{(2)\top} x ) \\ \vdots \\ \exp(\theta^{(K)\top} x ) \\ \end{bmatrix} \end{align}\]<p>Với $ \theta^{(1)}, \theta^{(2)}, \ldots, \theta^{(K)} \in \Re^{n}$ là các tham số của mô hình. Để ý tổng $\frac{1}{ \sum_{j=1}^{K}{\exp(\theta^{(j)\top} x) } }$ ta tiến hành nhân vào để chuẩn hóa phân phối, vì vậy tổng các phần tử của $ h_\theta(x)$ sẽ bằng 1.</p><p>Để thuận tiện, chúng ta sẽ viết $\theta$ đại diện cho các tham số của mô hình. Khi thực hiện implement bằng code sẽ dễ hơn biểu diễn $\theta$ bằng ma trận nxK, $\theta$ thu được bằng cách gộp $\theta^{(1)}, \theta^{(2)}, \ldots, \theta^{(K)}$ vào các cột như sau:</p>\[\theta = \left[\begin{array}{cccc}| &amp; | &amp; | &amp; | \\ \theta^{(1)} &amp; \theta^{(2)} &amp; \cdots &amp; \theta^{(K)} \\ | &amp; | &amp; | &amp; | \end{array}\right]\]<h2 id="hàm-chi-phí-của-mô-hình">Hàm chi phí của mô hình</h2><p>Bây giờ chúng ta sẽ xem hàm chi phí của mô hình Softmax Regression \(\begin{align} J(\theta) = - \left[ \sum_{i=1}^{m} \sum_{k=1}^{K} 1\left\{y^{(i)} = k\right\} \log \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)})}\right] \end{align}\)</p><p>Trong biểu thức trên, hàm chi phí sử dụng cách viết như “hàm chỉ dẫn (indicator function)”, ký hiệu 1{nếu biểu thức đúng} = 1 và 1{nếu biểu thức sai}=0. Ở đây, $ 1\left{y^{(i)} = k\right} $ sẽ = 1 nếu $y^{(i)} = k$ và = 0 nếu ngược lại.</p><p>Nhắc lại 1 chút, như vậy hàm chi phí của hồi quy logistic có thể viết dưới dạng:</p>\[\begin{align} J(\theta) &amp;= - \left[ \sum_{i=1}^m (1-y^{(i)}) \log (1-h_\theta(x^{(i)})) + y^{(i)} \log h_\theta(x^{(i)}) \right] \\ &amp;= - \left[ \sum_{i=1}^{m} \sum_{k=0}^{1} 1\left\{y^{(i)} = k\right\} \log P(y^{(i)} = k | x^{(i)} ; \theta) \right] \end{align}\]<p>Lúc này hàm chi phí của Logistic regression nhìn khá giống với hàm chi phí của Softmax regression, chỉ khác là chúng ta tính tổng các xác suất của K lớp khác nhau. Như vậy:</p><p>\(P(y^{(i)} = k | x^{(i)} ; \theta) = \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)}) }\) Bằng cách đạo hàm J(θ), chúng ta sẽ tìm được gradient như sau:</p>\[\begin{align} \nabla_{\theta^{(k)}} J(\theta) = - \sum_{i=1}^{m}{ \left[ x^{(i)} \left( 1\{ y^{(i)} = k\} - P(y^{(i)} = k | x^{(i)}; \theta) \right) \right] } \end{align}\]<p>$”\nabla_{\theta^{(k)}}”$ là 1 vector có phần tử thử j là $\frac{\partial J(\theta)}{\partial \theta_{lk}}$ là đạo hàm riêng của $J(\theta) $ đối với phần tử thứ j của $\theta(k)$</p><h1 id="mối-liên-hệ-với-logistic-regression">Mối liên hệ với Logistic Regression</h1><p>Trong trường hợp đặc biệt với K=2, chúng ta có thể thấy dạng của softmax regression được chuyển thành logistic regression. Điều này cho ta thấy softmax regression là khái quát của logistic regression.</p>\[\begin{align} h_\theta(x) &amp;= \frac{1}{ \exp(\theta^{(1)\top}x) + \exp( \theta^{(2)\top} x^{(i)} ) } \begin{bmatrix} \exp( \theta^{(1)\top} x ) \\ \exp( \theta^{(2)\top} x ) \end{bmatrix} \end{align}\]<p>\(\begin{align} h(x) &amp;= \frac{1}{ \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) + \exp(\vec{0}^\top x) } \begin{bmatrix} \exp( (\theta^{(1)}-\theta^{(2)})^\top x ) \exp( \vec{0}^\top x ) \\ \end{bmatrix} \\ &amp;= \begin{bmatrix} \frac{1}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \frac{\exp( (\theta^{(1)}-\theta^{(2)})^\top x )}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \end{bmatrix} \\ &amp;= \begin{bmatrix} \frac{1}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ 1 - \frac{1}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \end{bmatrix} \end{align}\) Sau đó ta thay $\theta^{(2)}-\theta^{(1)} $ với 1 tham số duy nhất là $\theta’$. Chúng ta sẽ có softmax regression dự đoán xác suất 1 lớp là $\frac{1}{ 1 + \exp(- (\theta’)^\top x^{(i)} ) }$, lớp còn lại là $1 - \frac{1}{ 1 + \exp(- (\theta’)^\top x^{(i)} ) }$. Giống hệt với hồi quy logistic</p><h1 id="lập-trình-bằng-python">Lập trình bằng python</h1><p>Trong phần này mình sẽ hướng dẫn mọi người thực hiện phân loại dựa trên tập Iris. Các bạn có thể tải về tại đây</p><p>https://github.com/WinVector/Logistic/blob/master/iris.data.txt</p><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<!DOCTYPE html>
+
+
+
+<html lang="en-US" 
+  
+>
+
+  <!--
+  The Head
+-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  
+    <meta name="pv-cache-enabled" content="false">
+
+    
+  
+
+  <!-- Begin Jekyll SEO tag v2.7.1 -->
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Softmax Regression" />
+<meta name="author" content="Quy Nguyen" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \in {1,\ldots,K} $ với K là số lớp cần dự đoán." />
+<meta property="og:description" content="Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \in {1,\ldots,K} $ với K là số lớp cần dự đoán." />
+<link rel="canonical" href="https://ndquy.github.io/posts/softmax-regression/" />
+<meta property="og:url" content="https://ndquy.github.io/posts/softmax-regression/" />
+<meta property="og:site_name" content="Quy’s blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-02T05:45:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Softmax Regression" />
+<meta name="twitter:site" content="@dinhquy94" />
+<meta name="twitter:creator" content="@Quy Nguyen" />
+<meta name="google-site-verification" content="google_meta_tag_verification" />
+<script type="application/ld+json">
+{"url":"https://ndquy.github.io/posts/softmax-regression/","@type":"BlogPosting","headline":"Softmax Regression","dateModified":"2021-04-03T16:19:04+08:00","datePublished":"2021-04-02T05:45:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ndquy.github.io/posts/softmax-regression/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \\in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \\in {1,\\ldots,K} $ với K là số lớp cần dự đoán.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <title>3. Softmax Regression | Quy's blog
+  </title>
+
+  <!--
+  The Favicons for Web, Android, Microsoft, and iOS (iPhone and iPad) Apps
+  Generated by: https://www.favicon-generator.org/
+-->
+
+
+
+<link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon">
+
+<link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon.png">
+<link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon-precomposed.png">
+<link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicons/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/assets/img/favicons/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicons/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicons/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicons/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicons/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicons/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicons/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-icon-180x180.png">
+
+<link rel="icon" type="image/png" sizes="192x192"  href="/assets/img/favicons/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
+
+<link rel="manifest" href="/assets/img/favicons/manifest.json">
+<meta name='msapplication-config' content='/assets/img/favicons/browserconfig.xml'>
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/assets/img/favicons/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+  <!-- GA -->
+  
+
+  <!-- jsDelivr CDN -->
+  <link rel="preconnect" href="cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="cdn.jsdelivr.net">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin="anonymous">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"
+    integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+    crossorigin="anonymous">
+
+  <!--
+  CSS selector for site.
+-->
+
+<link rel="stylesheet" href="/assets/css/style.css">
+
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+
+
+
+  <!-- JavaScripts -->
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+
+  <script defer
+    src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.15.0,npm/bootstrap@4/dist/js/bootstrap.min.js"></script>
+
+  <!--
+  JS selector for site.
+-->
+
+
+  
+
+
+
+
+
+<script defer src="/assets/js/dist/post.min.js"></script>
+
+
+  <!-- MathJax -->
+  <script>
+  // see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options>
+  MathJax = {
+    tex: {
+      inlineMath: [              // start/end delimiter pairs for in-line math
+        ['$','$'],
+        ['\\(','\\)']
+      ],
+      displayMath: [             // start/end delimiter pairs for display math
+        ['$$', '$$'],
+        ['\\[', '\\]']
+      ]
+    }
+  };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+  </script>
+
+
+
+
+
+</head>
+
+
+  <body data-spy="scroll" data-target="#toc">
+
+    <!--
+  The Side Bar
+-->
+
+<div id="sidebar" class="d-flex flex-column align-items-end">
+
+  <div class="profile-wrapper text-center">
+    <div id="avatar">
+      <a href="/" alt="avatar" class="mx-auto">
+        
+        <img src="/assets/img/blog/quynd_avarta.jpg" alt="avatar" onerror="this.style.display='none'">
+      </a>
+    </div>
+
+    <div class="site-title mt-3">
+      <a href="/">Quy's blog</a>
+    </div>
+
+    <div class="site-subtitle font-italic">Lập trình, Machine learning và Khoa học dữ liệu</div>
+
+  </div><!-- .profile-wrapper -->
+
+  <ul class="w-100">
+    <!-- home -->
+    <li class="nav-item">
+      <a href="/" class="nav-link">
+        <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i>
+        <span>HOME PAGE</span>
+      </a>
+    </li>
+    <!-- the real tabs -->
+    
+    <li class="nav-item">
+      <a href="/categories/" class="nav-link">
+        <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i>
+        <span>CATEGORIES</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/tags/" class="nav-link">
+        <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i>
+        <span>TAGS</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/archives/" class="nav-link">
+        <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i>
+        <span>ARCHIVES</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/about/" class="nav-link">
+        <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i>
+        <span>ABOUT</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+
+  </ul> <!-- ul.nav.flex-column -->
+
+  <div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center">
+
+    
+      
+
+      
+      <a href="https://github.com/dinhquy94" aria-label="github"
+        class="order-3"
+        target="_blank" rel="noopener">
+        <i class="fab fa-github-alt"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="https://twitter.com/dinhquy94" aria-label="twitter"
+        class="order-4"
+        target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="
+          javascript:location.href = 'mailto:' + ['dinhquy94','gmail.com'].join('@')" aria-label="email"
+        class="order-5"
+        >
+        <i class="fas fa-envelope"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="/feed.xml" aria-label="rss"
+        class="order-6"
+        >
+        <i class="fas fa-rss"></i>
+      </a>
+      
+
+    
+
+    
+      
+        <span class="icon-border order-2"></span>
+      
+
+      <span id="mode-toggle-wrapper" class="order-1">
+        <!--
+  Switch the mode between dark and light.
+-->
+
+<i class="mode-toggle fas fa-adjust"></i>
+
+<script type="text/javascript">
+
+  class ModeToggle {
+    static get MODE_KEY() { return "mode"; }
+    static get DARK_MODE() { return "dark"; }
+    static get LIGHT_MODE() { return "light"; }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      var self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addListener(function() {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.updateMermaid();
+      });
+
+    } /* constructor() */
+
+
+    setDark() {
+      $('html').attr(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      $('html').attr(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      $('html').removeAttr(ModeToggle.MODE_KEY);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
+
+    get isSysDarkPrefer() { return this.sysDarkPrefers.matches; }
+
+    get isDarkMode() { return this.mode == ModeToggle.DARK_MODE; }
+
+    get isLightMode() { return this.mode == ModeToggle.LIGHT_MODE; }
+
+    get hasMode() { return this.mode != null; }
+
+    get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode
+        || (!this.hasMode && this.isSysDarkPrefer) ) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    updateMermaid() {
+      if (typeof mermaid !== "undefined") {
+        let expectedTheme = (this.modeStatus === ModeToggle.DARK_MODE? "dark" : "default");
+        let config = { theme: expectedTheme };
+
+        /* re-render the SVG › <https://github.com/mermaid-js/mermaid/issues/311#issuecomment-332557344> */
+        $(".mermaid").each(function() {
+          let svgCode = $(this).prev().children().html();
+          $(this).removeAttr("data-processed");
+          $(this).html(svgCode);
+        });
+
+        mermaid.initialize(config);
+        mermaid.init(undefined, ".mermaid");
+      }
+    }
+
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.updateMermaid();
+
+    } /* flipMode() */
+
+  } /* ModeToggle */
+
+  let toggle = new ModeToggle();
+
+  $(".mode-toggle").click(function() {
+
+    toggle.flipMode();
+
+  });
+
+</script>
+
+      </span>
+    
+
+  </div> <!-- .sidebar-bottom -->
+
+</div><!-- #sidebar -->
+
+
+    <!--
+  The Top Bar
+-->
+
+<div id="topbar-wrapper" class="row justify-content-center topbar-down">
+  <div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between">
+    <span id="breadcrumb">
+
+    
+
+    
+
+      
+
+        
+          
+
+        
+
+      
+
+        
+        <span>
+          
+          
+          <a href="/">
+            Posts
+          </a>
+        </span>
+
+        
+
+      
+
+        
+          <span>3. Softmax Regression</span>
+
+        
+
+      
+
+    
+
+    </span><!-- endof #breadcrumb -->
+
+    <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i>
+
+    <div id="topbar-title">
+      Post
+    </div>
+
+    <i id="search-trigger" class="fas fa-search fa-fw"></i>
+    <span id="search-wrapper" class="align-items-center">
+      <i class="fas fa-search fa-fw"></i>
+      <input class="form-control" id="search-input" type="search"
+        aria-label="search" placeholder="Search...">
+      <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i>
+    </span>
+    <span id="search-cancel" >Cancel</span>
+  </div>
+
+</div>
+
+
+    <div id="main-wrapper">
+      <div id="main">
+
+        <!--
+  Refactor the HTML structure.
+-->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+<!-- Add attribute 'hide-bullet' to the checkbox list -->
+
+
+
+
+<!-- return -->
+<div class="row">
+
+  <div id="post-wrapper" class="col-12 col-lg-11 col-xl-8">
+
+    <div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+      <h1 data-toc-skip>3. Softmax Regression</h1>
+
+      <div class="post-meta text-muted d-flex flex-column">
+        <!-- Published date and author -->
+        <div>
+          <span class="semi-bold">
+            Quy Nguyen
+          </span>
+          <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago "
+  
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="Fri, Apr  2, 2021,  5:45 AM +0800"
+  
+
+  
+  prep="on" >
+
+  
+  
+
+  
+    Apr  2
+  
+
+  <i class="unloaded">2021-04-02T05:45:00+08:00</i>
+
+</span>
+
+        </div>
+
+        <div>
+          <!-- lastmod -->
+          
+          <span>
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago lastmod"
+  
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="Sat, Apr  3, 2021,  3:19 PM +0700"
+  
+
+  prefix="Updated "
+   >
+
+  
+  
+
+  
+    Apr  3
+  
+
+  <i class="unloaded">2021-04-03T16:19:04+08:00</i>
+
+</span>
+
+          </span>
+          
+
+          <!-- read time -->
+          <!--
+  Calculate the post's reading time, and display the word count in tooltip
+ -->
+
+
+<!-- words per minute  -->
+
+
+
+
+
+
+
+<!-- return element -->
+<span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1376 words">7 min</span>
+
+
+          <!-- page views -->
+          
+
+        </div>
+
+      </div> <!-- .post-meta -->
+
+      <div class="post-content">
+
+        
+
+        <p>Softmax regression (hay còn gọi là multinomial logistic regression) là dạng của hồi quy logistic cho trường hợp cần phân loại nhiều lớp. Trong hồi quy logistic chúng ta giả sử rằng các nhãn là các giá trị nhị phân $ y^{(i)} \in {0,1}$. Softmax regression cho phép chúng ta thực hiện phân loại $ y^{(i)} \in {1,\ldots,K} $ với K là số lớp cần dự đoán.</p>
+
+<h1 id="định-nghĩa-mô-hình">Định nghĩa mô hình</h1>
+
+<p>Chúng ta có tập dữ liệu huấn luyện ${ (x^{(1)}, y^{(1)}), \ldots, (x^{(m)}, y^{(m)}) }$ với m dữ liệu được đánh nhãn với input features x $ x^{(i)} \in \Re^{n}$. Với hồi quy logistic chúng ta có mô hình phân loại nhị phân, vì vậy $y^{(i)} \in {0,1} $. Chúng ta có giả thiết sau:</p>
+
+<p>\(\begin{align} h_\theta(x) = \frac{1}{1+\exp(-\theta^\top x)}, \end{align}\)
+Và tham số mô hình θ đã được huấn luyện để tối ưu hàm chi phí</p>
+
+\[\begin{align} J(\theta) = -\left[ \sum_{i=1}^m y^{(i)} \log h_\theta(x^{(i)}) + (1-y^{(i)}) \log (1-h_\theta(x^{(i)})) \right] \end{align}\]
+
+<p>Trong  softmax regression, chúng ta quan tâm tới việc phân loại nhiều lớp và nhãn y có thể là 1 trong K giá trị khác nhau thay vì chỉ 2 như logistic. Vì vậy trong tập huấn luyện ${ (x^{(1)}, y^{(1)}), \ldots, (x^{(m)}, y^{(m)}) }$, chúng ta có $y^{(i)} \in {1, 2, \ldots, K}$ (chú ý chúng ta quy ước sẽ đánh chỉ số cho các lớp bắt đầu từ 1, thay vì từ 0). Ví dụ trong nhận diện số viết tay dùng tập MNIST, chúng ta sẽ có K=10 lớp khác nhau.
+<br />
+Cho 1 dữ liệu đầu vào x, chúng ta cần phải ước lượng được xác xuất thuộc vào 1 lớp nào đó $ P(y=k | x) $ với $ k = 1, \ldots, K $. Sẽ có K giá trị xác suất khác nhau, vì vậy giả thiết của chúng ta sẽ đưa ra vector K chiều gồm các giá trị xác suất. Cụ thể, giả thiết $ h_{\theta}(x) $ sẽ có dạng:</p>
+
+\[\begin{align} h_\theta(x) = \begin{bmatrix} P(y = 1 | x; \theta) \\ P(y = 2 | x; \theta) \\ \vdots \\ P(y = K | x; \theta) \end{bmatrix} = \frac{1}{ \sum_{j=1}^{K}{\exp(\theta^{(j)\top} x) }} \begin{bmatrix} \exp(\theta^{(1)\top} x ) \\ \exp(\theta^{(2)\top} x ) \\ \vdots \\ \exp(\theta^{(K)\top} x ) \\ \end{bmatrix} \end{align}\]
+
+<p>Với $ \theta^{(1)}, \theta^{(2)}, \ldots, \theta^{(K)} \in \Re^{n}$ là các tham số của mô hình. Để ý tổng $\frac{1}{ \sum_{j=1}^{K}{\exp(\theta^{(j)\top} x) } }$ ta tiến hành nhân vào để chuẩn hóa phân phối, vì vậy tổng các phần tử của $ h_\theta(x)$ sẽ bằng 1.</p>
+
+<p>Để thuận tiện, chúng ta sẽ viết $\theta$ đại diện cho các tham số của mô hình. Khi thực hiện implement bằng code sẽ dễ hơn biểu diễn $\theta$ bằng ma trận nxK, $\theta$  thu được bằng cách gộp $\theta^{(1)}, \theta^{(2)}, \ldots, \theta^{(K)}$ vào các cột như sau:</p>
+
+\[\theta = \left[\begin{array}{cccc}| &amp; | &amp; | &amp; | \\ \theta^{(1)} &amp; \theta^{(2)} &amp; \cdots &amp; \theta^{(K)} \\ | &amp; | &amp; | &amp; | \end{array}\right]\]
+
+<h2 id="hàm-chi-phí-của-mô-hình">Hàm chi phí của mô hình</h2>
+
+<p>Bây giờ chúng ta sẽ xem hàm chi phí của mô hình Softmax Regression
+\(\begin{align} J(\theta) = - \left[ \sum_{i=1}^{m} \sum_{k=1}^{K}  1\left\{y^{(i)} = k\right\} \log \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)})}\right] \end{align}\)</p>
+
+<p>Trong biểu thức trên, hàm chi phí sử dụng cách viết như “hàm chỉ dẫn (indicator function)”, ký hiệu 1{nếu biểu thức đúng} = 1 và 1{nếu biểu thức sai}=0. Ở đây, $ 1\left{y^{(i)} = k\right} $ sẽ = 1 nếu $y^{(i)} = k$ và = 0 nếu ngược lại.</p>
+
+<p>Nhắc lại 1 chút, như vậy hàm chi phí của hồi quy logistic có thể viết dưới dạng:</p>
+
+\[\begin{align} J(\theta) &amp;= - \left[ \sum_{i=1}^m   (1-y^{(i)}) \log (1-h_\theta(x^{(i)})) + y^{(i)} \log h_\theta(x^{(i)}) \right] \\ &amp;= - \left[ \sum_{i=1}^{m} \sum_{k=0}^{1} 1\left\{y^{(i)} = k\right\} \log P(y^{(i)} = k | x^{(i)} ; \theta) \right] \end{align}\]
+
+<p>Lúc này hàm chi phí của Logistic regression nhìn khá giống với hàm chi phí của Softmax regression, chỉ khác là chúng ta tính tổng các xác suất của K lớp khác nhau. Như vậy:</p>
+
+<p>\(P(y^{(i)} = k | x^{(i)} ; \theta) = \frac{\exp(\theta^{(k)\top} x^{(i)})}{\sum_{j=1}^K \exp(\theta^{(j)\top} x^{(i)}) }\)
+Bằng cách đạo hàm J(θ), chúng ta sẽ tìm được gradient như sau:</p>
+
+\[\begin{align} \nabla_{\theta^{(k)}} J(\theta) = - \sum_{i=1}^{m}{ \left[ x^{(i)} \left( 1\{ y^{(i)} = k\}  - P(y^{(i)} = k | x^{(i)}; \theta) \right) \right]  } \end{align}\]
+
+<p>$”\nabla_{\theta^{(k)}}”$ là 1 vector có phần tử thử j là $\frac{\partial J(\theta)}{\partial \theta_{lk}}$ là đạo hàm riêng của $J(\theta) $ đối với phần tử thứ j của $\theta(k)$</p>
+
+<h1 id="mối-liên-hệ-với-logistic-regression">Mối liên hệ với Logistic Regression</h1>
+
+<p>Trong trường hợp đặc biệt với K=2, chúng ta có thể thấy dạng của softmax regression được chuyển thành logistic regression. Điều này cho ta thấy softmax regression là khái quát của logistic regression.</p>
+
+\[\begin{align} h_\theta(x) &amp;=  \frac{1}{ \exp(\theta^{(1)\top}x)  + \exp( \theta^{(2)\top} x^{(i)} ) } \begin{bmatrix} \exp( \theta^{(1)\top} x ) \\ \exp( \theta^{(2)\top} x ) \end{bmatrix} \end{align}\]
+
+<p>\(\begin{align} h(x) &amp;=  \frac{1}{ \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) + \exp(\vec{0}^\top x) } \begin{bmatrix} \exp( (\theta^{(1)}-\theta^{(2)})^\top x ) \exp( \vec{0}^\top x ) \\ \end{bmatrix} \\  &amp;= \begin{bmatrix} \frac{1}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \frac{\exp( (\theta^{(1)}-\theta^{(2)})^\top x )}{ 1 + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \end{bmatrix} \\  &amp;= \begin{bmatrix} \frac{1}{ 1  + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ 1 - \frac{1}{ 1  + \exp( (\theta^{(1)}-\theta^{(2)})^\top x^{(i)} ) } \\ \end{bmatrix} \end{align}\)
+Sau đó ta thay $\theta^{(2)}-\theta^{(1)} $ với 1 tham số duy nhất là $\theta’$. Chúng ta sẽ có softmax regression dự đoán xác suất 1 lớp là $\frac{1}{ 1 + \exp(- (\theta’)^\top x^{(i)} ) }$, lớp còn lại là $1 - \frac{1}{ 1 + \exp(- (\theta’)^\top x^{(i)} ) }$. Giống hệt với hồi quy logistic</p>
+
+<h1 id="lập-trình-bằng-python">Lập trình bằng python</h1>
+
+<p>Trong phần này mình sẽ hướng dẫn mọi người thực hiện phân loại dựa trên tập Iris. Các bạn có thể tải về tại đây</p>
+
+<p>https://github.com/WinVector/Logistic/blob/master/iris.data.txt</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -62,7 +762,7 @@
 62
 63
 64
-</pre><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">import</span> <span class="nn">math</span>
@@ -126,21 +826,30 @@
 <span class="n">y</span> <span class="o">=</span><span class="n">y</span><span class="p">.</span><span class="nb">map</span><span class="p">({</span><span class="s">'Iris-setosa'</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s">'Iris-versicolor'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s">'Iris-virginica'</span><span class="p">:</span><span class="mi">2</span><span class="p">})</span>
 <span class="n">y</span><span class="p">.</span><span class="n">value_counts</span><span class="p">()</span>
 
-</pre></table></code></div></div><p>Kết quả</p><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>Kết quả</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
-</pre><td class="rouge-code"><pre>0    38
+</pre></td><td class="rouge-code"><pre>0    38
 2    35
 1    32
 Name: class, dtype: int64
-</pre></table></code></div></div><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre><td class="rouge-code"><pre><span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></td><td class="rouge-code"><pre><span class="n">x</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">x</span><span class="p">.</span><span class="n">shape</span>
-</pre></table></code></div></div><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">((</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-</pre></table></code></div></div><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">((</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -161,7 +870,7 @@ Name: class, dtype: int64
 19
 20
 21
-</pre><td class="rouge-code"><pre><span class="n">theta_dash</span> <span class="o">=</span> <span class="n">gradient_descent</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+</pre></td><td class="rouge-code"><pre><span class="n">theta_dash</span> <span class="o">=</span> <span class="n">gradient_descent</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 <span class="n">x_u</span> <span class="o">=</span> <span class="n">test</span><span class="p">[[</span><span class="s">'sepal_length'</span><span class="p">,</span><span class="s">'sepal_width'</span><span class="p">,</span><span class="s">'petal_length'</span><span class="p">,</span><span class="s">'petal_width'</span><span class="p">]]</span>
 <span class="n">n</span> <span class="o">=</span> <span class="n">x_u</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">x_u</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -182,26 +891,1133 @@ Name: class, dtype: int64
 
 <span class="c1">#(45, 5)
 </span>
-</pre></table></code></div></div><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
-</pre><td class="rouge-code"><pre><span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">x_u</span><span class="p">.</span><span class="n">iterrows</span><span class="p">():</span>
+</pre></td><td class="rouge-code"><pre><span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">row</span> <span class="ow">in</span> <span class="n">x_u</span><span class="p">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="n">h_matrix</span> <span class="o">=</span> <span class="n">h_theta</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">where</span><span class="p">(</span><span class="n">h_matrix</span> <span class="o">==</span> <span class="n">h_matrix</span><span class="p">.</span><span class="nb">max</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">x_u</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span><span class="s">'prediction'</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
-</pre></table></code></div></div><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre><td class="rouge-code"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">x_u</span>
+</pre></td><td class="rouge-code"><pre><span class="n">results</span> <span class="o">=</span> <span class="n">x_u</span>
 <span class="n">results</span><span class="p">[</span><span class="s">'actual'</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_true</span>
-</pre></table></code></div></div><div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
-</pre><td class="rouge-code"><pre><span class="n">compare</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">'prediction'</span><span class="p">]</span> <span class="o">==</span> <span class="n">results</span><span class="p">[</span><span class="s">'actual'</span><span class="p">]</span>
+</pre></td><td class="rouge-code"><pre><span class="n">compare</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">'prediction'</span><span class="p">]</span> <span class="o">==</span> <span class="n">results</span><span class="p">[</span><span class="s">'actual'</span><span class="p">]</span>
 <span class="n">correct</span> <span class="o">=</span> <span class="n">compare</span><span class="p">.</span><span class="n">value_counts</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">accuracy</span> <span class="o">=</span> <span class="n">correct</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
 <span class="n">accuracy</span> <span class="o">*</span> <span class="mi">100</span>
 <span class="c1">#95.555555555555557
-</span></pre></table></code></div></div></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/machine-learning/'>Machine Learning</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/machine-learning/" class="post-tag no-text-decoration" >Machine learning</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=3. Softmax Regression - Quy's blog&url=/posts/softmax-regression/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=3. Softmax Regression - Quy's blog&u=/posts/softmax-regression/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://telegram.me/share?text=3. Softmax Regression - Quy's blog&url=/posts/softmax-regression/" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i class="fa-fw fas fa-link small" onclick="copyLink()" data-toggle="tooltip" data-placement="top" title="Copy link"></i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down"><div class="access"><div id="access-lastmod" class="post"> <span>Recent Update</span><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/loss-function/">7. Loss function P1 - hàm mất mát cho bài toán regression</a><li><a href="/posts/loss-function-p2/">8. Loss function P2 - hàm mất mát cho bài toán binary classification</a><li><a href="/posts/gradient-descent-2/">4. Gradient Descent</a><li><a href="/posts/hoi-quy-logistic/">5. Hồi quy Logistic</a><li><a href="/posts/bai-toan-phan-lop-va-danh-gia/">6. Bài toán phân lớp và các phương pháp đánh giá</a></ul></div><div id="access-tags"> <span>Trending Tags</span><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/machine-learning/">Machine learning</a> <a class="post-tag" href="/tags/google-analytics/">google analytics</a> <a class="post-tag" href="/tags/pageviews/">pageviews</a> <a class="post-tag" href="/tags/writing/">writing</a></div></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"> <span class="pl-3 pt-2 mb-2">Contents</span><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/gioi-thieu-machine-learning/"><div class="card-body"> <span class="timeago small" > Apr 1 <i class="unloaded">2021-04-01T14:32:00+08:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>1. Phân loại các thuật toán Machine Learning</h3><div class="text-muted small"><p> Phân loại các thuật toán Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau: Quá trình huấn luyện có cần sự giám sát của con ngư...</p></div></div></a></div><div class="card"> <a href="/posts/end-to-end-machine-learning-project/"><div class="card-body"> <span class="timeago small" > Apr 2 <i class="unloaded">2021-04-02T04:44:00+08:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Thực hiện một dự án Machine learning hoàn chỉnh</h3><div class="text-muted small"><p> Trong bài viết này chúng ta sẽ có cái nhìn tổng quát hơn về machine learning thông qua một bài toán cụ thể trong thực tế với dữ liệu thực tế của một công ty. Sau đây là các bước cần thực hiện: ...</p></div></div></a></div><div class="card"> <a href="/posts/linear-regression-part1/"><div class="card-body"> <span class="timeago small" > Apr 2 <i class="unloaded">2021-04-02T05:45:00+08:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>2. Huấn luyện mô hình Linear Regression</h3><div class="text-muted small"><p> Trong các bài trước chúng ta đã xử lý một số bài toán machine learning bằng 1 số thuật toán, tuy nhiên chúng ta mới chỉ coi chúng như các hộp đen. Thậm chí chúng ta không biết gì về cách thực hiện ...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/linear-regression-part1/" class="btn btn-outline-primary" prompt="Older"><p>2. Huấn luyện mô hình Linear Regression</p></a> <a href="/posts/gradient-descent-2/" class="btn btn-outline-primary" prompt="Newer"><p>4. Gradient Descent</p></a></div></div></div></div><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center"><div class="footer-left"><p class="mb-0"> © 2021 <a href="https://twitter.com/username">Nguyễn Đình Quý</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">STE</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">DD</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><h4 class="text-muted mb-4">Trending Tags</h4><a class="post-tag" href="/tags/machine-learning/">Machine learning</a> <a class="post-tag" href="/tags/google-analytics/">google analytics</a> <a class="post-tag" href="/tags/pageviews/">pageviews</a> <a class="post-tag" href="/tags/writing/">writing</a></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.7.3/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>
+</span></pre></td></tr></tbody></table></code></div></div>
+
+
+      </div>
+
+      <div class="post-tail-wrapper text-muted">
+
+        <!-- categories -->
+        
+        <div class="post-meta mb-3">
+          <i class="far fa-folder-open fa-fw mr-1"></i>
+          
+            <a href='/categories/machine-learning/'>Machine Learning</a>
+        </div>
+        
+
+        <!-- tags -->
+        
+        <div class="post-tags">
+          <i class="fa fa-tags fa-fw mr-1"></i>
+          
+          <a href="/tags/machine-learning/"
+            class="post-tag no-text-decoration" >Machine learning</a>
+          
+          </div>
+        
+
+        <div class="post-tail-bottom
+          d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+          
+          <div class="license-wrapper">
+            This post is licensed under
+            <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+            by the author.
+          </div>
+          
+
+          <!--
+ Post sharing snippet
+-->
+
+<div class="share-wrapper">
+  <span class="share-label text-muted mr-1">Share</span>
+  <span class="share-icons">
+    
+    
+
+    
+      
+        <a href="https://twitter.com/intent/tweet?text=3. Softmax Regression - Quy's blog&url=https://ndquy.github.io/posts/softmax-regression/" data-toggle="tooltip" data-placement="top"
+          title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+          <i class="fa-fw fab fa-twitter"></i>
+        </a>
+    
+      
+        <a href="https://www.facebook.com/sharer/sharer.php?title=3. Softmax Regression - Quy's blog&u=https://ndquy.github.io/posts/softmax-regression/" data-toggle="tooltip" data-placement="top"
+          title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
+          <i class="fa-fw fab fa-facebook-square"></i>
+        </a>
+    
+      
+        <a href="https://telegram.me/share?text=3. Softmax Regression - Quy's blog&url=https://ndquy.github.io/posts/softmax-regression/" data-toggle="tooltip" data-placement="top"
+          title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
+          <i class="fa-fw fab fa-telegram"></i>
+        </a>
+    
+
+    <i class="fa-fw fas fa-link small" onclick="copyLink()"
+        data-toggle="tooltip" data-placement="top" title="Copy link"></i>
+
+  </span>
+</div>
+
+
+        </div><!-- .post-tail-bottom -->
+
+      </div><!-- div.post-tail -->
+
+    </div> <!-- .post -->
+
+
+  </div> <!-- #post-wrapper -->
+
+  
+
+  
+
+  <!--
+  The Pannel on right side (Desktop views)
+-->
+
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down">
+
+  <div class="access">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+    <div id="access-lastmod" class="post">
+      <span>Recent Update</span>
+      <ul class="post-content pl-0 pb-1 ml-1 mt-2">
+
+      
+        
+        
+        
+        <li><a href="/posts/intent-classification/">13. Xác định ý định câu hỏi trong hệ thống hỏi đáp</a></li>
+      
+        
+        
+        
+        <li><a href="/posts/cac-phuong-phap-scaling/">11. Các phương pháp scale dữ liệu trong machine learning</a></li>
+      
+        
+        
+        
+        <li><a href="/posts/cai-dat-queue-python-production/">Triển khai hàng đợi xử lý bằng python với Redis</a></li>
+      
+        
+        
+        
+        <li><a href="/posts/okapi-bm-25-tim-kiem-tieng-viet/">10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</a></li>
+      
+        
+        
+        
+        <li><a href="/posts/loss-function/">7. Loss function P1 - hàm mất mát cho bài toán regression</a></li>
+      
+
+      </ul>
+    </div> <!-- #access-lastmod -->
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+  
+    <div id="access-tags">
+      <span>Trending Tags</span>
+      <div class="d-flex flex-wrap mt-3 mb-1 mr-3">
+
+      
+        
+        <a class="post-tag" href="/tags/machine-learning/">Machine learning</a>
+      
+        
+        <a class="post-tag" href="/tags/google-analytics/">google analytics</a>
+      
+        
+        <a class="post-tag" href="/tags/pageviews/">pageviews</a>
+      
+        
+        <a class="post-tag" href="/tags/queue/">queue</a>
+      
+        
+        <a class="post-tag" href="/tags/redis/">redis</a>
+      
+        
+        <a class="post-tag" href="/tags/writing/">writing</a>
+      
+
+      </div>
+    </div>
+  
+  </div> <!-- .access -->
+
+  
+    <!-- BS-toc.js will be loaded at medium priority -->
+    <script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+    <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+      <span class="pl-3 pt-2 mb-2">Contents</span>
+      <nav id="toc" data-toggle="toc"></nav>
+    </div>
+  
+
+</div> <!-- #panel-wrapper -->
+
+
+</div> <!-- .row -->
+
+<div class="row">
+  <div class="col-12 col-lg-11 col-xl-8">
+    <div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+    <!--
+ Recommend the other 3 posts according to the tags and categories of the current post,
+ if the number is not enough, use the other latest posts to supplement.
+-->
+
+<!-- The total size of related posts  -->
+
+
+<!-- An random integer that bigger than 0  -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy}  -->
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<!-- Fill with the other newlest posts  -->
+
+
+
+
+
+
+  <div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+    <h3 class="pt-2 mt-1 mb-4 ml-1"
+      data-toc-skip>Further Reading</h3>
+    <div class="card-deck mb-4">
+    
+      
+      
+      <div class="card">
+        <a href="/posts/gioi-thieu-machine-learning/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Apr  1
+  
+
+  <i class="unloaded">2021-04-01T14:32:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>1. Phân loại các thuật toán Machine Learning</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Phân loại các thuật toán
+
+Có rất nhiều loại thuật toán về Machine Learning, thông thường chúng được phân ra làm các loại với tiêu chí như sau:
+
+  Quá trình huấn luyện có cần sự giám sát của con ngư...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/bai-toan-phan-lop-va-danh-gia/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Apr  3
+  
+
+  <i class="unloaded">2021-04-03T05:47:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>6. Bài toán phân lớp và các phương pháp đánh giá</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.
+
+Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ả...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/loss-function/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Apr  3
+  
+
+  <i class="unloaded">2021-04-03T09:47:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>7. Loss function P1 - hàm mất mát cho bài toán regression</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Nếu đã tìm hiểu về machine learning, chắc các bạn được nghe rất nhiều đến khái niệm hàm mất mát.
+
+Trong các thuật toán tìm kiếm của trí tuệ nhân tạo cổ điển, hàm mất mát có thể là một hàm mục tiêu ...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+    </div> <!-- .card-deck -->
+  </div> <!-- #related-posts -->
+
+
+
+    <!--
+  Navigation buttons at the bottom of the post.
+-->
+
+<div class="post-navigation d-flex justify-content-between">
+  
+  <a href="/posts/linear-regression-part1/" class="btn btn-outline-primary"
+    prompt="Older">
+    <p>2. Huấn luyện mô hình Linear Regression</p>
+  </a>
+  
+
+  
+  <a href="/posts/gradient-descent-2/" class="btn btn-outline-primary"
+    prompt="Newer">
+    <p>4. Gradient Descent</p>
+  </a>
+  
+
+</div>
+
+
+    
+
+    </div> <!-- #post-extend-wrapper -->
+
+  </div> <!-- .col-* -->
+
+</div> <!-- .row -->
+
+
+
+
+
+        <!--
+  The Footer
+-->
+
+<footer class="d-flex w-100 justify-content-center">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="footer-left">
+      <p class="mb-0">
+        © 2021
+        <a href="https://twitter.com/username">Nguyễn Đình Quý</a>.
+        
+        <span data-toggle="tooltip" data-placement="top"
+          title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span>
+        
+      </p>
+    </div>
+
+    <div class="footer-right">
+      <p class="mb-0">
+        Powered by
+        <a href="https://jekyllrb.com" target="_blank" rel="noopener">STE</a>
+        with
+        <a href="https://github.com/cotes2020/jekyll-theme-chirpy"
+          target="_blank" rel="noopener">DD</a>
+        theme.
+      </p>
+    </div>
+
+  </div> <!-- div.d-flex -->
+</footer>
+
+
+      </div>
+
+      <!--
+  The Search results
+-->
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded">
+  <div class="col-12 col-sm-11 post-content">
+    <div id="search-hints">
+      <h4 class="text-muted mb-4">Trending Tags</h4>
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+      
+        
+        <a class="post-tag" href="/tags/machine-learning/">Machine learning</a>
+      
+        
+        <a class="post-tag" href="/tags/google-analytics/">google analytics</a>
+      
+        
+        <a class="post-tag" href="/tags/pageviews/">pageviews</a>
+      
+        
+        <a class="post-tag" href="/tags/queue/">queue</a>
+      
+        
+        <a class="post-tag" href="/tags/redis/">redis</a>
+      
+        
+        <a class="post-tag" href="/tags/writing/">writing</a>
+      
+
+    </div>
+    <div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+  </div>
+</div>
+
+
+    </div> <!-- #main-wrapper -->
+
+    
+
+    <div id="mask"></div>
+
+    <a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!--
+  Jekyll Simple Search loader
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+-->
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.7.3/dest/simple-jekyll-search.min.js"></script>
+
+<script>
+SimpleJekyllSearch({
+  searchInput: document.getElementById('search-input'),
+  resultsContainer: document.getElementById('search-results'),
+  json: '/assets/js/data/search.json',
+  searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0">  <a href="https://ndquy.github.io{url}">{title}</a>  <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">    {categories}    {tags}  </div>  <p>{snippet}</p></div>',
+  noResultsText: '<p class="mt-5">Oops! No result founds.</p>',
+  templateMiddleware: function(prop, value, template) {
+    if (prop === 'categories') {
+      if (value === '') {
+        return `${value}`;
+      } else {
+        return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+      }
+    }
+
+    if (prop === 'tags') {
+      if (value === '') {
+        return `${value}`;
+      } else {
+        return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+      }
+    }
+  }
+});
+</script>
+
+
+  </body>
+
+</html>
+

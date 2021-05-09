@@ -1,1 +1,206 @@
-<feed xmlns="http://www.w3.org/2005/Atom"> <id>/</id><title>Quy's blog</title><subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle> <updated>2021-04-04T19:27:08+08:00</updated> <author> <name>Nguyễn Đình Quý</name> <uri>/</uri> </author><link rel="self" type="application/atom+xml" href="/feed.xml"/><link rel="alternate" type="text/html" hreflang="en-US" href="/"/> <generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator> <rights> © 2021 Nguyễn Đình Quý </rights> <icon>/assets/img/favicons/favicon.ico</icon> <logo>/assets/img/favicons/favicon-96x96.png</logo> <entry><title>9. Loss function P3 - hàm mất mát cho bài toán multi-class classification</title><link href="/posts/loss-function-p3/" rel="alternate" type="text/html" title="9. Loss function P3 - hàm mất mát cho bài toán multi-class classification" /><published>2021-04-04T16:47:00+08:00</published> <updated>2021-04-04T16:47:00+08:00</updated> <id>/posts/loss-function-p3/</id> <content src="/posts/loss-function-p3/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Phân đa lớp là những bài toán mà mô hình dự đoán trong đó các đầu vào được chỉ định là một trong nhiều hơn hai lớp. Mô hình dự đoán một giá trị số nguyên, trong đó mỗi lớp được gán một giá trị số nguyên duy nhất từ ​​0 đến (num_classes - 1). Bài toán thường được thực hiện như là dự đoán xác suất của điểm dữ liệu thuộc về một lớp nào đó đã biết. num_classes là số class Trong phần này, chúng ta... </summary> </entry> <entry><title>8. Loss function P2 - hàm mất mát cho bài toán binary classification</title><link href="/posts/loss-function-p2/" rel="alternate" type="text/html" title="8. Loss function P2 - hàm mất mát cho bài toán binary classification" /><published>2021-04-04T16:47:00+08:00</published> <updated>2021-04-04T18:43:45+08:00</updated> <id>/posts/loss-function-p2/</id> <content src="/posts/loss-function-p2/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Phân lớp nhị phân là bài toán mà biến đầu ra (y) chỉ nhận một trong hai giá trị là 1 trong 2 nhãn. Bài toán thường dưới dạng bài toán dự đoán giá trị 0 hoặc 1 cho lớp đầu tiên hoặc lớp thứ hai và thường được phát biểu như dự đoán xác suất của đầu vào thuộc giá trị lớp 1. Trong phần này chúng ta sẽ khảo sát các hàm loss cho bài toán phân lớp nhị phân. Chuẩn bị dữ liệu và mô hình Mình sẽ khởi... </summary> </entry> <entry><title>7. Loss function P1 - hàm mất mát cho bài toán regression</title><link href="/posts/loss-function/" rel="alternate" type="text/html" title="7. Loss function P1 - hàm mất mát cho bài toán regression" /><published>2021-04-03T09:47:00+08:00</published> <updated>2021-04-04T18:43:45+08:00</updated> <id>/posts/loss-function/</id> <content src="/posts/loss-function/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Nếu đã tìm hiểu về machine learning, chắc các bạn được nghe rất nhiều đến khái niệm hàm mất mát. Trong các thuật toán tìm kiếm của trí tuệ nhân tạo cổ điển, hàm mất mát có thể là một hàm mục tiêu của quá trình tìm kiếm. Quá trình tìm kiếm sẽ thực hiện các thay đổi hay phương pháp di chuyển để hàm mục tiêu có giá trị nhỏ nhất hoặc giá trị chấp nhận được. Còn trong lĩnh vực học máy, bản chất củ... </summary> </entry> <entry><title>6. Bài toán phân lớp và các phương pháp đánh giá</title><link href="/posts/bai-toan-phan-lop-va-danh-gia/" rel="alternate" type="text/html" title="6. Bài toán phân lớp và các phương pháp đánh giá" /><published>2021-04-03T05:47:00+08:00</published> <updated>2021-04-03T17:50:12+08:00</updated> <id>/posts/bai-toan-phan-lop-va-danh-gia/</id> <content src="/posts/bai-toan-phan-lop-va-danh-gia/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp. Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thuật toán và thường được gọi là bộ dữ liệu “Hello World” trong Machine learning. Nói chung là ai học... </summary> </entry> <entry><title>5. Hồi quy Logistic</title><link href="/posts/hoi-quy-logistic/" rel="alternate" type="text/html" title="5. Hồi quy Logistic" /><published>2021-04-03T05:46:00+08:00</published> <updated>2021-04-03T17:50:12+08:00</updated> <id>/posts/hoi-quy-logistic/</id> <content src="/posts/hoi-quy-logistic/" /> <author> <name>Nguyễn Đình Quý</name> </author> <category term="Machine Learning" /> <summary> Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &amp;gt; 50% thì mô hình dự đoán có thể khẳng định được điểm ... </summary> </entry> </feed>
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://ndquy.github.io/</id>
+  <title>Quy's blog</title>
+  <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
+  <updated>2021-05-09T14:05:48+08:00</updated>
+  <author>
+    <name>Nguyễn Đình Quý</name>
+    <uri>https://ndquy.github.io/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="https://ndquy.github.io/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en-US"
+    href="https://ndquy.github.io/"/>
+  <generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator>
+  <rights> © 2021 Nguyễn Đình Quý </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>13. Xác định ý định câu hỏi trong hệ thống hỏi đáp</title>
+    <link href="https://ndquy.github.io/posts/intent-classification/" rel="alternate" type="text/html" title="13. Xác định ý định câu hỏi trong hệ thống hỏi đáp" />
+    <published>2021-04-14T16:47:00+08:00</published>
+  
+    <updated>2021-05-09T14:02:26+08:00</updated>
+  
+    <id>https://ndquy.github.io/posts/intent-classification/</id>
+    <content src="https://ndquy.github.io/posts/intent-classification/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Mục tiêu bài viết
+
+Phân tích câu hỏi là pha đầu tiên trong kiến trúc chung của một hệ thống hỏi đáp, có
+nhiệm vụ tìm ra các thông tin cần thiết làm đầu vào cho quá trình xử lý của các pha sau
+(trích chọn tài liệu, trích xuất câu trả lời, …). Vì vậy phân tích câu hỏi có vai trò hết sức
+quan trọng, ảnh hưởng trực tiếp đến hoạt động của toàn bộ hệ thống. Nếu phân tích câu hỏi không tốt thì sẽ khôn...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>14. Kỹ thuật data augmentation trong NLP với Tiếng Việt</title>
+    <link href="https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/" rel="alternate" type="text/html" title="14. Kỹ thuật data augmentation trong NLP với Tiếng Việt" />
+    <published>2021-04-10T16:47:00+08:00</published>
+  
+    <updated>2021-04-10T16:47:00+08:00</updated>
+  
+    <id>https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/</id>
+    <content src="https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.
+Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.
+Các kỹ thuật data augmentation được sử dụng nhiều trong thị giác máy tính, thuật toán supervised learning… Tuy ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>12. Các phương pháp đánh giá mô hình phân lớp phần 1</title>
+    <link href="https://ndquy.github.io/posts/Phan-lop-danh-gia-he-thong-phan-lop/" rel="alternate" type="text/html" title="12. Các phương pháp đánh giá mô hình phân lớp phần 1" />
+    <published>2021-04-10T16:47:00+08:00</published>
+  
+    <updated>2021-04-10T16:47:00+08:00</updated>
+  
+    <id>https://ndquy.github.io/posts/Phan-lop-danh-gia-he-thong-phan-lop/</id>
+    <content src="https://ndquy.github.io/posts/Phan-lop-danh-gia-he-thong-phan-lop/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 mô hình phân lớp.
+
+Bài toán phân lớp
+
+Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ảnh được đánh nhãn với số tương ứng. Tập dữ liệu này được dùng cực kì phổ biến trong huấn luyện các thuật toán và thường được gọi là bộ dữ liệu “Hello World” trong Machine learning. N...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>11. Các phương pháp scale dữ liệu trong machine learning</title>
+    <link href="https://ndquy.github.io/posts/cac-phuong-phap-scaling/" rel="alternate" type="text/html" title="11. Các phương pháp scale dữ liệu trong machine learning" />
+    <published>2021-04-06T16:47:00+08:00</published>
+  
+    <updated>2021-04-07T10:55:48+08:00</updated>
+  
+    <id>https://ndquy.github.io/posts/cac-phuong-phap-scaling/</id>
+    <content src="https://ndquy.github.io/posts/cac-phuong-phap-scaling/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong các thuật toán machine learning nói chung, và trong deep learning nói riêng, các mô hình học cách dự đoán đầu ra từ đầu vào thông qua các ví dụ trong tập dữ liệu huấn luyện.
+
+Các điểm dữ liệu đôi khi được đo đạc với những đơn vị khác nhau, m và feet chẳng hạn. Hoặc có hai thành phần (của vector dữ liệu) chênh lệch nhau quá lớn, một thành phần có khoảng giá trị từ 0 đến 1000, thành phần ki...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</title>
+    <link href="https://ndquy.github.io/posts/okapi-bm-25-tim-kiem-tieng-viet/" rel="alternate" type="text/html" title="10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt" />
+    <published>2021-04-05T11:09:00+08:00</published>
+  
+    <updated>2021-04-05T11:44:58+08:00</updated>
+  
+    <id>https://ndquy.github.io/posts/okapi-bm-25-tim-kiem-tieng-viet/</id>
+    <content src="https://ndquy.github.io/posts/okapi-bm-25-tim-kiem-tieng-viet/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trườ...
+    </summary>
+  
+
+  </entry>
+
+</feed>
+
+
