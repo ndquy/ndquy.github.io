@@ -1,5 +1,5 @@
 ---
-title: 12. Xác định ý định câu hỏi trong hệ thống hỏi đáp
+title: 13. Xác định ý định câu hỏi trong hệ thống hỏi đáp
 author: Quy Nguyen
 date: 2021-04-14 15:47:00 +0700
 categories: [Machine Learning]
@@ -422,7 +422,8 @@ print(f1)
 
 Kết quả in ra sẽ được: 
 
-```0.8303684789128464
+```
+0.8303684789128464
 ```
 
 * Độ chính xác
