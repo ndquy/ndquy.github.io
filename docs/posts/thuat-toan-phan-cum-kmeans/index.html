@@ -25,8 +25,8 @@
 <meta property="og:title" content="Thuật toán phân cụm K-Means" />
 <meta name="author" content="Quy Nguyen" />
 <meta property="og:locale" content="vi_VI" />
-<meta name="description" content="Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${{x_1, x_2, …, x_N}; {y_1, y_2,…, y_N}}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${x_1, x_2, …, x_N}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó." />
-<meta property="og:description" content="Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${{x_1, x_2, …, x_N}; {y_1, y_2,…, y_N}}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${x_1, x_2, …, x_N}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó." />
+<meta name="description" content="Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{{x_1, x_2, …, x_N\}; {y_1, y_2,…, y_N\}\}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{x_1, x_2, …, x_N\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó." />
+<meta property="og:description" content="Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{{x_1, x_2, …, x_N\}; {y_1, y_2,…, y_N\}\}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{x_1, x_2, …, x_N\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó." />
 <link rel="canonical" href="https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/" />
 <meta property="og:url" content="https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/" />
 <meta property="og:site_name" content="Quy’s blog" />
@@ -38,7 +38,7 @@
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"description":"Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${{x_1, x_2, …, x_N}; {y_1, y_2,…, y_N}}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${x_1, x_2, …, x_N}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.","url":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/","headline":"Thuật toán phân cụm K-Means","datePublished":"2021-09-09T11:47:00+08:00","dateModified":"2021-09-09T15:46:28+08:00","author":{"@type":"Person","name":"Quy Nguyen"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/"},"@context":"https://schema.org"}</script>
+{"description":"Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{{x_1, x_2, …, x_N\\}; {y_1, y_2,…, y_N\\}\\}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{x_1, x_2, …, x_N\\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.","url":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/","headline":"Thuật toán phân cụm K-Means","datePublished":"2021-09-09T11:47:00+08:00","dateModified":"2021-09-09T15:46:28+08:00","author":{"@type":"Person","name":"Quy Nguyen"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -658,10 +658,10 @@
         <p>Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.</p>
 <h1 id="nhắc-lại-về-học-có-giám-sát-và-không-giám-sát">Nhắc lại về học có giám sát và không giám sát</h1>
 <h2 id="học-có-giám-sát">Học có giám sát</h2>
-<p>Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${{x_1, x_2, …, x_N}; {y_1, y_2,…, y_N}}$ sao cho $y_i ≅ f(x_i )$ với mọi i.<br />
+<p>Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{{x_1, x_2, …, x_N\}; {y_1, y_2,…, y_N\}\}$ sao cho $y_i ≅ f(x_i )$ với mọi i.<br />
 Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng.</p>
 <h2 id="học-không-giám-sát">Học không giám sát</h2>
-<p>Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${x_1, x_2, …, x_N}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn.<br />
+<p>Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{x_1, x_2, …, x_N\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn.<br />
 Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.</p>
 
 <h1 id="ví-dụ-về-học-không-giám-sát">Ví dụ về học không giám sát</h1>
@@ -716,7 +716,7 @@ Hai khách hàng tương đồng có thể được xem xét dựa trên các ti
 <h1 id="thuật-toán-phân-cụm-k-means">Thuật toán phân cụm K-means</h1>
 
 <p>Thuật toán phân cụm K-means được giới thiệu năm 1957 bởi Lloyd K-means và là phương pháp phổ biến nhất cho việc phân cụm, dựa trên việc phân vùng dữ liệu <br />
-Biểu diễn dữ liệu: $D = {x_1, x_2, …, x_r }$, với $x_i$ là vector n chiều trong không gian Euclidean. K-means phân cụm D thành K cụm dữ liệu:</p>
+Biểu diễn dữ liệu: $D = \{x_1, x_2, …, x_r \}$, với $x_i$ là vector n chiều trong không gian Euclidean. K-means phân cụm D thành K cụm dữ liệu:</p>
 <ul>
   <li>Mỗi cụm dữ liệu có một điểm trung tâm gọi là centroid.</li>
   <li>K là một hằng số cho trước.</li>
@@ -812,7 +812,7 @@ Các vòng lặp iteration 2 và iteration 3 tiếp tục thực hiện như v�
   <li>Lấy ngẫu nhiên điểm centroid đầu tiên m1</li>
   <li>Lấy điểm centroid tiếp theo là điểm xa nhất so với m1</li>
   <li>..</li>
-  <li>Lấy điểm centroid thứ i $(m_i)$ là điểm xa nhất so với ${ m_1,…, m_i-1}$</li>
+  <li>Lấy điểm centroid thứ i $(m_i)$ là điểm xa nhất so với $\{ m_1,…, m_i-1\}$</li>
   <li>…</li>
   <li>Bằng cách này K-means sẽ hội tụ về gần kết quả tối ưu (Arthur, D.; Vassilvitskii, 2007)</li>
 </ul>
@@ -1124,6 +1124,11 @@ Các vòng lặp iteration 2 và iteration 3 tiếp tục thực hiện như v�
         
         
         
+        <li><a href="/posts/danh-gia-xet-nghiem-covid-19/">Tản mạn - Đánh giá độ chính xác các bộ kit xét nghiệm thế nào?</a></li>
+      
+        
+        
+        
         <li><a href="/posts/thuat-toan-phan-cum-kmeans/">15. Thuật toán phân cụm K-Means</a></li>
       
         
@@ -1140,11 +1145,6 @@ Các vòng lặp iteration 2 và iteration 3 tiếp tục thực hiện như v�
         
         
         <li><a href="/posts/cac-phuong-phap-scaling/">11. Các phương pháp scale dữ liệu trong machine learning</a></li>
-      
-        
-        
-        
-        <li><a href="/posts/cai-dat-queue-python-production/">Triển khai hàng đợi xử lý bằng python với Redis</a></li>
       
 
       </ul>

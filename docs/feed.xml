@@ -4,7 +4,7 @@
   <id>https://ndquy.github.io/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning, khai phá dữ liệu, kỹ thuật lập trình.</subtitle>
-  <updated>2021-09-09T16:41:14+08:00</updated>
+  <updated>2021-09-09T16:44:38+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>https://ndquy.github.io/</uri>
@@ -24,7 +24,7 @@
     <link href="https://ndquy.github.io/posts/danh-gia-xet-nghiem-covid-19/" rel="alternate" type="text/html" title="Tản mạn - Đánh giá độ chính xác các bộ kit xét nghiệm thế nào?" />
     <published>2021-09-09T11:48:00+08:00</published>
   
-    <updated>2021-09-09T11:48:00+08:00</updated>
+    <updated>2021-09-09T16:41:18+08:00</updated>
   
     <id>https://ndquy.github.io/posts/danh-gia-xet-nghiem-covid-19/</id>
     <content src="https://ndquy.github.io/posts/danh-gia-xet-nghiem-covid-19/" />
@@ -83,7 +83,7 @@
       Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.
 Nhắc lại về học có giám sát và không giám sát
 Học có giám sát
-Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${{x_1, x_...
+Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{{x_1, x...
     </summary>
   
 

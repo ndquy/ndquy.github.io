@@ -10,10 +10,10 @@ math: true
 Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.
 # Nhắc lại về học có giám sát và không giám sát
 ## Học có giám sát
-Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{\{x_1, x_2, …, x_N\}; \{y_1, y_2,…, y_N\}\}$ sao cho $y_i ≅ f(x_i )$ với mọi i.  
+Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{\{x_1, x_2, …, x_N\\}; \{y_1, y_2,…, y_N\\}\\}$ sao cho $y_i ≅ f(x_i )$ với mọi i.  
 Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng.
 ## Học không giám sát
-Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{x_1, x_2, …, x_N\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn.  
+Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{x_1, x_2, …, x_N\\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn.  
 Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.
 
 # Ví dụ về học không giám sát
@@ -60,7 +60,7 @@ Như vậy mục tiêu của bài toán phân cụm là những cụm dữ liệ
 # Thuật toán phân cụm K-means
 
 Thuật toán phân cụm K-means được giới thiệu năm 1957 bởi Lloyd K-means và là phương pháp phổ biến nhất cho việc phân cụm, dựa trên việc phân vùng dữ liệu   
-Biểu diễn dữ liệu: $D = \{x_1, x_2, …, x_r \}$, với $x_i$ là vector n chiều trong không gian Euclidean. K-means phân cụm D thành K cụm dữ liệu:
+Biểu diễn dữ liệu: $D = \\{x_1, x_2, …, x_r \\}$, với $x_i$ là vector n chiều trong không gian Euclidean. K-means phân cụm D thành K cụm dữ liệu:
 * Mỗi cụm dữ liệu có một điểm trung tâm gọi là centroid.
 * K là một hằng số cho trước.
 
@@ -138,7 +138,7 @@ Chất lượng của K-means phụ thuộc vào việc khởi tạo các điể
 * Lấy ngẫu nhiên điểm centroid đầu tiên m1
 * Lấy điểm centroid tiếp theo là điểm xa nhất so với m1
 * ..
-* Lấy điểm centroid thứ i $(m_i)$ là điểm xa nhất so với $\{ m_1,..., m_i-1\}$
+* Lấy điểm centroid thứ i $(m_i)$ là điểm xa nhất so với $\\{ m_1,..., m_i-1\\}$
 * ...
 * Bằng cách này K-means sẽ hội tụ về gần kết quả tối ưu (Arthur, D.; Vassilvitskii, 2007)
 
