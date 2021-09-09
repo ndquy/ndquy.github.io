@@ -1,4 +1,3 @@
-
 ---  
 title: 15. Thuật toán phân cụm K-Means  
 author: Quy Nguyen  
@@ -6,7 +5,8 @@ date: 2021-09-09 10:47:00 +0700
 categories: [Machine Learning]  
 tags: [Machine learning]  
 math: true
----  
+---
+
 Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.
 # Nhắc lại về học có giám sát và không giám sát
 ## Học có giám sát
