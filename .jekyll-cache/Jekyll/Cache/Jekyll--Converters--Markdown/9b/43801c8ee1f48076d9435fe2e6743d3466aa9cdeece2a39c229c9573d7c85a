@@ -1,0 +1,4 @@
+I"�<p>Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.
+Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.
+Các kỹ thuật data augmentation được sử dụng nhiều trong thị giác máy tính, thuật toán supervised learning… Tuy nhiên trong NLP thì cá nhân mình thấy ít được sử dụng và với Tiếng Việt thì chưa thấy bài viết nào đề cập đến.</p>
+:ET

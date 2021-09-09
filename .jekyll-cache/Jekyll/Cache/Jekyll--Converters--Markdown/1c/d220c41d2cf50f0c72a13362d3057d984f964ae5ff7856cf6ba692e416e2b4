@@ -1,0 +1,722 @@
+I"��<p>Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.
+Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.
+Các kỹ thuật data augmentation được sử dụng nhiều trong thị giác máy tính, thuật toán supervised learning… Tuy nhiên trong NLP thì cá nhân mình thấy ít được sử dụng và với Tiếng Việt thì chưa thấy bài viết nào đề cập đến.</p>
+
+<h1 id="giới-thiệu">Giới thiệu</h1>
+
+<p>“Deep learning is a data-hungry framework”. Tạm dịch câu này là Học sâu là 1 framework luôn “đói dữ liệu”. Câu này có ý nghĩa là dữ liệu là một phần quan trọng trong học sâu nói riêng và trong học máy nói chung.
+Và bởi vì deep learning là thuật toán dựa trên data (data-driven approach), và càng nhiều data thì càng dễ dẫn đến chất lượng các ứng dụng học máy được cải thiện.</p>
+
+<p>Vậy nếu giờ chúng ta phải xử lý bài toán có giữ liệu giới hạn thì phải làm sao? Không đủ dữ liệu sẽ dẫn tới vấn đề như</p>
+
+<ul>
+  <li>Thiếu tính generalization: Over-fitting hay như một kiểu học vẹt, Train thì chất lượng rõ cao còn test thì lẹt đẹt.</li>
+  <li>Khó huấn luyện: Mạng DL nhạy cảm với giá trị khởi tạo, khó hội tụ</li>
+  <li>
+    <p>Chất lượng dự đoán sẽ không ổn định:</p>
+
+    <ul>
+      <li>Outlier - một số trường hợp kết quả sai khác rất nhiều,</li>
+      <li>Nhiễu với đầu vào ảnh hưởng lớn tới chất lượng dự đoán</li>
+    </ul>
+  </li>
+</ul>
+
+<p>… vân vân và mây mây. [1]</p>
+
+<h1 id="bài-toán">Bài toán</h1>
+
+<p>Trong thị giác máy tính bạn có thể dễ dàng tìm được các kỹ thuật tăng cường dữ liệu, tuy nhiên trong xử lý ngôn ngữ tự nhiên thì kỹ thuật này còn gặp nhiều khó khăn do domain của các bài toán NLP là khác nhau.</p>
+
+<p>Trong blog này mình sẽ bàn luận chủ yếu về kỹ thuật data augmentation trong NLP và cụ thể là bài toán phân lớp văn bản (text classification).</p>
+
+<h2 id="giới-thiệu-về-bài-toán">Giới thiệu về bài toán</h2>
+
+<p>Bài toán mình đưa ra được áp dụng trong hệ thống hỏi đáp sử dụng với chatbot. Đó là module xác định ý định câu hỏi của người dùng đặt câu hỏi cho chatbot.
+Về cơ bản việc xác định ý định của câu hỏi sẽ được chúng ta đưa về bài toán phân loại văn bản, với các ý định là các class (lớp) tương ứng.</p>
+
+<p>Cụ thể hơn, mình đang thực hiện xây dựng hệ thống hỏi đáp dành cho sinh viên trường Đại học Xây dựng. Ý tưởng là sinh viên sẽ đặt câu hỏi cho hệ thống, sau đó hệ thống sẽ tìm ra những câu trả lời phù hợp bằng cách tìm kiếm câu hỏi trong tập dữ liệu câu hỏi - câu trả lời để xem câu hỏi đó gần với câu hỏi nào nhất để đưa ra câu trả lời tương ứng.
+Và để đưa ra được câu trả lời chính xác thì chúng ta cần phải xác định được ý định của câu hỏi mà người dùng muốn hỏi là gì. Và phần này sẽ tập trung chính vào kỹ thuật sinh câu hỏi tương ứng với ý định của người dùng để bổ sung thêm dữ liệu vào tập dữ liệu huấn luyện.</p>
+
+<p>Tất cả các câu hỏi của sinh viên trong trường được chia ra thành các class như sau, mỗi class tương ứng với ý định hỏi của người dùng. Như vậy việc xác định ý định chính là việc phân lớp 1 câu hỏi thuộc vào class nào:</p>
+
+<p><img src="/assets/img/blog/Screen Shot 2021-04-15 at 23.05.49.png" alt="Số lượng các câu hỏi trong các class" />
+<em>Số lượng các câu hỏi trong các class</em></p>
+
+<p>Như hình trên các bạn có thể thấy số lượng các câu hỏi trong các class là không đều nhau, các câu hỏi thuộc class <code class="language-plaintext highlighter-rouge">TOEIC</code> chỉ khoảng 50 câu hỏi, trong khi các câu hỏi trong class <code class="language-plaintext highlighter-rouge">DKMH</code> lại là gần 480 câu hỏi. Việc mất cân bằng dữ liệu này sẽ ảnh hưởng nhiều đến chất lượng của mô hình. Có nhiều phương pháp để xử lý mất cân bằng dữ liệu, tuy nhiên các phương pháp chủ yếu tập trung vào việc phân chia tập dữ liệu huấn luyện và kiểm tra chứ không tập trung vào việc bổ sung thêm dữ liệu. Việc bổ sung dữ liệu sẽ giúp cải thiện mô hình một cách tốt hơn.</p>
+
+<h2 id="phương-pháp-thêm-dữ-liệu">Phương pháp thêm dữ liệu</h2>
+
+<p>Một số phương pháp thêm dữ liệu:</p>
+
+<ol>
+  <li>Collect more data. Đúng nghĩa đen xì là lấy thêm dữ liệu. Trả tiền, lấy dữ liệu trên mạng, .v.v.</li>
+  <li>Data synthesis: Tạo dữ liệu giả. Đối với một số bài toán dữ liệu có thể được mô phỏng qua computer graphic. Như ảnh depth, ảnh ở chiều góc nhìn khác nhau, .v.v.</li>
+  <li>Data Augmentation. Là kỹ thuật đơn giản nhất bằng việc xử lý đơn giản dữ liệu sẵn có bằng các phép tuyến tính hay phi tuyến (như tạo dữ liệu qua mạng GAN)</li>
+</ol>
+
+<p>Phương pháp <code class="language-plaintext highlighter-rouge">1</code> thì quá tốt nếu thực hiện được, tuy nhiên vì nhiều lý do và điều kiện ta không thể thu thập thêm được dữ liệu vì việc này tốn thời gian, công sức và cả tiền nữa.</p>
+
+<p>Phương pháp số <code class="language-plaintext highlighter-rouge">2</code> thì khó có thể áp dụng được cho bài toán xử lý ngôn ngữ tự nhiên NLP.</p>
+
+<p>Phương pháp số <code class="language-plaintext highlighter-rouge">3</code> sẽ phù hợp hơn trong bài toán này và mình sẽ đề cập trong phần tiếp theo.</p>
+
+<h1 id="bert">BERT</h1>
+
+<p>BERT được coi là bước đột phá trong công nghệ xử lý ngôn ngữ tự nhiên của Google. Năm 2018 Google giới thiệu BERT, BERT là viết tắt của Bidirectional Encoder Representations from Transformers được hiểu là một mô hình học sẵn hay còn gọi là pre-train model, học ra các vector đại diện theo ngữ cảnh 2 chiều của từ, được sử dụng để transfer sang các bài toán khác trong lĩnh vực xử lý ngôn ngữ tự nhiên. BERT đã thành công trong việc cải thiện những công việc gần đây trong việc tìm ra đại diện của từ trong không gian số (không gian mà máy tính có thể hiểu được) thông qua ngữ cảnh của nó. [2]</p>
+
+<p>Như chúng ta đã biết, xử lý ngôn ngữ tự nhiên luôn gặp phải vấn đề về thiếu hụt dữ liệu, hầu hết các tập dữ liệu chỉ đặc thù cho từng domain cụ thể. Để giải quyết thách thức này, các mô hình xử lý ngôn ngữ tự nhiên sử dụng một cơ chế tiền xử lý dữ liệu huấn luyện bằng việc transfer từ một mô hình chung được đào tạo từ một lượng lớn các dữ liệu không được gán nhãn. [2]</p>
+
+<p>#BERT trong Tiếng Việt - phoBERT</p>
+
+<p>Khi google đưa ra mã nguồn mở của BERT, có rất nhiều dự án dựa trên BERT được chia sẻ. Đối với Tiếng Việt chúng ta có <a href="https://github.com/VinAIResearch/PhoBERT">phoBert</a> do VinAI public.</p>
+
+<p>PhoBert được huấn luyện dựa trên tập dữ liệu Tiếng Việt khá lớn nên khi sử dụng phoBERT nhìn chung cải thiện khá tốt các bài toán NLP với Tiếng Việt.
+Các bạn có thể sử dụng</p>
+
+<p>Để sử dụng phoBERT, bạn cài đặt các gói sau:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="o">!</span>pip3 <span class="nb">install </span>fairseq
+<span class="o">!</span>pip3 <span class="nb">install </span>fastbpe
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="download-pretrained-bert-model">Download pretrained bert model</h2>
+
+<p>Đầu tiên chúng ta cần download toàn bộ pretrain của model bằng lệnh sau:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="o">!</span>wget https://public.vinai.io/PhoBERT_base_fairseq.tar.gz
+<span class="o">!</span><span class="nb">tar</span> <span class="nt">-xzvf</span> PhoBERT_base_fairseq.tar.gz
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Trong thư mục tải về sẽ có 3 file sau:</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bpe.codes</code>: BPE token dùng để mã hóa bằng bpe.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">dict.txt</code>:   Từ điển của tập dữ liệu dùng huấn luyện mô hình.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">model.pt</code>: File pretrain chính của model.</p>
+  </li>
+</ul>
+
+<h2 id="load-model-bằng-python">Load model bằng python</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1"># Load the model in fairseq
+</span><span class="kn">from</span> <span class="nn">fairseq.models.roberta</span> <span class="kn">import</span> <span class="n">RobertaModel</span>
+<span class="n">phoBERT</span> <span class="o">=</span> <span class="n">RobertaModel</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s">'PhoBERT_base_fairseq'</span><span class="p">,</span> <span class="n">checkpoint_file</span><span class="o">=</span><span class="s">'model.pt'</span><span class="p">)</span>
+<span class="n">phoBERT</span><span class="p">.</span><span class="nb">eval</span><span class="p">()</span>  <span class="c1"># disable dropout (or leave in train mode to finetune
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Ở đây chúng ta sử dụng RobertaModel, đây là một mô hình dựa trên BERT nhưng có nhiều cải tiến và được đánh giá là tốt hơn so với BERT.</p>
+
+<h1 id="fine-tune-phobert">Fine-tune phoBERT</h1>
+
+<p>Mình sẽ tìm cách finetune lại model với dữ liệu huấn luyện của mình để phù hợp với bài toán mình cần thực hiện.</p>
+
+<p>Trước tiên bạn cần download mã nguồn của fairseq:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="o">!</span>wget https://public.vinai.io/PhoBERT_large_fairseq.tar.gz
+<span class="o">!</span><span class="nb">tar</span> <span class="nt">-xzvf</span> PhoBERT_large_fairseq.tar.gz
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau đó switch vào thư mục vừa download</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>import os
+
+os.chdir<span class="o">(</span><span class="s2">"fairseq"</span><span class="o">)</span>
+<span class="o">!</span><span class="nb">ls</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Thực hiện cài đặt các gói và thư viện cần thiết:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="o">!</span>pip <span class="nb">install</span> <span class="nt">--editable</span> ./
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>Kết quả:</p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>Installing collected packages: fairseq
+  Found existing installation: fairseq 0.10.2
+    Uninstalling fairseq-0.10.2:
+      Successfully uninstalled fairseq-0.10.2
+  Running setup.py develop for fairseq
+Successfully installed fairseq
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau đây là các bước thực hiện finetune phoBERT</p>
+
+<h2 id="dữ-liệu-huấn-luyện">Dữ liệu huấn luyện</h2>
+
+<p>Dữ liệu trong bài toán này của mình là các câu hỏi trong tập dữ liệu câu hỏi của sinh viên trường Đại học Xây dựng mà mình đang xây dựng hệ thống hỏi đáp tự động. Mỗi câu hỏi sẽ được gán nhãn tương ứng với ý định của câu hỏi. Mình sẽ sử dụng nhãn này để sinh thêm câu hỏi tương ứng với nhãn mong muốn.</p>
+
+<p>Ví dụ một câu hỏi như sau: “Cô ơi cho e hỏi về việc đăng kí và hủy môn học , môn e đăng kí vừa mới có điểm và e muốn hủy đăng kí môn đó vào kì 3 có đc không ạ” có nhãn là <code class="language-plaintext highlighter-rouge">Đăng ký môn học</code> vì người hỏi có ý định hỏi về việc đăng ký môn học.</p>
+
+<p>Dữ liệu huấn luyện sẽ cần phải được encode về dạng bpe (Byte Pair Encoding) trước khi đưa vào mô hình.</p>
+
+<h3 id="tìm-hiểu-về-mã-hóa-bpe">Tìm hiểu về mã hóa BPE</h3>
+
+<p>BPE (Byte Pair Encoding) là một kỹ thuật nén từ cơ bản giúp chúng ta index được toàn bộ các từ kể cả trường hợp từ mở (không xuất hiện trong từ điển) nhờ mã hóa các từ bằng chuỗi các từ phụ (subwords). Nguyên lý hoạt động của BPE dựa trên phân tích trực quan rằng hầu hết các từ đều có thể phân tích thành các thành phần con.</p>
+
+<p>Chẳng hạn như từ: low, lower, lowest đều là hợp thành bởi low và những đuôi phụ er, est. Những đuôi này rất thường xuyên xuất hiện ở các từ. Như vậy khi biểu diễn từ lower chúng ta có thể mã hóa chúng thành hai thành phần từ phụ (subwords) tách biệt là low và er. Theo cách biểu diễn này sẽ không phát sinh thêm một index mới cho từ lower và đồng thời tìm được mối liên hệ giữa lower, lowest và low nhờ có chung thành phần từ phụ là low.</p>
+
+<p>Phương pháp BPE sẽ thống kê tần suất xuất hiện của các từ phụ cùng nhau và tìm cách gộp chúng lại nếu tần suất xuất hiện của chúng là lớn nhất. Cứ tiếp tục quá trình gộp từ phụ cho tới khi không tồn tại các subword để gộp nữa, ta sẽ thu được tập subwords cho toàn bộ bộ văn bản mà mọi từ đều có thể biểu diễn được thông qua subwords.</p>
+
+<p>Code của thuật toán BPE đã được tác giả chia sẻ tại subword-nmt.</p>
+
+<p>Qúa trình này gồm các bước như sau:</p>
+
+<p>Bước 1: Khởi tạo từ điển (vocabulary).</p>
+
+<p>Bước 2: Biểu diễn mỗi từ trong bộ văn bản bằng kết hợp của các ký tự với token &lt;\w&gt; ở cuối cùng đánh dấu kết thúc một từ (lý do thêm token sẽ được giải thích bên dưới).</p>
+
+<p>Bước 3: Thống kê tần suất xuất hiện theo cặp của toàn bộ token trong từ điển.</p>
+
+<p>Bước 4: Gộp các cặp có tần suất xuất hiện lớn nhất để tạo thành một n-gram theo level character mới cho từ điển.</p>
+
+<p>Bước 5: Lặp lại bước 3 và bước 4 cho tới khi số bước triển khai merge đạt đỉnh hoặc kích thước kỳ vọng của từ điển đạt được.</p>
+
+<p>(theo https://phamdinhkhanh.github.io/2020/06/04/PhoBERT_Fairseq.html)</p>
+
+<h3 id="bpe-tokenize-trong-bert">BPE tokenize trong BERT</h3>
+
+<p>Để thực hiện tokenize, chúng ta làm như sau:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">fairseq.data.encoders.fastbpe</span> <span class="kn">import</span> <span class="n">fastBPE</span>
+
+<span class="c1"># Khởi tạo Byte Pair Encoding cho PhoBERT
+</span><span class="k">class</span> <span class="nc">BPE</span><span class="p">():</span>
+  <span class="n">bpe_codes</span> <span class="o">=</span> <span class="s">'PhoBERT_base_fairseq/bpe.codes'</span>
+
+<span class="n">args</span> <span class="o">=</span> <span class="n">BPE</span><span class="p">()</span>
+<span class="n">phoBERT</span><span class="p">.</span><span class="n">bpe</span> <span class="o">=</span> <span class="n">fastBPE</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="c1">#Incorporate the BPE encoder into PhoBERT
+</span><span class="n">tokens</span> <span class="o">=</span> <span class="n">phoBERT</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'Hello world!'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'tokens list : '</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span>
+<span class="c1"># Decode ngược lại thành câu từ chuỗi index token
+</span><span class="n">phoBERT</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>  <span class="c1"># 'Hello world!'
+</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Kết quả</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>tokens list :  tensor([    0, 11623, 31433, 1232, 2])
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>Hello world!
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="các-bước-thực-hiện">Các bước thực hiện</h1>
+
+<h2 id="khai-báo-các-hàm-tiền-xử-lý-văn-bản-tiếng-việt">Khai báo các hàm tiền xử lý văn bản tiếng việt</h2>
+
+<p>Chúng ta sẽ sử dụng thư viện vncorenlp để tiến hành tách từ tiếng việt và sử dụng từ điển các từ dừng để loại bỏ các stopword.</p>
+
+<h3 id="download-thư-viện-tách-từ">Download thư viện tách từ</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="o">!</span><span class="nb">mkdir</span> <span class="nt">-p</span> vncorenlp/models/wordsegmenter
+<span class="o">!</span>wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/VnCoreNLP-1.1.1.jar
+<span class="o">!</span>wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab
+<span class="o">!</span>wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/wordsegmenter.rdr
+<span class="o">!</span><span class="nb">mv </span>VnCoreNLP-1.1.1.jar vncorenlp/
+<span class="o">!</span><span class="nb">mv </span>vi-vocab vncorenlp/models/wordsegmenter/
+<span class="o">!</span><span class="nb">mv </span>wordsegmenter.rdr vncorenlp/models/wordsegmenter/
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="khai-báo-thư-viện-tách-từ">Khai báo thư viện tách từ</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="n">filename</span> <span class="o">=</span> <span class="s">'/đường_dẫn/đến/stopwords.csv'</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">)</span>
+<span class="n">list_stopwords</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'stopwords'</span><span class="p">]</span>
+<span class="k">def</span> <span class="nf">remove_stopword</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">pre_text</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">list_stopwords</span><span class="p">:</span>
+            <span class="n">pre_text</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="n">text2</span> <span class="o">=</span> <span class="s">' '</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">pre_text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text2</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Các bạn thay <code class="language-plaintext highlighter-rouge">filename</code> bằng tên đường dẫn file chứa các stopword.</p>
+
+<h3 id="tiền-xử-lý-văn-bản">Tiền xử lý văn bản</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="k">def</span> <span class="nf">clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="s">'&lt;.*?&gt;'</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="n">text</span><span class="p">).</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="s">'(\s)+'</span><span class="p">,</span> <span class="sa">r</span><span class="s">'\1'</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span> <span class="nf">remove_numbers</span><span class="p">(</span><span class="n">text_in</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">text_in</span><span class="p">.</span><span class="n">split</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">ele</span><span class="p">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="n">text_in</span> <span class="o">=</span> <span class="n">text_in</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="s">"@"</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">character</span> <span class="ow">in</span> <span class="n">text_in</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">character</span><span class="p">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="n">text_in</span> <span class="o">=</span> <span class="n">text_in</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="n">character</span><span class="p">,</span> <span class="s">"@"</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">text_in</span>
+
+
+<span class="k">def</span> <span class="nf">remove_special_characters</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+  <span class="n">chars</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">escape</span><span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">punctuation</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">re</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s">'['</span><span class="o">+</span><span class="n">chars</span><span class="o">+</span><span class="s">']'</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">word_segment</span><span class="p">(</span><span class="n">sent</span><span class="p">):</span>
+  <span class="n">sent</span> <span class="o">=</span> <span class="s">" "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">rdrsegmenter</span><span class="p">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">sent</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="s">" "</span><span class="p">).</span><span class="n">lower</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
+  <span class="k">return</span> <span class="n">sent</span>
+
+
+<span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">text_in</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">clean_text</span><span class="p">(</span><span class="n">text_in</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">remove_special_characters</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">remove_numbers</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">word_segment</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="đọc-dữ-liệu">Đọc dữ liệu:</h2>
+
+<p>Sau khi khai báo các hàm tiền xử lý, chúng ta sẽ tiến hành đọc dữ liệu từ file:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">qa_data_path</span> <span class="o">=</span> <span class="s">'/content/drive/MyDrive/NUCE/NLP/QA/intent_db_v2.json'</span>
+
+<span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">traindata</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">qa_data_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+        <span class="n">qa_data</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">qa_data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s">'content'</span> <span class="ow">in</span> <span class="n">question</span> <span class="p">:</span>
+              <span class="n">content</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">question</span><span class="p">[</span><span class="s">'content'</span><span class="p">])</span>
+              <span class="n">traindata</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">content</span><span class="p">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Dataset loaded"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">qa_data</span>
+<span class="n">train_data</span><span class="p">,</span> <span class="n">qa_data</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">wiki_data_path</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="chuẩn-hóa-dữ-liệu">Chuẩn hóa dữ liệu</h2>
+
+<p>Để tạo ra các câu với class tương ứng, dữ liệu huấn luyện sẽ có dạng như sau:</p>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;s&gt; CLASS_NAME &lt;/s&gt; content &lt;/s&gt;</code></p>
+
+<p>Lý do vì sao sử dụng phương pháp này, các bạn có thể đọc thêm paper <a href="https://arxiv.org/pdf/2004.01881.pdf">CG-BERT: Conditional Text Generation with BERT for Generalized Few-shot Intent Detection</a>:</p>
+
+<p><img src="/assets/img/blog/05/dataaugument.png" alt="Data" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">json</span>
+<span class="n">sents_output</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">intents_output</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">qa_data</span><span class="p">:</span>
+<span class="k">if</span> <span class="s">'content'</span> <span class="ow">in</span> <span class="n">question</span> <span class="ow">and</span> <span class="s">'intent'</span> <span class="ow">in</span> <span class="n">question</span><span class="p">:</span>
+  <span class="n">sents_output</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"&lt;s&gt; "</span> <span class="o">+</span> <span class="n">question</span><span class="p">[</span><span class="s">'intent'</span><span class="p">]</span> <span class="o">+</span> <span class="s">" &lt;/s&gt; "</span> <span class="o">+</span>  <span class="n">preprocess</span><span class="p">(</span><span class="n">question</span><span class="p">[</span><span class="s">'content'</span><span class="p">]).</span><span class="n">replace</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="s">" "</span><span class="p">)</span>  <span class="o">+</span> <span class="s">" &lt;/s&gt;"</span><span class="p">)</span>
+  <span class="n">intents_output</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">question</span><span class="p">[</span><span class="s">'intent'</span><span class="p">])</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">sents_output</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Kết quả sau khi chuẩn hóa sẽ là:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre> ['&lt;s&gt; DIEM &lt;/s&gt; cho em hỏi em có_thể chuyển_đổi kết_quả @ môn_học cùng tên nhưng khác mã được không ạ &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; em mới làm đơn phúc_khảo gần đây ạ mà @ @ ngày rồi thấy mãi điểm chưa thay_đổi em có_thể xin phép đc xem bài thi của mình đc k ạ nếu em thực_sự sai em chỉ muốn xem_lại bài thi của mình &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; cho em hỏi là làm_sao để biết kết_quả điểm phúc_khảo môn_học sau khi đã làm đơn phúc_khảo ạ &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; thưa thầy muốn phúc_khảo điểm môn_học thì làm thế_nào ạ &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; thầy_cô cho em hỏi là còn thời_gian phúc_tra điểm của kì học vừa_rồi không ạ vì dịch_bệnh không lên trường được nên em đã không phúc_tra được bài ạ &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; cho em hỏi là muốn phúc_tra điểm thì làm thế_nào ạ &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; cho em hỏi là thời_hạn phúc_khảo môn_học là bao_giờ ạ em cần làm đơn hay liên_hệ với ai để tiến_hành phúc_tra được ạ &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; mong thầy_cô xem giúp e điểm trên trang đao tạo với ạ hiện_tại điểm đồ_án tốt_nghiệp của e đã được cập_nhật lên nhưng có_lẽ do lỗi mà chưa được cộng tổng điểm trung_bình tích_luỹ và số tín_chỉ của đồ_án tốt_nghiệp &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; em có thắc_mắc muốn hỏi là @ tín_đồ án tốt_nghiệp đatn có tính vào số tín_chỉ tích_luỹ hay không\xa0lí do vì em thấy trên trang đào_tạo sau khi đã up điểm đatn của em lên lại không thấy tính @ tín_chỉ này vào số tính chỉ tích_luỹ ảnh chụp kèm theo là điểm của em &lt;/s&gt;',
+  '&lt;s&gt; DIEM &lt;/s&gt; dạ em chào thầy_cô thưa thầy_cô là điểm của em trên trang đào_tạo thầy vào điểm sai cho em và em đã hỏi thầy thầy có nói đã sửa lại điểm thế nên cho em hỏi bao_giờ đào_tạo cập_nhật lại điểm ạ e xin cảm_ơn thầy_cô ạ &lt;/s&gt;']
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Ở đây mình sử dụng token <code class="language-plaintext highlighter-rouge">&lt;s&gt;</code> như là token bắt đầu của câu, <code class="language-plaintext highlighter-rouge">&lt;/s&gt;</code> là token phân cách câu.</p>
+
+<h2 id="phân-chia-dữ-liệu-huấn-luyện">Phân chia dữ liệu huấn luyện</h2>
+
+<p>Mình tiến hành phân chia dữ liệu thành 3 tập train, test và valid. Vì dữ liệu hơi ít nên mình sẽ để tập test và valid mỗi tập 50 điểm dữ liệu</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">random</span><span class="p">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">sents_output</span><span class="p">)</span>
+
+<span class="n">valid_data</span> <span class="o">=</span> <span class="n">sents_output</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">sents_output</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">sents_output</span><span class="p">[</span><span class="mi">100</span><span class="p">:]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="mã-hóa-dữ-liệu-huấn-luyện-theo-bpe">Mã hóa dữ liệu huấn luyện theo bpe</h2>
+
+<p>Dữ liệu huấn luyện cần được mã hóa thành các token bpe để có thể sử dụng cho các language model. Nếu bạn nào làm nhiều với NLP chắc hẳn đã quen với phương pháp này.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre>
+<span class="k">def</span> <span class="nf">encode_bpe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+  <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">target_dir</span> <span class="o">+</span> <span class="s">"finetune."</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">".bpe"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="n">bpe_enc</span> <span class="o">=</span> <span class="s">""</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="n">phoBERT</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
+      <span class="n">bpe_enc</span> <span class="o">=</span> <span class="n">bpe_enc</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">token</span><span class="p">.</span><span class="n">item</span><span class="p">())</span> <span class="o">+</span> <span class="s">" "</span>
+    <span class="n">bpe_enc</span> <span class="o">=</span> <span class="n">bpe_enc</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+    <span class="n">f</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">bpe_enc</span><span class="p">)</span>
+
+  <span class="n">f</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi mã hóa bpe, dữ liệu sẽ được lưu vào thư mục được chỉ định trong <code class="language-plaintext highlighter-rouge">target_dir</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="n">save_path</span> <span class="o">=</span> <span class="s">"fintune_data"</span>
+<span class="n">encode_bpe</span><span class="p">(</span><span class="n">valid_data</span><span class="p">,</span> <span class="s">"valid"</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+<span class="n">encode_bpe</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="s">"test"</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+<span class="n">encode_bpe</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="s">"train"</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="đưa-dữ-liệu-vào-pha-tiền-xử-lý-để-tạo-đầu-vào-cho-bert">Đưa dữ liệu vào pha tiền xử lý để tạo đầu vào cho BERT</h2>
+
+<p>Ở đây chúng ta sẽ thực hiện thông qua thư viện qua command line như sau:</p>
+
+<p>(các bạn nhớ thay <code class="language-plaintext highlighter-rouge">/path/to/save_path</code> thành đường dẫn lưu các file bpe trong bước trên)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="o">!</span> fairseq-preprocess <span class="nt">--only-source</span>   <span class="nt">--srcdict</span> /path/to/save_path <span class="nt">--workers</span> 60
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Bước này xử lý khá nhanh, chỉ vài giây là xong do tập dữ liệu của mình hơi ít. Sau khi chạy xong, dữ liệu sẽ được lưu vào thư mục</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>2021-05-08 15:37:31 | INFO | fairseq_cli.preprocess | Namespace(align_suffix=None, alignfile=None, all_gather_list_size=16384, azureml_logging=False, bf16=False, bpe=None, cpu=False, criterion='cross_entropy', dataset_impl='mmap', destdir='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/data-bin/finetune_data', empty_cache_freq=0, fp16=False, fp16_init_scale=128, fp16_no_flatten_grads=False, fp16_scale_tolerance=0.0, fp16_scale_window=None, joined_dictionary=False, log_file=None, log_format=None, log_interval=100, lr_scheduler='fixed', memory_efficient_bf16=False, memory_efficient_fp16=False, min_loss_scale=0.0001, model_parallel_size=1, no_progress_bar=False, nwordssrc=-1, nwordstgt=-1, only_source=True, optimizer=None, padding_factor=8, plasma_path='/tmp/plasma', profile=False, quantization_config_path=None, reset_logging=False, scoring='bleu', seed=1, source_lang=None, srcdict='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/PhoBERT_base_fairseq/dict.txt', suppress_crashes=False, target_lang=None, task='translation', tensorboard_logdir=None, testpref='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.test.bpe', tgtdict=None, threshold_loss_scale=None, thresholdsrc=0, thresholdtgt=0, tokenizer=None, tpu=False, trainpref='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.train.bpe', use_plasma_view=False, user_dir=None, validpref='/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.valid.bpe', wandb_project=None, workers=60)
+2021-05-08 15:37:32 | INFO | fairseq_cli.preprocess | [None] Dictionary: 64000 types
+2021-05-08 15:37:40 | INFO | fairseq_cli.preprocess | [None] /content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.train.bpe: 2769 sents, 173535 tokens, 54.6% replaced by &lt;unk&gt;
+2021-05-08 15:37:40 | INFO | fairseq_cli.preprocess | [None] Dictionary: 64000 types
+2021-05-08 15:37:45 | INFO | fairseq_cli.preprocess | [None] /content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.valid.bpe: 50 sents, 2951 tokens, 58.1% replaced by &lt;unk&gt;
+2021-05-08 15:37:45 | INFO | fairseq_cli.preprocess | [None] Dictionary: 64000 types
+2021-05-08 15:37:51 | INFO | fairseq_cli.preprocess | [None] /content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/fintune_data/finetune.test.bpe: 50 sents, 3150 tokens, 53.1% replaced by &lt;unk&gt;
+2021-05-08 15:37:51 | INFO | fairseq_cli.preprocess | Wrote preprocessed data to /content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/data-bin/finetune_data
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="mã-hóa-dataset-thành-file-binary-để-huấn-luyện-model">Mã hóa dataset thành file binary để huấn luyện model</h3>
+
+<p>Sau khi thực hiện preprocess, chúng ta cần chuyển data sang dạng binary theo yêu cầu của thư viện:
+Trong bước này sẽ yêu cầu các bạn cung cấp file từ điển <code class="language-plaintext highlighter-rouge">dict.txt</code> được cho kèm theo phoBERT</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="o">!</span> fairseq-preprocess <span class="nt">--only-source</span>   <span class="nt">--srcdict</span> PhoBERT_base_fairseq/dict.txt <span class="nt">--trainpref</span> data-bin/fintune_data/finetune.train.bpe  <span class="nt">--validpref</span> finetune.valid.bpe  <span class="nt">--testpref</span> data-bin/finetune_data/finetune.test.bpe <span class="nt">--workers</span> 60
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Sau khi xây dựng được tập dữ liệu huấn luyện, bước cuối cùng đó là thực hiện fine-tune thôi nào.</p>
+
+<h2 id="tiến-hành-fine-tune">Tiến hành fine-tune</h2>
+
+<p>Chúng ta chạy lệnh sau:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre><span class="o">!</span>fairseq-train <span class="nt">--fp16</span> data-bin/finetune_data <span class="se">\</span>
+ <span class="nt">--task</span> masked_lm <span class="nt">--lr</span> 2e-05 <span class="nt">--criterion</span> masked_lm <span class="se">\</span>
+<span class="nt">--arch</span> roberta_base <span class="nt">--sample-break-mode</span> <span class="nb">complete</span> <span class="se">\</span>
+<span class="nt">--tokens-per-sample</span> 256 <span class="nt">--optimizer</span> adam <span class="nt">--adam-betas</span> <span class="s1">'(0.9,0.98)'</span> <span class="se">\</span>
+<span class="nt">--adam-eps</span> 1e-6 <span class="nt">--clip-norm</span> 0.0 <span class="se">\</span>
+<span class="nt">--lr-scheduler</span> polynomial_decay <span class="se">\</span>
+<span class="nt">--warmup-updates</span> 10000 <span class="nt">--total-num-update</span> 12000  <span class="se">\</span>
+<span class="nt">--dropout</span> 0.1 <span class="nt">--attention-dropout</span> 0.1 <span class="nt">--weight-decay</span> 0.01   <span class="se">\</span>
+<span class="nt">--batch-size</span> 20 <span class="nt">--update-freq</span> 1  <span class="nt">--log-format</span> simple <span class="se">\</span>
+<span class="nt">--log-interval</span> 1  <span class="nt">--reset-optimizer</span> <span class="nt">--reset-dataloader</span> <span class="se">\</span>
+<span class="nt">--reset-meters</span>  <span class="nt">--sample-break-mode</span> <span class="nb">complete</span> <span class="se">\</span>
+<span class="nt">--restore-file</span> PhoBERT_base_fairseq/model.pt  <span class="se">\</span>
+<span class="nt">--skip-invalid-size-inputs-valid-test</span>  <span class="se">\</span>
+<span class="nt">--max-epoch</span> 500 <span class="nt">--no-epoch-checkpoints</span> <span class="se">\</span>
+<span class="nt">--no-last-checkpoints</span> <span class="nt">--no-save-optimizer-state</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Mình sẽ huấn luyện thông qua 500 epochs, có sử dụng learning rate scheduler và khởi tạo ban đầu lr lớn 2e-05.</p>
+
+<p>Trong câu lệnh trên chúng ta sẽ đưa vào pretrain của phoBERT bởi tham số <code class="language-plaintext highlighter-rouge">--restore-file</code></p>
+
+<p>Trong quá trình huấn luyện mình sẽ lưu lại các checkpoint có loss thấp nhất để sử dụng về sau. Sau khi huấn luyện, kết quả tốt nhất của mô hình sẽ được lưu vào file `checkpoint_best.pt’</p>
+
+<p>Quá trình huấn luyện khá lâu, mình khuyên các bạn nếu máy tính không có GPU thì nên sử dụng google colab có GPU để đỡ mất công chờ đợi.</p>
+
+<h2 id="sinh-văn-bản-bằng-phobert-đã-fine-tune">Sinh văn bản bằng phoBERT đã fine-tune</h2>
+
+<p>Trong bài toán này chúng ta sẽ sinh ra các câu mới bằng cách điền các từ hợp lý vào các vị trí còn trống của câu.</p>
+
+<p>Mô hình BERT tạo ra các biểu diễn từ từ quá trình ẩn các vị trí token một cách ngẫu nhiên trong câu input và dự báo chính chính từ đó ở output dựa trên bối cảnh là các từ xung quanh.</p>
+
+<p>Như vậy khi đã biết các từ xung quanh, chúng ta hoàn toàn có thể dự báo được từ phù hợp nhất với vị trí đã được masking.</p>
+
+<p>Ý tưởng của việc sinh văn bản đó là mình sẽ tiến hành che lần lượt các từ trong câu và tìm ra các từ bị che, sau đó ghép lại các tử bị che thành câu mới.</p>
+
+<p>Các bước thực hiện như sau:</p>
+
+<h3 id="load-lại-model-với-weight-mới">Load lại model với weight mới</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="c1"># Load the model in fairseq
+</span><span class="kn">from</span> <span class="nn">fairseq.data.encoders.fastbpe</span> <span class="kn">import</span> <span class="n">fastBPE</span>
+<span class="kn">from</span> <span class="nn">fairseq.models.roberta</span> <span class="kn">import</span> <span class="n">RobertaModel</span>
+<span class="n">phoBERT</span> <span class="o">=</span> <span class="n">RobertaModel</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s">'/path/to/checkpoints'</span><span class="p">,</span> <span class="n">checkpoint_file</span><span class="o">=</span><span class="s">"checkpoint_best.pt"</span><span class="p">)</span>
+
+<span class="c1"># Khởi tạo Byte Pair Encoding cho PhoBERT
+</span><span class="k">class</span> <span class="nc">BPE</span><span class="p">():</span>
+  <span class="n">bpe_codes</span> <span class="o">=</span> <span class="s">'/content/drive/MyDrive/NUCE/NLP/QA/BERT/fairseq/checkpoints/bpe.codes'</span>
+
+<span class="n">args</span> <span class="o">=</span> <span class="n">BPE</span><span class="p">()</span>
+<span class="n">phoBERT</span><span class="p">.</span><span class="n">bpe</span> <span class="o">=</span> <span class="n">fastBPE</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="c1">#Incorporate the BPE encoder into PhoBERT
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Thực hiện sinh văn bản mới</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">seed</span> <span class="o">=</span> <span class="s">"Cho em hỏi bao giờ thì có bằng tốt nghiệp ạ"</span>
+<span class="n">intent</span> <span class="o">=</span> <span class="s">"TN"</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">seed</span><span class="p">).</span><span class="n">split</span><span class="p">()</span>
+
+<span class="n">seed</span> <span class="o">=</span> <span class="s">" "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+
+<span class="n">gen_sentence</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">)):</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">"&lt;mask&gt;"</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="s">"&lt;s&gt;'+intent+'&lt;/s&gt; "</span> <span class="o">+</span> <span class="s">' '</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">+</span> <span class="s">"&lt;/s&gt;"</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">topk_filled_outputs</span> <span class="o">=</span> <span class="n">phoBERT</span><span class="p">.</span><span class="n">fill_mask</span><span class="p">(</span><span class="n">mask</span> <span class="p">,</span> <span class="n">topk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+    <span class="n">gen_sentence</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">topk_filled_outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">gen_sentence</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Kết quả in ra sẽ là:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>Xin tôi hỏi khi_nào sẽ có giấy_chứng_nhận tốt_nghiệp
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Như vậy là câu được sinh ra khá là giống với câu seed, ngoài ra <code class="language-plaintext highlighter-rouge">&lt;mask&gt;</code> thay vì dịch từ trái qua phải, các bạn cũng có thể thử dịch từ phải qua trái.</p>
+
+<h1 id="tổng-kết">Tổng kết</h1>
+
+<p>Như vậy trong bài này mình đã hướng dẫn các bạn cách finetune lại model phoBERT và thực hiện dùng model sau khi fine-tune để sinh văn bản mới. Kỹ thuật này có thể được sử dụng trong việc tạo thêm dữ liệu trong các bài toán xử lý ngôn ngữ tự nhiên để tăng thêm độ chính xác cho mô hình.</p>
+
+<p>Hi vọng bài này giúp ích được cho mọi người!</p>
+
+<h1 id="tài-liệu-tham-khảo">Tài liệu tham khảo</h1>
+
+<ul>
+  <li>
+    <p>https://arxiv.org/pdf/2004.01881.pdf</p>
+  </li>
+  <li>
+    <p>https://phamdinhkhanh.github.io/2020/06/04/PhoBERT_Fairseq.html</p>
+  </li>
+  <li>
+    <p>https://viblo.asia/p/bert-roberta-phobert-bertweet-ung-dung-state-of-the-art-pre-trained-model-cho-bai-toan-phan-loai-van-ban-4P856PEWZY3</p>
+  </li>
+  <li>
+    <p>https://medium.com/intel-student-ambassadors/natural-language-generation-using-bert-df6d863c3f52</p>
+  </li>
+</ul>
+:ET
