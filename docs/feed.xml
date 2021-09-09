@@ -4,7 +4,7 @@
   <id>https://ndquy.github.io/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning, khai phá dữ liệu, kỹ thuật lập trình.</subtitle>
-  <updated>2021-09-09T16:46:41+08:00</updated>
+  <updated>2021-09-09T16:55:25+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>https://ndquy.github.io/</uri>
@@ -58,7 +58,7 @@
     <link href="https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/" rel="alternate" type="text/html" title="15. Thuật toán phân cụm K-Means" />
     <published>2021-09-09T11:47:00+08:00</published>
   
-    <updated>2021-09-09T16:44:59+08:00</updated>
+    <updated>2021-09-09T16:52:10+08:00</updated>
   
     <id>https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/</id>
     <content src="https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/" />

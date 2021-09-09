@@ -38,7 +38,7 @@
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"description":"Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{\\{x_1, x_2, …, x_N\\}; \\{y_1, y_2,…, y_N\\}\\}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{x_1, x_2, …, x_N\\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.","url":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/","headline":"Thuật toán phân cụm K-Means","datePublished":"2021-09-09T11:47:00+08:00","dateModified":"2021-09-09T16:44:59+08:00","author":{"@type":"Person","name":"Quy Nguyen"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/"},"@context":"https://schema.org"}</script>
+{"description":"Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng. Nhắc lại về học có giám sát và không giám sát Học có giám sát Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{\\{x_1, x_2, …, x_N\\}; \\{y_1, y_2,…, y_N\\}\\}$ sao cho $y_i ≅ f(x_i )$ với mọi i. Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng. Học không giám sát Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\\{x_1, x_2, …, x_N\\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn. Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.","url":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/","headline":"Thuật toán phân cụm K-Means","datePublished":"2021-09-09T11:47:00+08:00","dateModified":"2021-09-09T16:52:10+08:00","author":{"@type":"Person","name":"Quy Nguyen"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -606,7 +606,7 @@
   
     data-toggle="tooltip"
     data-placement="bottom"
-    title="Thu, Sep  9, 2021,  3:44 PM +0700"
+    title="Thu, Sep  9, 2021,  3:52 PM +0700"
   
 
   prefix="Updated "
@@ -619,7 +619,7 @@
     Sep  9
   
 
-  <i class="unloaded">2021-09-09T16:44:59+08:00</i>
+  <i class="unloaded">2021-09-09T16:52:10+08:00</i>
 
 </span>
 
@@ -692,7 +692,7 @@ Nói cách khác mỗi loại khách hàng sẽ có những đặc điểm chung
   <li><strong>Trong một cụm thì các điểm dữ liệu thuộc về cụm đó phải giống nhau</strong> theo một ý nghĩa, việc xác định <em>thế nào là giống nhau</em> quyết định đầu ra của thuật toán này. Ví dụ như để xác định những khách hàng thuộc cùng một nhóm thì trước tiên ta cần phải xác định định nghĩa <em>thế nào là giống nhau</em>?<br />
 Hai khách hàng tương đồng có thể được xem xét dựa trên các tiêu chí khác nhau, có thể dựa trên số lần mua hàng, số tiền mua hàng, hay giới tính, độ tuổi…</li>
   <li><strong>Hai cụm dữ liệu là khác nhau</strong>: Điều này là cần thiết vì khi phân cụm các cụm phải là tách biệt nhau hoàn toàn, không có sự chồng lấp 2 cụm dữ liệu với nhau.<br />
-<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/blog/clusters.png" alt="Mục tiêu bài toán phân cụm" /></li>
+<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/blog/clusters.jpg" alt="Mục tiêu bài toán phân cụm" /></li>
 </ul>
 
 <h2 id="một-số-phương-pháp-phân-cụm-phổ-biến">Một số phương pháp phân cụm phổ biến</h2>

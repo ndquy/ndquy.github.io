@@ -1,0 +1,351 @@
+I"~<p>Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.</p>
+<h1 id="nhắc-lại-về-học-có-giám-sát-và-không-giám-sát">Nhắc lại về học có giám sát và không giám sát</h1>
+<h2 id="học-có-giám-sát">Học có giám sát</h2>
+<p>Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{\{x_1, x_2, …, x_N\}; \{y_1, y_2,…, y_N\}\}$ sao cho $y_i ≅ f(x_i )$ với mọi i.<br />
+Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng.</p>
+<h2 id="học-không-giám-sát">Học không giám sát</h2>
+<p>Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm $\{x_1, x_2, …, x_N\}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn.<br />
+Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.</p>
+
+<h1 id="ví-dụ-về-học-không-giám-sát">Ví dụ về học không giám sát</h1>
+
+<p>Học không giám sát nhằm phân dữ liệu thành một số cụm cho trước. <br />
+Ví dụ phổ biến cho thuật toán này đó là việc phân loại khách hàng. <br />
+Giả sử ta có một tập dữ liệu mua hàng của các khách hàng, ta có thể đưa dữ liệu này vào thuật toán phân cụm để tiến hành phân loại khách hàng. <br />
+Các khách hàng có những đặc điểm tương đồng về mặt thông tin hoặc dựa trên lịch sử mua hàng, hành vi mua hàng có thể phân thành các loại khách hàng khác nhau.<br />
+Nói cách khác mỗi loại khách hàng sẽ có những đặc điểm chung giống nhau, và những đặc điểm đó được phát hiện thông qua thuật toán phân cụm mà chúng ta sẽ nghiên cứu ngay sau đây.<br />
+<img src="/assets/img/blog/k-means-example.png" alt="Ví dụ về K-Means" /><br />
+<em>Ví dụ về K-means</em></p>
+
+<p>Ngoài ra có một ví dụ khác mà chúng ta cũng hay bắt gặp, đó là các mạng xã hội luôn tìm cách phân cụm những người có cùng sở thích, thói quen để đưa ra những gợi ý kết bạn hay tham gia một nhóm nào đó.<br />
+Để xác định được những người có các điểm tương đồng trong mạng xã hội ta cần một thuật toán phân cụm.</p>
+
+<h1 id="bài-toán-phân-cụm">Bài toán phân cụm</h1>
+<p>Chúng ta sẽ xem xét lần lượt các nội dung liên quan đến bài toán phân cụm.</p>
+<h2 id="khái-quát-bài-toán-phân-cụm">Khái quát bài toán phân cụm:</h2>
+<ul>
+  <li><strong>Đầu vào</strong>: Tập dữ liệu không có nhãn</li>
+  <li><strong>Đầu ra</strong>: Các cụm dữ liệu đã được phân chia</li>
+</ul>
+
+<p>Như vậy mục tiêu của bài toán phân cụm là những cụm dữ liệu được phân chia bởi thuật toán. Chúng ta cùng xem xét đặc điểm của một cụm.</p>
+<h2 id="một-cụm">Một cụm</h2>
+
+<ul>
+  <li><strong>Trong một cụm thì các điểm dữ liệu thuộc về cụm đó phải giống nhau</strong> theo một ý nghĩa, việc xác định <em>thế nào là giống nhau</em> quyết định đầu ra của thuật toán này. Ví dụ như để xác định những khách hàng thuộc cùng một nhóm thì trước tiên ta cần phải xác định định nghĩa <em>thế nào là giống nhau</em>?<br />
+Hai khách hàng tương đồng có thể được xem xét dựa trên các tiêu chí khác nhau, có thể dựa trên số lần mua hàng, số tiền mua hàng, hay giới tính, độ tuổi…</li>
+  <li><strong>Hai cụm dữ liệu là khác nhau</strong>: Điều này là cần thiết vì khi phân cụm các cụm phải là tách biệt nhau hoàn toàn, không có sự chồng lấp 2 cụm dữ liệu với nhau.<br />
+<img src="/assets/img/blog/clusters.jpg" alt="Mục tiêu bài toán phân cụm" /></li>
+</ul>
+
+<h2 id="một-số-phương-pháp-phân-cụm-phổ-biến">Một số phương pháp phân cụm phổ biến</h2>
+
+<ul>
+  <li><strong>Phân cụm dựa trên phân vùng</strong> (Partition-based clustering): Đây là phương pháp phổ biến và được sử dụng nhiều trong các bài toán phân cụm. Mục tiêu là phân dữ liệu thành các phân vùng khác nhau.</li>
+  <li><strong>Phân cụm thứ bậc</strong> (Hierarchical clustering): Ngoài việc phân thành các cụm lớn, phương pháp này còn phân các cụm lớn thành những cụm nhỏ hơn dưới dạng thứ bậc.</li>
+  <li>Mô hình hỗn hợp (Mixture models)</li>
+  <li>Phân cụm sâu (Deep clustering): Sử dụng mạng nơ-ron học sâu để phân cụm.</li>
+</ul>
+
+<h2 id="đánh-giá-chất-lượng-mô-hình-phân-cụm">Đánh giá chất lượng mô hình phân cụm</h2>
+
+<p>Để đánh giá chất lượng mô hình phân cụm ta có thể đánh giá thông qua một số phương pháp như sau:</p>
+
+<ul>
+  <li>Khoảng cách / sự khác biệt giữa hai cụm bất kỳ phải lớn. (khoảng cách giữa các cụm): Giữa các cụm phải được tách biệt nhau hoàn toàn và sự khác biệt giữa 2 cụm phải đủ lớn để phân biệt 2 cụm với nhau.</li>
+  <li>Chênh lệch giữa các điểm dữ liệu bên trong một cụm phải nhỏ. Chênh lệch ở đây thể hiện sự khác biệt với nhau về mặt  tương đồng giữa 2 dữ liệu theo tiêu chí phân cụm.</li>
+</ul>
+
+<h1 id="thuật-toán-phân-cụm-k-means">Thuật toán phân cụm K-means</h1>
+
+<p>Thuật toán phân cụm K-means được giới thiệu năm 1957 bởi Lloyd K-means và là phương pháp phổ biến nhất cho việc phân cụm, dựa trên việc phân vùng dữ liệu <br />
+Biểu diễn dữ liệu: $D = \{x_1, x_2, …, x_r \}$, với $x_i$ là vector n chiều trong không gian Euclidean. K-means phân cụm D thành K cụm dữ liệu:</p>
+<ul>
+  <li>Mỗi cụm dữ liệu có một điểm trung tâm gọi là centroid.</li>
+  <li>K là một hằng số cho trước.</li>
+</ul>
+
+<h2 id="các-bước-trong-thuật-toán-k-means">Các bước trong thuật toán K-Means</h2>
+
+<ul>
+  <li><strong>Đầu vào</strong>: Cho tập dữ liệu D, với K là số cụm, phép đo khoảng cách giữa 2 điểm dữ liệu là d(x,y)</li>
+  <li><strong>Khởi tạo</strong>: Khởi tạo K điểm dữ liệu trong D làm các điểm trung tâm (centroid)</li>
+  <li><strong>Lặp lại</strong> các bước sau đến khi <strong>hội tụ</strong>:
+    <ul>
+      <li><strong><em>Bước 1</em></strong>: Với mỗi điểm dữ liệu, gán điểm dữ liệu đó vào cluster có khoảng cách đến điểm trung tâm của cluster là nhỏ nhất.</li>
+      <li><strong><em>Bước 2:</em></strong> Với mỗi cluster, xác định lại điểm trung tâm của tất cả các điểm dữ liệu được gán vào cluster đó.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Sau đây là một số bước dưới dạng hình ảnh:<br />
+<img src="/assets/img/blog/k-mean-step1.jpg" alt="Thuật toán k-means" /><br />
+Tại bước này thuật toán sẽ khởi tạo <strong>k</strong> điểm dữ liệu trung tâm ban đầu, sau đó qua iteration 1 để thực hiện bước 1: gán các điểm dữ liệu vào cluster và bước 2: Xác định lại điểm trung tâm.<br />
+<img src="/assets/img/blog/k-mean-step2.jpg" alt="Thuật toán k-means" /><br />
+Các vòng lặp iteration 2 và iteration 3 tiếp tục thực hiện như vậy đến khi nào thuật toán hội tụ thì dừng lại.</p>
+
+<h2 id="điều-kiện-hội-tụ-điều-kiện-dừng-thuật-toán">Điều kiện hội tụ (điều kiện dừng thuật toán)</h2>
+
+<p>Ta sẽ xác định điều kiện dừng thuật toán theo một số cách như sau:</p>
+<ul>
+  <li>Tại 1 vòng lặp: có ít các điểm dữ liệu được gán sang cluster khác hoặc</li>
+  <li>Điểm trung tâm (centroid) không thay đổi nhiều hoặc</li>
+  <li>Giá trị hàm mất mát không thay đổi nhiều:<br />
+<img src="/assets/img/blog/k-mean-loss.jpg" alt="Thuật toán k-means" /></li>
+</ul>
+
+<p>Trong đó $C_i$ là cluster thứ i, $m_i$ là điểm trung tâm của cluster $C_i$ tương ứng.</p>
+
+<p>Nhìn chung về điều kiện hội tụ có thể thấy mối liên hệ giữa các điều kiện là gần tương đồng như nhau. Khi có ít điểm dữ liệu được gán sang cluster khác có thể khiến điểm trung tâm không thay đổi nhiều và từ đó hàm mất mát cũng sẽ ít bị ảnh hưởng. Vậy nên chúng ta có thể sử dụng 1 trong 3 cách trên để xác định điều kiện dừng của thuật toán.</p>
+
+<h2 id="xác-định-điểm-trung-tâm-của-cluster">Xác định điểm trung tâm của cluster</h2>
+
+<p>Để xác định điểm trung tâm của cluster ta sử dụng công thức như sau:<br />
+<img src="/assets/img/blog/k-mean-center_calculate.jpg" alt="Thuật toán k-means" /></p>
+
+<p>Trong đó $C_i$ là cluster thứ i, $m_i$ là điểm trung tâm của cluster $C_i$ tương ứng.</p>
+
+<h2 id="phép-đo-khoảng-cách">Phép đo khoảng cách</h2>
+
+<p>Trong K-means để đánh giá mức độ giống nhau hay khoảng cách giữa 2 điểm dữ liệu ta có thể sử dụng các phép đo khoảng cách khác nhau. Ngoài khoảng cách Euclidean, tuỳ thuộc vào từng bài toán có thể sử dụng phương pháp đo khác (cosine, manhattan…)</p>
+
+<p><img src="/assets/img/blog/euclid.jpg" alt="Thuật toán k-means - Phép đo euclid" /></p>
+
+<p>Mọi phương pháp tính khoảng cách giữa 2 vector đều có thể được sử dụng. Mỗi cách tính khoảng cách thể hiện cách nhìn nhận về dữ liệu</p>
+<ul>
+  <li>Có vô số cách tính khoảng cách</li>
+  <li>Cách tính khoảng cách nào là tốt? Câu trả lời phụ thuộc vào từng bài toán để đưa ra cách tính khoảng cách phù hợp.</li>
+</ul>
+
+<h1 id="một-số-ảnh-hưởng-đến-thuật-toán-k-means">Một số ảnh hưởng đến thuật toán K-means</h1>
+<p>Chúng ta sẽ cùng nhau xem xét một số ảnh hưởng đến thuật toán K-means và phương pháp để xử lý.</p>
+<h2 id="ảnh-hưởng-của-outlier">Ảnh hưởng của outlier</h2>
+<h3 id="outlier-là-gì">Outlier là gì?</h3>
+<p>Hiểu đơn giản thì Outliers là một hoặc nhiều cá thể khác hẳn đối với các thành viên còn lại của nhóm. Sự khác biệt này có thể dựa trên nhiều tiêu chí khác nhau như giá trị hay thuộc tính. Ví dụ về outlier có thể như là nhiễu trong các cảm biến hay lỗi trong quá trình nhập liệu của người dùng ảnh hưởng đến chất lượng của dữ liệu.</p>
+<h3 id="xem-xét-ảnh-hường">Xem xét ảnh hường</h3>
+<p>K-means nhạy cảm với các điểm outlier, ví dụ: Các điểm dữ liệu outlier ảnh hưởng lớn đến kết quả của việc phân cụm:</p>
+<ul>
+  <li>Các điểm dữ liệu outlier có khoảng cách đến các điểm dữ liệu chuẩn rất lớn.</li>
+  <li>Phân bố của các điểm outliner rất khác so với các điểm dữ liệu chuẩn</li>
+  <li>Nhiễu hoặc lỗi của dữ liệu được thể hiện trong các điểm outlier</li>
+</ul>
+
+<p><img src="/assets/img/blog/oulier.jpg" alt="Thuật toán k-means - Ví dụ về oulier" /></p>
+
+<h3 id="khắc-phục-outlier">Khắc phục outlier</h3>
+
+<ul>
+  <li><strong>Outlier removal</strong>: Có thể loại bỏ các điểm dữ liệu xa đáng kể so với điểm trung tâm (centroid) của các cluster so với các điểm dữ liệu khác.  Việc loại bỏ có thể được thực hiện trước hoặc trong khi phân cụm.</li>
+  <li><strong>Random sampling</strong>: Thay vì phân cụm toàn bộ tập dữ liệu, chúng ta sẽ lấy ngẫu nhiên tập con S từ tập dữ liệu huấn luyện. S được sử dụng để phân cụm, tập S lúc này sẽ có ít các điểm outlier hơn tập dữ liệu gốc. Sau khi phân cụm xong, tập dữ liệu còn lại sẽ được gán vào các cụm đã học được</li>
+</ul>
+
+<h2 id="ảnh-hưởng-của-việc-khởi-tạo-trung-tâm">Ảnh hưởng của việc khởi tạo trung tâm</h2>
+
+<p>Chất lượng của K-means phụ thuộc vào việc khởi tạo các điểm centroid<br />
+<img src="/assets/img/blog/k-mean-problem1.jpg" alt="Thuật toán k-means " /></p>
+
+<p><strong>Giải pháp 1</strong>: Lặp lại nhiều lần thuật toán K-means:</p>
+<ul>
+  <li>Mỗi lần chạy lại thuật toán K-means sẽ khởi tạo các điểm centroid khác nhau</li>
+  <li>Sau quá trình học, tiến hành gộp các kết quả từ các lần chạy thành kết quả cuối cùng</li>
+</ul>
+
+<p><strong>Giải pháp 2</strong>: Thuật toán K-means++ : Để tìm ra cụm tốt nhất, chúng ta có thể lần lượt khởi tại các điểm trung tâm từ tập D tuần tự như sau:</p>
+<ul>
+  <li>Lấy ngẫu nhiên điểm centroid đầu tiên m1</li>
+  <li>Lấy điểm centroid tiếp theo là điểm xa nhất so với m1</li>
+  <li>..</li>
+  <li>Lấy điểm centroid thứ i $(m_i)$ là điểm xa nhất so với $\{ m_1,…, m_i-1\}$</li>
+  <li>…</li>
+  <li>Bằng cách này K-means sẽ hội tụ về gần kết quả tối ưu (Arthur, D.; Vassilvitskii, 2007)</li>
+</ul>
+
+<h1 id="tổng-kết">Tổng kết</h1>
+<h2 id="ưu-điểm-của-thuật-toán-k-means">Ưu điểm của thuật toán K-means:</h2>
+<p>*Đơn giản</p>
+<ul>
+  <li>Hiệu quả trong thực tế</li>
+  <li>Đảm bảo hội tụ trong thời gian đa thức [Manthey &amp; Röglin, JACM, 2011]</li>
+  <li>Linh hoạt trong việc lựa chọn phương pháp đo khoảng cách
+    <h2 id="hạn-chế">Hạn chế:</h2>
+  </li>
+  <li>Việc lựa chọn các tính khoảng cách cho bài toán cụ thể khó.</li>
+  <li>Nhạy cảm với các điểm dữ liệu outlier</li>
+</ul>
+
+<h1 id="code-python">Code Python</h1>
+
+<p>Load các thư viện cần thiết</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td> --><td class="rouge-code"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span>
+<span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>Khởi tạo dữ liệu demo</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td> --><td class="rouge-code"><pre><span class="c1"># Khởi tạo dữ liệu demo
+</span><span class="n">means</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">2</span><span class="p">],</span>  <span class="p">[</span><span class="mi">9</span><span class="p">,</span>  <span class="mi">3</span><span class="p">],</span>  <span class="p">[</span><span class="mi">3</span><span class="p">,</span>  <span class="mi">6</span><span class="p">]]</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">],</span>  <span class="p">[</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">]]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">X0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cov</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">X1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cov</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span><span class="nb">object</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cov</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X0</span><span class="p">,</span> <span class="n">X1</span><span class="p">,</span> <span class="n">X2</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">K</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">original_label</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">N</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">N</span> <span class="o">+</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">N</span><span class="p">).</span><span class="n">T</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td> --><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">kmeans_display</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">amax</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">X0</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">label</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">X1</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">label</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">X2</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">label</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+    
+    <span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X0</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X0</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">'b^'</span><span class="p">,</span> <span class="n">markersize</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="p">.</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">'go'</span><span class="p">,</span> <span class="n">markersize</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="p">.</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s">'rs'</span><span class="p">,</span> <span class="n">markersize</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="p">.</span><span class="mi">8</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'equal'</span><span class="p">)</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">()</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="n">kmeans_display</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">original_label</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><img src="/assets/img/blog/kmeansimplement.png" alt="Thuật toán k-means " />
+<em>Biểu diễn dữ liệu demo</em></p>
+
+<p>Xây dựng các hàm cần thiết</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td> --><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">init_centroids</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="c1"># pick k centroid randomly
+</span>    <span class="k">return</span> <span class="n">X</span><span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">(</span><span class="n">X</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="bp">False</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">assign_labels</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">centroids</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+  <span class="n">clusters</span> <span class="o">=</span> <span class="p">{}</span> 
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="n">clusters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">featureset</span> <span class="ow">in</span> <span class="n">X</span><span class="p">:</span> 
+    <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">linalg</span><span class="p">.</span><span class="n">norm</span><span class="p">(</span><span class="n">featureset</span> <span class="o">-</span> <span class="n">centroid</span><span class="p">)</span> <span class="k">for</span> <span class="n">centroid</span> <span class="ow">in</span> <span class="n">centroids</span><span class="p">]</span>
+    <span class="n">cluster</span> <span class="o">=</span> <span class="n">distances</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">distances</span><span class="p">))</span>
+    <span class="n">clusters</span><span class="p">[</span><span class="n">cluster</span><span class="p">].</span><span class="n">append</span><span class="p">(</span><span class="n">featureset</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">clusters</span>
+  
+<span class="k">def</span> <span class="nf">update_centroids</span><span class="p">(</span><span class="n">clusters</span><span class="p">):</span>
+  <span class="n">new_centroids</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">data_points</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">new_centroids</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">average</span><span class="p">(</span><span class="n">data_points</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">new_centroids</span>
+
+<span class="k">def</span> <span class="nf">has_converged</span><span class="p">(</span><span class="n">centers</span><span class="p">,</span> <span class="n">new_centers</span><span class="p">):</span>
+    <span class="c1"># return True if two sets of centers are the same
+</span>    <span class="k">return</span> <span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">centers</span><span class="p">])</span> <span class="o">==</span> 
+        <span class="nb">set</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">new_centers</span><span class="p">]))</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Phần code triển khai thuật toán</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td> --><td class="rouge-code"><pre><span class="n">max_iter</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">3</span> 
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">init_centroids</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+  <span class="n">clusters</span> <span class="o">=</span> <span class="n">assign_labels</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">centroids</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+  <span class="n">new_centroids</span> <span class="o">=</span> <span class="n">update_centroids</span><span class="p">(</span><span class="n">clusters</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">has_converged</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span> <span class="n">new_centroids</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'convered'</span><span class="p">)</span>
+    <span class="k">break</span>
+  <span class="n">centroids</span> <span class="o">=</span> <span class="n">new_centroids</span>
+
+<span class="n">X_</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">cluster</span><span class="p">,</span> <span class="n">datapoints</span> <span class="ow">in</span> <span class="n">clusters</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+  <span class="k">for</span> <span class="n">datapoint</span> <span class="ow">in</span> <span class="n">datapoints</span><span class="p">:</span>
+    <span class="n">X_</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">datapoint</span><span class="p">)</span>
+    <span class="n">labels</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Hiển thị kết quả</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><!-- <td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> --><td class="rouge-code"><pre><span class="n">kmeans_display</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">X_</span><span class="p">),</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Kết quả thuật toán</p>
+
+<p><img src="/assets/img/blog/kmeansimplement2.png" alt="Thuật toán k-means " />
+<em>Biểu diễn kết quả phân cụm của thuật toán</em></p>
+:ET
