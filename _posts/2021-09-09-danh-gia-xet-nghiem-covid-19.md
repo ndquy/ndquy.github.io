@@ -1,5 +1,5 @@
 ---  
-title: \[Tản mạn\] Đánh giá độ chính xác các bộ kit xét nghiệm thế nào?  
+title: Tản mạn - Đánh giá độ chính xác các bộ kit xét nghiệm thế nào?  
 author: Quy Nguyen  
 date: 2021-09-09 10:48:00 +0700  
 categories: [Machine Learning]  
