@@ -4,7 +4,7 @@
   <id>https://ndquy.github.io/</id>
   <title>Quy's blog</title>
   <subtitle>Chia sẻ kiến thức công nghệ lập trình và ứng dụng machine learning cơ bản và nâng cao.</subtitle>
-  <updated>2021-05-09T14:05:48+08:00</updated>
+  <updated>2021-09-09T16:06:58+08:00</updated>
   <author>
     <name>Nguyễn Đình Quý</name>
     <uri>https://ndquy.github.io/</uri>
@@ -17,6 +17,79 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>15. Thuật toán phân cụm K-Means</title>
+    <link href="https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/" rel="alternate" type="text/html" title="15. Thuật toán phân cụm K-Means" />
+    <published>2021-09-09T11:47:00+08:00</published>
+  
+    <updated>2021-09-09T15:46:28+08:00</updated>
+  
+    <id>https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/</id>
+    <content src="https://ndquy.github.io/posts/thuat-toan-phan-cum-kmeans/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.
+Nhắc lại về học có giám sát và không giám sát
+Học có giám sát
+Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${{x_1, x_...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>14. Kỹ thuật data augmentation trong NLP với Tiếng Việt</title>
+    <link href="https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/" rel="alternate" type="text/html" title="14. Kỹ thuật data augmentation trong NLP với Tiếng Việt" />
+    <published>2021-05-08T16:47:00+08:00</published>
+  
+    <updated>2021-05-09T14:12:56+08:00</updated>
+  
+    <id>https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/</id>
+    <content src="https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/" />
+    <author>
+      <name>Nguyễn Đình Quý</name>
+    </author>
+
+  
+    
+    <category term="Machine Learning" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.
+Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.
+Các kỹ thuật data augmentation được sử dụng nhiều trong thị giác máy tính, thuật toán supervised learning… Tuy ...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -52,42 +125,6 @@ Phân tích câu hỏi là pha đầu tiên trong kiến trúc chung của một
 nhiệm vụ tìm ra các thông tin cần thiết làm đầu vào cho quá trình xử lý của các pha sau
 (trích chọn tài liệu, trích xuất câu trả lời, …). Vì vậy phân tích câu hỏi có vai trò hết sức
 quan trọng, ảnh hưởng trực tiếp đến hoạt động của toàn bộ hệ thống. Nếu phân tích câu hỏi không tốt thì sẽ khôn...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>14. Kỹ thuật data augmentation trong NLP với Tiếng Việt</title>
-    <link href="https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/" rel="alternate" type="text/html" title="14. Kỹ thuật data augmentation trong NLP với Tiếng Việt" />
-    <published>2021-04-10T16:47:00+08:00</published>
-  
-    <updated>2021-04-10T16:47:00+08:00</updated>
-  
-    <id>https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/</id>
-    <content src="https://ndquy.github.io/posts/ky-thuat-tang-cuong-du-lieu-nlp/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Machine Learning" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.
-Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.
-Các kỹ thuật data augmentation được sử dụng nhiều trong thị giác máy tính, thuật toán supervised learning… Tuy ...
     </summary>
   
 
@@ -162,40 +199,6 @@ Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của c�
       Trong các thuật toán machine learning nói chung, và trong deep learning nói riêng, các mô hình học cách dự đoán đầu ra từ đầu vào thông qua các ví dụ trong tập dữ liệu huấn luyện.
 
 Các điểm dữ liệu đôi khi được đo đạc với những đơn vị khác nhau, m và feet chẳng hạn. Hoặc có hai thành phần (của vector dữ liệu) chênh lệch nhau quá lớn, một thành phần có khoảng giá trị từ 0 đến 1000, thành phần ki...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</title>
-    <link href="https://ndquy.github.io/posts/okapi-bm-25-tim-kiem-tieng-viet/" rel="alternate" type="text/html" title="10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt" />
-    <published>2021-04-05T11:09:00+08:00</published>
-  
-    <updated>2021-04-05T11:44:58+08:00</updated>
-  
-    <id>https://ndquy.github.io/posts/okapi-bm-25-tim-kiem-tieng-viet/</id>
-    <content src="https://ndquy.github.io/posts/okapi-bm-25-tim-kiem-tieng-viet/" />
-    <author>
-      <name>Nguyễn Đình Quý</name>
-    </author>
-
-  
-    
-    <category term="Machine Learning" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Trong tìm kiếm thông tin, để xếp hạng các văn bản phù hợp với truy vấn của người dùng, người ta thường sử dụng thuật toán Okapi BM25. Thuật toán này dựa trên mô hình xác suất , được phát minh ra vào những năm 1970 – 1980. Phương pháp có tên BM25 (BM – best match), nhưng người ta thường gọi “Okapi BM25”, vì lần đầu tiên công thức được sử dụng trong hệ thống tìm kiếm Okapi, được sáng lập tại trườ...
     </summary>
   
 

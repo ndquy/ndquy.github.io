@@ -1,0 +1,9 @@
+I"<p>Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.</p>
+<h1 id="nhắc-lại-về-học-có-giám-sát-và-không-giám-sát">Nhắc lại về học có giám sát và không giám sát</h1>
+<h2 id="học-có-giám-sát">Học có giám sát</h2>
+<p>Trong học máy, lớp các thuật toán học có giám sát Supervised learning là việc học các xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${{x_1, x_2, …, x_N}; {y_1, y_2,…, y_N}}$ sao cho $y_i ≅ f(x_i )$ với mọi i.<br />
+Để thực hiện điều này tập dữ liệu huấn luyện gồm các điểm dữ liệu trong đó mỗi điểm dữ liệu có chứa nhãn tương ứng.</p>
+<h2 id="học-không-giám-sát">Học không giám sát</h2>
+<p>Học cách xác định hàm y = f(x) từ tập dữ liệu huấn luyện gồm ${x_1, x_2, …, x_N}$. Các dữ liệu trong tập dữ liệu dùng để huấn luyện không có nhãn.<br />
+Các thuật toán phân cụm dựa trên tập dữ liệu chính là cách xác định cấu trúc ẩn trong tập dữ liệu đó.</p>
+:ET

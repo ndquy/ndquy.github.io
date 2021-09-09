@@ -38,7 +38,7 @@
 <meta name="twitter:creator" content="@Quy Nguyen" />
 <meta name="google-site-verification" content="google_meta_tag_verification" />
 <script type="application/ld+json">
-{"url":"https://ndquy.github.io/posts/hoi-quy-logistic/","@type":"BlogPosting","headline":"Hồi quy Logistic","dateModified":"2021-04-03T17:50:12+08:00","datePublished":"2021-04-03T05:46:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://ndquy.github.io/posts/hoi-quy-logistic/"},"author":{"@type":"Person","name":"Quy Nguyen"},"description":"Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &gt; 50% thì mô hình dự đoán có thể khẳng định được điểm dữ liệu đó thuộc về lớp 1 (nhãn là 1) hoặc ngược lại (nhãn là 0). Việc này được gọi là phân loại nhị phân (chỉ có 0 với 1)","@context":"https://schema.org"}</script>
+{"description":"Như chúng ta đã thảo luận từ các bài trước, một vài thuật toán hồi quy có thể được sử dụng để phân lớp (và ngược lại) đều cho kết quả khá tốt. Logistic Regression (hay còn gọi là Logit Regression) được sử dụng phổ biến để ước lượng xác suất 1 điểm dữ liệu có thể thuộc về 1 lớp nào đó (ví dụ tính xác suất để 1 email là spam). Nếu xác suất &gt; 50% thì mô hình dự đoán có thể khẳng định được điểm dữ liệu đó thuộc về lớp 1 (nhãn là 1) hoặc ngược lại (nhãn là 0). Việc này được gọi là phân loại nhị phân (chỉ có 0 với 1)","url":"https://ndquy.github.io/posts/hoi-quy-logistic/","headline":"Hồi quy Logistic","datePublished":"2021-04-03T05:46:00+08:00","dateModified":"2021-04-03T17:50:12+08:00","author":{"@type":"Person","name":"Quy Nguyen"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://ndquy.github.io/posts/hoi-quy-logistic/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -147,7 +147,8 @@
         ['$$', '$$'],
         ['\\[', '\\]']
       ]
-    }
+    },
+
   };
   </script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -905,6 +906,16 @@
         
         
         
+        <li><a href="/posts/thuat-toan-phan-cum-kmeans/">15. Thuật toán phân cụm K-Means</a></li>
+      
+        
+        
+        
+        <li><a href="/posts/ky-thuat-tang-cuong-du-lieu-nlp/">14. Kỹ thuật data augmentation trong NLP với Tiếng Việt</a></li>
+      
+        
+        
+        
         <li><a href="/posts/intent-classification/">13. Xác định ý định câu hỏi trong hệ thống hỏi đáp</a></li>
       
         
@@ -916,16 +927,6 @@
         
         
         <li><a href="/posts/cai-dat-queue-python-production/">Triển khai hàng đợi xử lý bằng python với Redis</a></li>
-      
-        
-        
-        
-        <li><a href="/posts/okapi-bm-25-tim-kiem-tieng-viet/">10. Áp dụng Okapi BM25 vào tìm kiếm thông tin dựa trên Tiếng Việt</a></li>
-      
-        
-        
-        
-        <li><a href="/posts/loss-function/">7. Loss function P1 - hàm mất mát cho bài toán regression</a></li>
       
 
       </ul>
@@ -1294,6 +1295,19 @@
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
     
   
 
@@ -1458,55 +1472,6 @@ Có rất nhiều loại thuật toán về Machine Learning, thông thường c
       
       
       <div class="card">
-        <a href="/posts/bai-toan-phan-lop-va-danh-gia/">
-          <div class="card-body">
-            <!--
-  Date format snippet
-  See: /assets/js/_utils/timeage.js
--->
-
-
-
-
-
-<span class="timeago small"
-  
-
-  
-   >
-
-  
-  
-
-  
-    Apr  3
-  
-
-  <i class="unloaded">2021-04-03T05:47:00+08:00</i>
-
-</span>
-
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>6. Bài toán phân lớp và các phương pháp đánh giá</h3>
-            <div class="text-muted small">
-              <p>
-                
-
-
-
-
-
-                Trong bài viết này mình sẽ nói đến bài toán phân lớp và các phương pháp đánh giá 1 hệ thống phân lớp.
-
-Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của các số viết tay bởi người ở US. Mỗi ả...
-              </p>
-            </div>
-          </div>
-        </a>
-      </div>
-    
-      
-      
-      <div class="card">
         <a href="/posts/loss-function/">
           <div class="card-body">
             <!--
@@ -1547,6 +1512,55 @@ Mình sẽ sử dụng bộ dữ liệu MNIST, gồm 70.000 ảnh nhỏ của c�
                 Nếu đã tìm hiểu về machine learning, chắc các bạn được nghe rất nhiều đến khái niệm hàm mất mát.
 
 Trong các thuật toán tìm kiếm của trí tuệ nhân tạo cổ điển, hàm mất mát có thể là một hàm mục tiêu ...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/loss-function-p2/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: /assets/js/_utils/timeage.js
+-->
+
+
+
+
+
+<span class="timeago small"
+  
+
+  
+   >
+
+  
+  
+
+  
+    Apr  4
+  
+
+  <i class="unloaded">2021-04-04T16:47:00+08:00</i>
+
+</span>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>8. Loss function P2 - hàm mất mát cho bài toán binary classification</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Phân lớp nhị phân là bài toán mà biến đầu ra (y) chỉ nhận một trong hai giá trị là 1 trong 2 nhãn.
+
+Bài toán thường dưới dạng bài toán dự đoán giá trị 0 hoặc 1 cho lớp đầu tiên hoặc lớp thứ hai và ...
               </p>
             </div>
           </div>

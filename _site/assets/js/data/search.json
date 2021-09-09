@@ -1,6 +1,36 @@
 [
   
   {
+    "title": "15. Thuật toán phân cụm K-Means",
+    "url": "/posts/thuat-toan-phan-cum-kmeans/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-09-09 11:47:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Thuật toán phân cụm K-Means là một trong những thuật toán phân cụm dữ liệu dựa trên học không giám sát được sử dụng nhiều trong các học máy nói chung và trong khai phá dữ liệu nói riêng.Nhắc lại về học có giám sát và không giám sátHọc có giám sátTrong học máy, lớp các thuật toán học có giám sát S..."
+  },
+  
+  {
+    "title": "14. Kỹ thuật data augmentation trong NLP với Tiếng Việt",
+    "url": "/posts/ky-thuat-tang-cuong-du-lieu-nlp/",
+    "categories": "Machine Learning",
+    "tags": "Machine learning",
+    "date": "2021-05-08 16:47:00 +0800",
+    
+
+
+
+
+
+    "snippet": "Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.Các kỹ thuật ..."
+  },
+  
+  {
     "title": "13. Xác định ý định câu hỏi trong hệ thống hỏi đáp",
     "url": "/posts/intent-classification/",
     "categories": "Machine Learning",
@@ -13,21 +43,6 @@
 
 
     "snippet": "Mục tiêu bài viếtPhân tích câu hỏi là pha đầu tiên trong kiến trúc chung của một hệ thống hỏi đáp, cónhiệm vụ tìm ra các thông tin cần thiết làm đầu vào cho quá trình xử lý của các pha sau(trích chọn tài liệu, trích xuất câu trả lời, …). Vì vậy phân tích câu hỏi có vai trò hết sứcquan trọng, ảnh ..."
-  },
-  
-  {
-    "title": "14. Kỹ thuật data augmentation trong NLP với Tiếng Việt",
-    "url": "/posts/ky-thuat-tang-cuong-du-lieu-nlp/",
-    "categories": "Machine Learning",
-    "tags": "Machine learning",
-    "date": "2021-04-10 16:47:00 +0800",
-    
-
-
-
-
-
-    "snippet": "Tăng cường dữ liệu (Data Augmentation) là một khái niệm khá phổ biến trong deep learning mà chắc hẳn ai đang nghiên cứu cũng đã từng nghe hoặc sử dụng đến.Nói đơn giản hơn, Data Augmentation là kỹ thuật tạo ra thêm dữ liệu để bổ sung cho tập dữ liệu để giúp mô hình khái quát tốt hơn.Các kỹ thuật ..."
   },
   
   {

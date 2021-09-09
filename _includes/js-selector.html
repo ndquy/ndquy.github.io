@@ -27,20 +27,16 @@
   // see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options>
   MathJax = {
     tex: {
-      inlineMath: [              // start/end delimiter pairs for in-line math
+      inlineMath: [
         ['$','$'],
         ['\\(','\\)']
       ],
-      displayMath: [             // start/end delimiter pairs for display math
+      displayMath: [
         ['$$', '$$'],
         ['\\[', '\\]']
       ]
     },
-    tex2jax: {
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-      displayMath: [['$$','$$']],
-      inlineMath: [['$','$']],
-    }
+
   };
   </script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
