@@ -41,7 +41,7 @@ Như vậy mục tiêu của bài toán phân cụm là những cụm dữ liệ
 * **Trong một cụm thì các điểm dữ liệu thuộc về cụm đó phải giống nhau** theo một ý nghĩa, việc xác định _thế nào là giống nhau_ quyết định đầu ra của thuật toán này. Ví dụ như để xác định những khách hàng thuộc cùng một nhóm thì trước tiên ta cần phải xác định định nghĩa _thế nào là giống nhau_?  
   Hai khách hàng tương đồng có thể được xem xét dựa trên các tiêu chí khác nhau, có thể dựa trên số lần mua hàng, số tiền mua hàng, hay giới tính, độ tuổi...
 * **Hai cụm dữ liệu là khác nhau**: Điều này là cần thiết vì khi phân cụm các cụm phải là tách biệt nhau hoàn toàn, không có sự chồng lấp 2 cụm dữ liệu với nhau.  
-  ![Mục tiêu bài toán phân cụm](/assets/img/blog/clusters.png)
+  ![Mục tiêu bài toán phân cụm](/assets/img/blog/clusters.jpg)
 
 ## Một số phương pháp phân cụm phổ biến
 
